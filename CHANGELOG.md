@@ -15,6 +15,12 @@
 - Custom contact photo instead of initials (click the avatar in the record)
 - "Partner" and "Met through" suggest existing contacts, save as links and are clickable
 - Detail side pane removed from Table / Cards / Kanban (kept in Network); icon-only view switcher
+- Collapsible header (collapsed by default); bulk action bar above the table; working color pickers for relationship labels with default colors and bold tinted badges
+- Customizable table columns with HubSpot-style header menu (sort, filter, pin, move, add, remove); clickable company, email and city cells; mini company icon
+- Multi-select relationship with linked company (`label @ Company`)
+- Companies card on the person page (including past companies)
+- Full company page: people, info, notes, per-company hidden sections/fields, resizable columns, automatic enrichment (Wikidata + website), manual logo (upload or link)
+- Back navigation and swipe gesture between record, company and table
 
 ## 0.5.1
 - Header: **New contact** is now the first button; "Calendar .ics" renamed **Add to calendar**

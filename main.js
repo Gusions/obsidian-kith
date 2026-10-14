@@ -3,13 +3,13 @@
 const obsidian = require('obsidian');
 const {
   Plugin, ItemView, Modal, Notice, PluginSettingTab, Setting, TFile,
-  FuzzySuggestModal, setIcon, normalizePath, stringifyYaml, MarkdownRenderChild, Menu,
+  FuzzySuggestModal, setIcon, normalizePath, stringifyYaml, MarkdownRenderChild, Menu, requestUrl,
 } = obsidian;
 
 /* ───────────────────────── i18n (IT / EN) ───────────────────────── */
 /* Le stringhe nel codice sono in italiano e fanno da chiave; EN contiene le traduzioni inglesi.
    La lingua segue Obsidian (localStorage "language"), con override opzionale "crm-contatti-lang". */
-const EN = {"Eliminare ${} contatti?": "Delete ${} contacts?", "Le note verranno spostate nel cestino secondo le impostazioni di Obsidian. Le interazioni collegate restano nel vault.": "Notes will be moved to the trash according to Obsidian settings. Linked interactions stay in the vault.", "${} contatti eliminati": "${} contacts deleted", "Cambia foto": "Change photo", "Carica foto…": "Upload photo…", "Rimuovi foto": "Remove photo", "Te l’ha presentato/a": "Introduced you", "Presentato/a da te": "Introduced by you", "tra ${} gg": "in ${} d", "${} giorni fa": "${} days ago", "oggi": "today", "ieri": "yesterday", "domani": "tomorrow", "mese": "month", "mesi": "months", "anno": "year", "anni": "years", "${} ${} fa": "${} ${} ago", "Anagrafica": "Personal", "Contatti": "Contact", "Lavoro": "Work", "Relazione": "Relationship", "Rete": "Network", "Note": "Notes", "Nome": "First name", "Cognome": "Last name", "Soprannome": "Nickname", "Compleanno": "Birthday", "Città": "City", "Paese": "Country", "Partner": "Partner", "Figli": "Children", "Lingue": "Languages", "Email": "Email", "Email lavoro": "Work email", "Telefono": "Phone", "Ruolo attuale": "Current role", "Azienda attuale": "Current company", "Aziende passate": "Past companies", "Settore": "Industry", "Competenze": "Skills", "Vicinanza": "Closeness", "Stato": "Status", "Priorità": "Priority", "Frequenza contatto": "Contact frequency", "Canale preferito": "Preferred channel", "Ultimo contatto": "Last contact", "Prossimo follow-up": "Next follow-up", "Quando contattare": "When to reach out", "Conosciuti dove": "Met where", "Conosciuti quando": "Met when", "Conosciuti tramite": "Met through", "Interessi": "Interests", "Può aiutarmi con": "Can help me with", "Posso aiutarlo con": "I can help with", "Favori ricevuti": "Favors received", "Favori dati": "Favors given", "Nome A→Z": "Name A→Z", "Contatto più vecchio": "Oldest contact", "Follow-up più urgente": "Most urgent follow-up", "Prossimo compleanno": "Next birthday", "Apri Kith": "Open Kith", "Nuovo contatto": "New contact", "Registra interazione": "Log interaction", "Segna contatto come contattato oggi": "Mark contact as contacted today", "${}: ultimo contatto = oggi": "${}: last contact = today", "Elimina contatto…": "Delete contact…", "Personalizza CRM (colori, font, campi, Google Calendar)": "Customize CRM (colors, fonts, fields, Google Calendar)", "Aggiungi il compleanno del contatto a Google Calendar": "Add the contact's birthday to Google Calendar", "Importa contatti (LinkedIn, telefono, Facebook, CSV)": "Import contacts (LinkedIn, phone, Facebook, CSV)", "Esporta compleanni e follow-up per il calendario (.ics)": "Export birthdays and follow-ups for your calendar (.ics)", "Inserisci widget CRM “Oggi” nella nota": "Insert CRM “Today” widget in note", "Copiato": "Copied", "Copia non riuscita": "Copy failed", "“${}” eliminato": "“${}” deleted", "“${}” archiviato": "“${}” archived", "“${}” ripristinato": "“${}” restored", "Questo contatto non ha un compleanno valido (serve almeno giorno e mese)": "This contact has no valid birthday (day and month are required)", "Senza nome": "Unnamed", "---\n${}---\n\n## Note\n\n## Interazioni\n": "---\n${}---\n\n## Notes\n\n## Interactions\n", "\n## Note\n\n## Interazioni\n": "\n## Notes\n\n## Interactions\n", "Nessun compleanno o follow-up da esportare": "No birthdays or follow-ups to export", "${}/Compleanni e follow-up.ics": "${}/Birthdays and follow-ups.ics", "Creato “${}”: ${} compleanni, ${} follow-up. Aprilo per importarlo nel calendario.": "Created “${}”: ${} birthdays, ${} follow-ups. Open it to import into your calendar.", "Kith": "Kith", "Cerca per nome, azienda, città, interessi…": "Search by name, company, city, interests…", "Importa": "Import", "Personalizza": "Customize", "Calendario .ics": "Calendar .ics", "+ Nuovo contatto": "+ New contact", "Contatti attivi": "Active contacts", "Follow-up scaduti": "Overdue follow-ups", "Compleanni (${} gg)": "Birthdays (${} d)", "Priorità alta": "High priority", "Tutte le relazioni": "All relationships", "Ogni vicinanza": "Any closeness", "Ogni priorità": "Any priority", "Solo attivi": "Active only", "Tutti (incl. archiviati)": "All (incl. archived)", "Filtro rapido: ${} ✕": "Quick filter: ${} ✕", "Ordina": "Sort", "Raggruppa": "Group by", "Colonne: relazione": "Columns: relationship", "Colonne: vicinanza": "Columns: closeness", "Colonne: stato": "Columns: status", "Colonne: priorità": "Columns: priority", "Tabella": "Table", "Schede": "Cards", "Kanban": "Kanban", "Nessun contatto trovato": "No contacts found", "Cerco note con frontmatter in “${}”. Se il tuo vault usa un'altra cartella, cambiala nelle impostazioni del plugin, oppure crea il primo contatto.": "Looking for notes with frontmatter in “${}”. If your vault uses a different folder, change it in the plugin settings, or create your first contact.", "contatto": "contact", "contatti": "contacts", "Nessun risultato con questi filtri.": "No results with these filters.", "Aziende": "Companies", "Isolati (${})": "Isolated (${})", "Adatta": "Fit", "Nessuna connessione da mostrare. Le relazioni nascono da: stessa azienda (almeno 2 persone), “Conosciuti tramite” con il nome di un altro contatto, “Partner”, oppure [[link]] tra schede.": "No connections to show. Relationships come from: the same company (at least 2 people), “Met through” naming another contact, “Partner”, or [[links]] between notes.", "Mostrati i 700 contatti più connessi": "Showing the 700 most connected contacts", "Oggi": "Today", "Contatto": "Contact", "Chiama": "Call", "Scaduto da ${} gg": "Overdue by ${} d", "Tra ${} gg": "In ${} d", "Ultimo contatto: ": "Last contact: ", "Follow-up: ": "Follow-up: ", "Follow-up": "Follow-up", "oggi!": "today!", "Non assegnato": "Unassigned", "Spostato in “${}”": "Moved to “${}”", "← Elenco": "← List", "✓ Contattato oggi": "✓ Contacted today", "+ Interazione": "+ Interaction", "Modifica": "Edit", "Apri nota": "Open note", "Elimina": "Delete", "Ripristina": "Restore", "Archivia": "Archive", "Prossimo contatto": "Next contact", "Frequenza": "Frequency", "Personale": "Personal", "Ruolo": "Role", "Azienda": "Company", "✓ In Google Calendar": "✓ In Google Calendar", "+ Google Calendar": "+ Google Calendar", " · ${} anni": " · ${} years old", "tra ": "in ", " gg": " d", "Altri campi": "Other fields", "Interazioni recenti": "Recent interactions", "Nessuna interazione registrata.": "No interactions logged.", "Apri scheda": "Open record", "Contattato oggi": "Contacted today", "Copia scheda completa": "Copy full record", "Scheda copiata": "Record copied", "Copia nome": "Copy name", "Nome copiato": "Name copied", "email lavoro": "work email", "Copia ${}": "Copy ${}", "${} copiata": "${} copied", "Copia selezione": "Copy selection", "${} copiato": "${} copied", "Copia “${}: …”": "Copy “${}: …”", "Seleziona un contatto per vedere la scheda completa.": "Select a contact to see the full record.", "Tutto in ordine ✨": "All clear ✨", "Prossimi 7 giorni": "Next 7 days", "Compleanni in arrivo": "Upcoming birthdays", "Agenda": "Agenda", "🎂 oggi": "🎂 today", "Modifica ${}": "Edit ${}", "valori separati da |": "values separated by |", "Annulla": "Cancel", "Salva modifiche": "Save changes", "Crea contatto": "Create contact", "Inserisci almeno nome o cognome": "Enter at least a first or last name", "Contatto aggiornato": "Contact updated", "Contatto creato": "Contact created", "Errore nel salvataggio: ": "Error while saving: ", "Nuova interazione con ${}": "New interaction with ${}", "Tipo": "Type", "Data": "Date", "Messaggio": "Message", "Chiamata": "Call", "Incontro": "Meeting", "Evento": "Event", "Altro": "Other", "Prossimo follow-up (opzionale)": "Next follow-up (optional)", "Cosa vi siete detti": "What you talked about", "Registra": "Log", "Interazione registrata": "Interaction logged", "Errore: ": "Error: ", "Scegli un contatto…": "Choose a contact…", "stessa email": "same email", "stesso telefono": "same phone", "stesso LinkedIn": "same LinkedIn", "stesso nome": "same name", "lettura non riuscita": "could not be read", "Nato/a il ${}": "Born on ${}", "🎂 Compleanno di ${}": "🎂 ${}’s birthday", "Relazione: ${}": "Relationship: ${}", "Canale: ${}": "Channel: ${}", "📞 Ricontatta ${}${}": "📞 Get back in touch with ${}${}", " (scaduto)": " (overdue)", "CRM · Oggi": "CRM · Today", "Apri CRM": "Open CRM", "Nulla in programma ✨": "Nothing scheduled ✨", "… e altri ${}": "… and ${} more", "scaduto da ${} gg": "overdue by ${} d", "${}: contattato": "${}: contacted", "📞 Da ricontattare": "📞 To follow up", "🗓 Prossimi ${} giorni": "🗓 Next ${} days", "🎂 Compleanni": "🎂 Birthdays", "Importa contatti": "Import contacts", "Carica uno o più file esportati da LinkedIn, dalla rubrica del telefono o da Facebook. Nel passo successivo scegli esattamente chi importare: niente viene creato prima della tua conferma.": "Upload one or more files exported from LinkedIn, your phone contacts or Facebook. In the next step you choose exactly who to import: nothing is created before you confirm.", "Origine: ": "Source: ", "Rileva automaticamente": "Auto-detect", "LinkedIn (Connections.csv)": "LinkedIn (Connections.csv)", "Telefono (.vcf oppure Google Contacts CSV)": "Phone (.vcf or Google Contacts CSV)", "Facebook (friends .json / .html)": "Facebook (friends .json / .html)", "CSV generico / formato del vault": "Generic CSV / vault format", "Trascina qui i file oppure": "Drop files here or", "Scegli file…": "Choose files…", "Come esportare i dati": "How to export your data", "LinkedIn: Impostazioni → Privacy dei dati → Ottieni una copia dei tuoi dati → seleziona “Collegamenti” → scarica lo zip e usa Connections.csv.": "LinkedIn: Settings → Data privacy → Get a copy of your data → select “Connections” → download the zip and use Connections.csv.", "iPhone: iCloud.com → Contatti → seleziona tutti → Esporta vCard. Android / Google: contacts.google.com → Esporta → vCard (.vcf) oppure Google CSV.": "iPhone: iCloud.com → Contacts → select all → Export vCard. Android / Google: contacts.google.com → Export → vCard (.vcf) or Google CSV.", "Facebook: Impostazioni → Le tue informazioni → Scarica le tue informazioni → Amici e follower, formato JSON → file your_friends.json. Facebook esporta solo nome e data di amicizia: niente email, telefono o compleanni.": "Facebook: Settings → Your information → Download your information → Friends and followers, JSON format → your_friends.json. Facebook only exports name and friendship date: no email, phone or birthdays.", "CSV generico: qualsiasi CSV con intestazioni tipo Nome, Cognome, Email, Telefono, Azienda… (anche il formato del tuo contatti.csv, separatore ; o ,).": "Generic CSV: any CSV with headers such as First name, Last name, Email, Phone, Company… (separator ; or ,).", "${}: nessun contatto riconosciuto (${})": "${}: no contacts recognized (${})", "Cerca nell’elenco…": "Search the list…", "Tutti gli stati": "All statuses", "Solo nuovi": "New only", "Già presenti": "Already present", "Doppi nel file": "Duplicates in file", "Tutte le fonti": "All sources", "Seleziona visibili": "Select visible", "Deseleziona visibili": "Deselect visible", "Solo i nuovi": "Only new", "＋ Aggiungi altri file": "＋ Add more files", "Relazione per i nuovi (vuoto = come da fonte)": "Relationship for new contacts (empty = as in source)", "Contatti già presenti": "Existing contacts", "Salta (non toccare)": "Skip (leave untouched)", "Completa solo i campi vuoti": "Fill empty fields only", " Crea le note azienda mancanti": " Create missing company notes", "(senza nome)": "(no name)", "Fonte": "Source", "Nuovo": "New", "Già presente · ${}": "Already present · ${}", "Doppio nel file · ${}": "Duplicate in file · ${}", "Mostra altri ${} (${} nascosti)": "Show ${} more (${} hidden)", "Nessun contatto con questi filtri.": "No contacts match these filters.", "${} selezionati su ${} · ${} visibili": "${} selected of ${} · ${} visible", "Importa ${} nuovi${}": "Import ${} new${}", " e aggiorna ${}": " and update ${}", "Importazione in corso…": "Importing…", "Interrompi": "Stop", "Importazione interrotta": "Import stopped", "Importazione completata": "Import complete", "${} contatti creati": "${} contacts created", "${} contatti esistenti completati": "${} existing contacts completed", "${} saltati": "${} skipped", "${} errori": "${} errors", "Apri il CRM": "Open the CRM", "Chiudi": "Close", "Compleanno di ${}": "${}’s birthday", "(${} anni)": "(turns ${})", " (${} anni)": " (turns ${})", "Eliminare ${}?": "Delete ${}?", "nel cestino di sistema (recuperabile)": "to the system trash (recoverable)", "nella cartella .trash del vault (recuperabile)": "to the vault’s .trash folder (recoverable)", "in modo definitivo (NON recuperabile)": "permanently (NOT recoverable)", "nel cestino": "to the trash", "La nota “${}” verrà spostata ${}. Le interazioni collegate restano nel vault.": "The note “${}” will be moved ${}. Linked interactions stay in the vault.", "Puoi cambiare questo comportamento in Impostazioni → File e collegamenti → File eliminati.": "You can change this in Settings → Files and links → Deleted files.", "Archivia invece": "Archive instead", "Aggiungi il compleanno a Google Calendar": "Add the birthday to Google Calendar", "${}: prossimo compleanno ${}.": "${}: next birthday ${}.", "Si apre Google Calendar con un evento annuale, tutto il giorno, già compilato: devi solo premere “Salva”.": "Google Calendar opens with a pre-filled yearly all-day event: you only need to press “Save”.", "Non chiedermelo più quando creo un contatto": "Don’t ask again when I create a contact", "Non ora": "Not now", "Apri Google Calendar": "Open Google Calendar", "Cartella contatti": "Contacts folder", "Percorso (dalla radice del vault) delle note persona.": "Path (from the vault root) of the person notes.", "Cartella interazioni": "Interactions folder", "Dove salvare le interazioni registrate.": "Where to save logged interactions.", "Cartella aziende": "Companies folder", "Dove creare le note azienda mancanti.": "Where to create missing company notes.", "Collega le aziende con [[link]]": "Link companies with [[links]]", "Crea nota azienda se manca": "Create company note if missing", "Finestra compleanni (giorni)": "Birthday window (days)", "Vista predefinita": "Default view", "Calendario .ics: includi i follow-up": "Calendar .ics: include follow-ups", "L’export .ics contiene sempre i compleanni (ricorrenti ogni anno); attiva per aggiungere anche le scadenze di ricontatto.": "The .ics export always includes birthdays (repeating yearly); turn on to also add follow-up due dates.", "Conferma prima di eliminare un contatto": "Confirm before deleting a contact", "Se spento, “Elimina” sposta subito la nota nel cestino senza chiedere.": "If off, “Delete” moves the note to the trash immediately without asking.", "Widget “Oggi” nelle nuove daily note (sperimentale)": "“Today” widget in new daily notes (experimental)", "Aggiunge il blocco crm-oggi alle daily note appena create. Dipende dalle impostazioni del plugin Note giornaliere.": "Adds the crm-oggi block to newly created daily notes. Depends on the Daily notes plugin settings.", "Personalizza Kith": "Customize Kith", "Google Calendar": "Google Calendar", "Ripristina predefiniti": "Reset to defaults", "“Come il tema” usa il font di Obsidian/Minimal.": "“Like the theme” uses the Obsidian/Minimal font.", "Come il tema": "Like the theme", "Sans di sistema": "System sans", "Monospazio": "Monospace", "Famiglia font": "Font family", "Nome di un font installato, es. Inter o \"SF Pro Text\".": "Name of an installed font, e.g. Inter or \"SF Pro Text\".", "Dimensione testo": "Text size", "Scala tutta l’interfaccia del CRM (100% = dimensione del tema).": "Scales the whole CRM interface (100% = theme size).", "Densità righe": "Row density", "Altezza delle righe della tabella.": "Height of table rows.", "Compatta": "Compact", "Normale": "Normal", "Comoda": "Comfortable", "Arrotondamento angoli": "Corner radius", "Bordi tra le colonne": "Column borders", "Striscia KPI in alto": "KPI strip on top", "Di base il CRM usa i colori del tema attivo (Minimal). Qui puoi sovrascriverli solo per il CRM.": "By default the CRM uses your active theme’s colors (Minimal). Here you can override them for the CRM only.", "Usa il colore del tema": "Use theme color", "Accento": "Accent", "Pulsanti principali, selezione, filtro attivo.": "Primary buttons, selection, active filter.", "Scaduto / priorità alta": "Overdue / high priority", "Follow-up scaduti e priorità alta.": "Overdue follow-ups and high priority.", "In scadenza / priorità media": "Due soon / medium priority", "Follow-up nei prossimi giorni.": "Follow-ups in the coming days.", "Ok": "OK", "Follow-up non urgenti, vicinanza stretta.": "Non-urgent follow-ups, close relationships.", "Evidenziazione dei compleanni.": "Birthday highlighting.", "Avatar": "Avatar", "Colorati": "Colored", "Neutri": "Neutral", "Colorati (tenui, in base al nome) oppure tutti neutri.": "Colored (soft, based on the name) or all neutral.", "Etichette neutre": "Neutral tags", "Spento: ogni valore (relazione, interessi…) prende un colore automatico dal tema.": "Off: each value (relationship, interests…) gets an automatic color from the theme.", "Colore per relazione": "Color per relationship", "Neutro": "Neutral", "Rinomina i campi, nascondili dal form e dalla scheda, o aggiungine di nuovi. I dati nelle note non vengono mai cancellati.": "Rename fields, hide them from the form and the record, or add new ones. Data in your notes is never deleted.", " · personalizzato": " · custom", "Chiave nella nota: ${}": "Key in the note: ${}", "Mostra nel form e nella scheda": "Show in the form and record", "Rimuovi il campo (i dati nelle note restano)": "Remove the field (data in notes stays)", "Nuovo campo personalizzato": "New custom field", "Nome del campo": "Field name", "Es. Taglia regalo": "e.g. Gift size", "Chiave nella nota": "Key in the note", "Nome della proprietà nel frontmatter. Vuoto = ricavata dal nome.": "Property name in the frontmatter. Empty = derived from the name.", "Testo": "Text", "Testo lungo": "Long text", "Lista (valori separati da |)": "List (values separated by |)", "Scelta (suggerisce i valori già usati)": "Choice (suggests values already used)", "Sezione del form": "Form section", "Aggiungi campo": "Add field", "Inserisci un nome per il campo": "Enter a name for the field", "La chiave “${}” è già usata da “${}”": "The key “${}” is already used by “${}”", "Scegli quali colonne mostrare nella tabella e in che ordine. “Contatto” è sempre la prima.": "Choose which columns to show in the table and in what order. “Contact” is always first.", "Sposta a sinistra": "Move left", "Sposta a destra": "Move right", "Rimuovi colonna": "Remove column", "Aggiungi colonna": "Add column", "Aggiungi": "Add", "Ripristina colonne predefinite": "Reset default columns", "Il plugin apre Google Calendar con un evento annuale “tutto il giorno” già compilato; tu premi “Salva”. Non serve collegare nessun account al plugin.": "The plugin opens Google Calendar with a pre-filled yearly “all-day” event; you press “Save”. No account needs to be linked to the plugin.", "Abilita “Aggiungi a Google Calendar”": "Enable “Add to Google Calendar”", "Mostra il pulsante nella scheda del contatto e il comando dedicato.": "Shows the button on the contact record and the dedicated command.", "Proponi quando creo o modifico un contatto con compleanno": "Offer when I create or edit a contact with a birthday", "Dopo il salvataggio compare una finestra con il pulsante per aprire Google Calendar.": "After saving, a window appears with a button to open Google Calendar.", "Titolo evento": "Event title", "Segnaposto: {nome} {cognome} {eta}": "Placeholders: {first} {last} {age}", "Descrizione evento": "Event description", "Dopo l’inserimento la scheda riceve la proprietà compleanno_in_calendario, così il CRM sa che l’evento esiste. Promemoria e calendario di destinazione si scelgono su Google Calendar al momento del salvataggio.": "After insertion the record gets the property birthday_in_calendar, so the CRM knows the event exists. Reminders and the target calendar are chosen in Google Calendar when you save.", "Colori, font, campi dei contatti, colonne della tabella e Google Calendar.": "Colors, fonts, contact fields, table columns and Google Calendar.", "Apri “Personalizza”": "Open “Customize”", "Aspetto": "Appearance", "Colori": "Colors", "Campi": "Fields", "Generale": "General", "Font": "Font", "oggi! 🎂": "today! 🎂", "Caricamento…": "Loading…", "Elimina…": "Delete…", "Personalizzato…": "Custom…", "Compleanni": "Birthdays", "Personalizzazione": "Customization", "🎂 Compleanno di {nome} {cognome}": "🎂 {first} {last}’s birthday", "Compleanno di {nome} {cognome} {eta}": "{first} {last}’s birthday {age}", "gg/mm/aaaa": "dd/mm/yyyy", "mm/gg/aaaa": "mm/dd/yyyy", "aaaa-mm-gg": "yyyy-mm-dd", "Data non valida": "Invalid date", "Follow-up non valido": "Invalid follow-up", "email": "email", "telefono": "phone", "archiviato": "archived", "Lingua": "Language", "Automatica": "Automatic", "Automatica = segue la lingua di Obsidian. Dopo il cambio disattiva e riattiva il plugin (Impostazioni → Plugin della community).": "Automatic = follows Obsidian’s language. After changing it, turn the plugin off and on again (Settings → Community plugins).", "Lingua salvata: riavvia il plugin per applicarla.": "Language saved: restart the plugin to apply it.", "Formato data (visualizzazione)": "Date format (display)", "Nelle note le date vengono sempre scritte in formato ISO (AAAA-MM-GG), che non è ambiguo.": "In your notes dates are always written in ISO format (YYYY-MM-DD), which is unambiguous.", "Date con la barra (es. 03/04/2025)": "Dates with slashes (e.g. 03/04/2025)", "Come interpretare le date scritte con la barra nelle note esistenti.": "How to interpret slash-formatted dates in your existing notes.", "Automatico (dalla lingua)": "Automatic (from language)", "giorno/mese/anno": "day/month/year", "mese/giorno/anno": "month/day/year", "Analizza le note": "Analyze notes", "Nessuna data con la barra trovata: sei già a posto.": "No slash-formatted dates found: you’re all set.", "Trovate ${} date con la barra: ${} sono certamente giorno/mese. Imposto “giorno/mese/anno”.": "Found ${} slash-formatted dates: ${} are definitely day/month. Setting “day/month/year”.", "Trovate ${} date con la barra: ${} sono certamente mese/giorno. Imposto “mese/giorno/anno”.": "Found ${} slash-formatted dates: ${} are definitely month/day. Setting “month/day/year”.", "Trovate ${} date con la barra, ma i segnali sono misti o assenti (${} giorno/mese, ${} mese/giorno). Scegli a mano.": "Found ${} slash-formatted dates, but the signals are mixed or missing (${} day/month, ${} month/day). Please choose manually.", "Aggiungi al calendario": "Add to calendar", "Esporta compleanni e follow-up in un file .ics da importare nel calendario": "Export birthdays and follow-ups to an .ics file you can import into your calendar", "Importa da LinkedIn, rubrica del telefono, Facebook o CSV. Scegli esattamente chi importare prima della conferma: niente viene creato prima.": "Import from LinkedIn, your phone contacts, Facebook or CSV. You choose exactly who to import before confirming: nothing is created before that.", "Apri importatore": "Open importer", "Archiviati": "Archived", "Esplora": "Browse", "Azzera filtri": "Clear filters", "Nessun valore": "No values", "Cerca contatti…": "Search contacts…", "Mostra meno": "Show less", "vicinanza ${}": "closeness ${}", "frequenza": "frequency", "follow-up": "follow-up", "Apri scheda completa": "Open full record", "← Kith": "← Kith", "Trascina per ridimensionare": "Drag to resize", "Aggiungi campo": "Add field", "Nuovo campo personalizzato": "New custom field", "← Indietro": "← Back", "Persone in ${}": "People at ${}", "Persone collegate": "Connected people", "Nessuna": "None", "Scheda": "Record", "Cronologia": "Timeline", "Tutte le interazioni": "All interactions", "Esporta CSV": "Export CSV", "${} selezionati": "${} selected", "Deseleziona": "Clear selection", "Seleziona tutti": "Select all", "contatti esportati": "contacts exported"};
+const EN = {"Salva": "Save", "Link o percorso dell’immagine": "Image link or path", "Rimuovi logo": "Remove logo", "Incolla link immagine…": "Paste image link…", "Carica immagine…": "Upload image…", "Cambia logo": "Change logo", "Nascondi campo in questa pagina": "Hide field on this page", "Rimuovi sezione da questa pagina": "Remove section from this page", "Ripristina predefinito di tutte le aziende": "Reset default for all companies", "Ripristina questa pagina": "Reset this page", "Disposizione salvata come predefinita": "Layout saved as default", "Usa questa disposizione per tutte le aziende": "Use this layout for all companies", "Personalizza questa pagina": "Customize this page", "Personalizza pagina": "Customize page", "Aprendo la pagina di un’azienda, Kith cerca sito, settore, contatti e logo su Wikidata e sul sito ufficiale. Invia in rete solo il nome dell’azienda. Spegni per usare solo i dati inseriti a mano.": "When you open a company page, Kith looks up website, industry, contacts and logo on Wikidata and the official site. Only the company name is sent. Turn off to use manual data only.", "Arricchisci le aziende in automatico": "Enrich companies automatically", "Fonte: ${}": "Source: ${}", "Recupero non riuscito": "Fetch failed", "Nessuna nuova informazione trovata": "No new information found", "Aggiunti ${} campi (${})": "Added ${} fields (${})", "Recupero informazioni…": "Fetching information…", "Recupero…": "Fetching…", "Aggiorna info": "Refresh info", "Descrizione": "Description", "Collegate via relazione": "Linked via relationship", "Apri ${}": "Open ${}", "Aggiungi relazione": "Add relationship", "Mostra tutte le persone a ${}": "Show everyone in ${}", "Kith: indietro": "Kith: go back", "Scegli un’azienda…": "Choose a company…", "Apri pagina azienda…": "Open company page…", "Nessuna nota. Creala dal pulsante a sinistra.": "No note yet. Create it with the button on the left.", "Nota azienda": "Company note", "Cronologia azienda": "Company timeline", "Ex colleghi": "Former colleagues", "Persone": "People", "dai contatti": "from contacts", "Indirizzo": "Address", "Sito web": "Website", "Riepilogo": "Summary", "Informazioni": "Information", "Crea nota azienda": "Create company note", "Mostra in Kith": "Show in Kith", "+ Persona": "+ Person", "persone": "people", "persona": "person", "Email copiate": "Emails copied", "Copia ${} email": "Copy ${} emails", "Interazione": "Interaction", "${} contatti selezionati": "${} contacts selected", "1 contatto selezionato: ${}": "1 contact selected: ${}", "Ordine crescente": "Ascending", "Ordine decrescente": "Descending", "Filtra per questa colonna": "Filter by this column", "Rimuovi filtro colonna": "Remove column filter", "Blocca colonna": "Pin column", "Sblocca colonna": "Unpin column", "contiene…": "contains…", "Filtra: ${}": "Filter: ${}", "Opzioni colonna": "Column options", "Cerca un campo…": "Search a field…", "Nessun campo": "No fields", "Altri contatti in questa azienda": "Other contacts at this company", "Passata": "Past", "ex": "former", "Aziende": "Companies", "Mostra tutte le persone in Kith": "Show everyone in Kith", "Apri nota azienda": "Open company note", "Nessun altro contatto": "No other contacts", "Salva colore": "Save color", "Comprimi intestazione": "Collapse header", "Espandi intestazione": "Expand header", "Eliminare ${} contatti?": "Delete ${} contacts?", "Le note verranno spostate nel cestino secondo le impostazioni di Obsidian. Le interazioni collegate restano nel vault.": "Notes will be moved to the trash according to Obsidian settings. Linked interactions stay in the vault.", "${} contatti eliminati": "${} contacts deleted", "Cambia foto": "Change photo", "Carica foto…": "Upload photo…", "Rimuovi foto": "Remove photo", "Te l’ha presentato/a": "Introduced you", "Presentato/a da te": "Introduced by you", "tra ${} gg": "in ${} d", "${} giorni fa": "${} days ago", "oggi": "today", "ieri": "yesterday", "domani": "tomorrow", "mese": "month", "mesi": "months", "anno": "year", "anni": "years", "${} ${} fa": "${} ${} ago", "Anagrafica": "Personal", "Contatti": "Contact", "Lavoro": "Work", "Relazione": "Relationship", "Rete": "Network", "Note": "Notes", "Nome": "First name", "Cognome": "Last name", "Soprannome": "Nickname", "Compleanno": "Birthday", "Città": "City", "Paese": "Country", "Partner": "Partner", "Figli": "Children", "Lingue": "Languages", "Email": "Email", "Email lavoro": "Work email", "Telefono": "Phone", "Ruolo attuale": "Current role", "Azienda attuale": "Current company", "Aziende passate": "Past companies", "Settore": "Industry", "Competenze": "Skills", "Vicinanza": "Closeness", "Stato": "Status", "Priorità": "Priority", "Frequenza contatto": "Contact frequency", "Canale preferito": "Preferred channel", "Ultimo contatto": "Last contact", "Prossimo follow-up": "Next follow-up", "Quando contattare": "When to reach out", "Conosciuti dove": "Met where", "Conosciuti quando": "Met when", "Conosciuti tramite": "Met through", "Interessi": "Interests", "Può aiutarmi con": "Can help me with", "Posso aiutarlo con": "I can help with", "Favori ricevuti": "Favors received", "Favori dati": "Favors given", "Nome A→Z": "Name A→Z", "Contatto più vecchio": "Oldest contact", "Follow-up più urgente": "Most urgent follow-up", "Prossimo compleanno": "Next birthday", "Apri Kith": "Open Kith", "Nuovo contatto": "New contact", "Registra interazione": "Log interaction", "Segna contatto come contattato oggi": "Mark contact as contacted today", "${}: ultimo contatto = oggi": "${}: last contact = today", "Elimina contatto…": "Delete contact…", "Personalizza CRM (colori, font, campi, Google Calendar)": "Customize CRM (colors, fonts, fields, Google Calendar)", "Aggiungi il compleanno del contatto a Google Calendar": "Add the contact's birthday to Google Calendar", "Importa contatti (LinkedIn, telefono, Facebook, CSV)": "Import contacts (LinkedIn, phone, Facebook, CSV)", "Esporta compleanni e follow-up per il calendario (.ics)": "Export birthdays and follow-ups for your calendar (.ics)", "Inserisci widget CRM “Oggi” nella nota": "Insert CRM “Today” widget in note", "Copiato": "Copied", "Copia non riuscita": "Copy failed", "“${}” eliminato": "“${}” deleted", "“${}” archiviato": "“${}” archived", "“${}” ripristinato": "“${}” restored", "Questo contatto non ha un compleanno valido (serve almeno giorno e mese)": "This contact has no valid birthday (day and month are required)", "Senza nome": "Unnamed", "---\n${}---\n\n## Note\n\n## Interazioni\n": "---\n${}---\n\n## Notes\n\n## Interactions\n", "\n## Note\n\n## Interazioni\n": "\n## Notes\n\n## Interactions\n", "Nessun compleanno o follow-up da esportare": "No birthdays or follow-ups to export", "${}/Compleanni e follow-up.ics": "${}/Birthdays and follow-ups.ics", "Creato “${}”: ${} compleanni, ${} follow-up. Aprilo per importarlo nel calendario.": "Created “${}”: ${} birthdays, ${} follow-ups. Open it to import into your calendar.", "Kith": "Kith", "Cerca per nome, azienda, città, interessi…": "Search by name, company, city, interests…", "Importa": "Import", "Personalizza": "Customize", "Calendario .ics": "Calendar .ics", "+ Nuovo contatto": "+ New contact", "Contatti attivi": "Active contacts", "Follow-up scaduti": "Overdue follow-ups", "Compleanni (${} gg)": "Birthdays (${} d)", "Priorità alta": "High priority", "Tutte le relazioni": "All relationships", "Ogni vicinanza": "Any closeness", "Ogni priorità": "Any priority", "Solo attivi": "Active only", "Tutti (incl. archiviati)": "All (incl. archived)", "Filtro rapido: ${} ✕": "Quick filter: ${} ✕", "Ordina": "Sort", "Raggruppa": "Group by", "Colonne: relazione": "Columns: relationship", "Colonne: vicinanza": "Columns: closeness", "Colonne: stato": "Columns: status", "Colonne: priorità": "Columns: priority", "Tabella": "Table", "Schede": "Cards", "Kanban": "Kanban", "Nessun contatto trovato": "No contacts found", "Cerco note con frontmatter in “${}”. Se il tuo vault usa un'altra cartella, cambiala nelle impostazioni del plugin, oppure crea il primo contatto.": "Looking for notes with frontmatter in “${}”. If your vault uses a different folder, change it in the plugin settings, or create your first contact.", "contatto": "contact", "contatti": "contacts", "Nessun risultato con questi filtri.": "No results with these filters.", "Aziende": "Companies", "Isolati (${})": "Isolated (${})", "Adatta": "Fit", "Nessuna connessione da mostrare. Le relazioni nascono da: stessa azienda (almeno 2 persone), “Conosciuti tramite” con il nome di un altro contatto, “Partner”, oppure [[link]] tra schede.": "No connections to show. Relationships come from: the same company (at least 2 people), “Met through” naming another contact, “Partner”, or [[links]] between notes.", "Mostrati i 700 contatti più connessi": "Showing the 700 most connected contacts", "Oggi": "Today", "Contatto": "Contact", "Chiama": "Call", "Scaduto da ${} gg": "Overdue by ${} d", "Tra ${} gg": "In ${} d", "Ultimo contatto: ": "Last contact: ", "Follow-up: ": "Follow-up: ", "Follow-up": "Follow-up", "oggi!": "today!", "Non assegnato": "Unassigned", "Spostato in “${}”": "Moved to “${}”", "← Elenco": "← List", "✓ Contattato oggi": "✓ Contacted today", "+ Interazione": "+ Interaction", "Modifica": "Edit", "Apri nota": "Open note", "Elimina": "Delete", "Ripristina": "Restore", "Archivia": "Archive", "Prossimo contatto": "Next contact", "Frequenza": "Frequency", "Personale": "Personal", "Ruolo": "Role", "Azienda": "Company", "✓ In Google Calendar": "✓ In Google Calendar", "+ Google Calendar": "+ Google Calendar", " · ${} anni": " · ${} years old", "tra ": "in ", " gg": " d", "Altri campi": "Other fields", "Interazioni recenti": "Recent interactions", "Nessuna interazione registrata.": "No interactions logged.", "Apri scheda": "Open record", "Contattato oggi": "Contacted today", "Copia scheda completa": "Copy full record", "Scheda copiata": "Record copied", "Copia nome": "Copy name", "Nome copiato": "Name copied", "email lavoro": "work email", "Copia ${}": "Copy ${}", "${} copiata": "${} copied", "Copia selezione": "Copy selection", "${} copiato": "${} copied", "Copia “${}: …”": "Copy “${}: …”", "Seleziona un contatto per vedere la scheda completa.": "Select a contact to see the full record.", "Tutto in ordine ✨": "All clear ✨", "Prossimi 7 giorni": "Next 7 days", "Compleanni in arrivo": "Upcoming birthdays", "Agenda": "Agenda", "🎂 oggi": "🎂 today", "Modifica ${}": "Edit ${}", "valori separati da |": "values separated by |", "Annulla": "Cancel", "Salva modifiche": "Save changes", "Crea contatto": "Create contact", "Inserisci almeno nome o cognome": "Enter at least a first or last name", "Contatto aggiornato": "Contact updated", "Contatto creato": "Contact created", "Errore nel salvataggio: ": "Error while saving: ", "Nuova interazione con ${}": "New interaction with ${}", "Tipo": "Type", "Data": "Date", "Messaggio": "Message", "Chiamata": "Call", "Incontro": "Meeting", "Evento": "Event", "Altro": "Other", "Prossimo follow-up (opzionale)": "Next follow-up (optional)", "Cosa vi siete detti": "What you talked about", "Registra": "Log", "Interazione registrata": "Interaction logged", "Errore: ": "Error: ", "Scegli un contatto…": "Choose a contact…", "stessa email": "same email", "stesso telefono": "same phone", "stesso LinkedIn": "same LinkedIn", "stesso nome": "same name", "lettura non riuscita": "could not be read", "Nato/a il ${}": "Born on ${}", "🎂 Compleanno di ${}": "🎂 ${}’s birthday", "Relazione: ${}": "Relationship: ${}", "Canale: ${}": "Channel: ${}", "📞 Ricontatta ${}${}": "📞 Get back in touch with ${}${}", " (scaduto)": " (overdue)", "CRM · Oggi": "CRM · Today", "Apri CRM": "Open CRM", "Nulla in programma ✨": "Nothing scheduled ✨", "… e altri ${}": "… and ${} more", "scaduto da ${} gg": "overdue by ${} d", "${}: contattato": "${}: contacted", "📞 Da ricontattare": "📞 To follow up", "🗓 Prossimi ${} giorni": "🗓 Next ${} days", "🎂 Compleanni": "🎂 Birthdays", "Importa contatti": "Import contacts", "Carica uno o più file esportati da LinkedIn, dalla rubrica del telefono o da Facebook. Nel passo successivo scegli esattamente chi importare: niente viene creato prima della tua conferma.": "Upload one or more files exported from LinkedIn, your phone contacts or Facebook. In the next step you choose exactly who to import: nothing is created before you confirm.", "Origine: ": "Source: ", "Rileva automaticamente": "Auto-detect", "LinkedIn (Connections.csv)": "LinkedIn (Connections.csv)", "Telefono (.vcf oppure Google Contacts CSV)": "Phone (.vcf or Google Contacts CSV)", "Facebook (friends .json / .html)": "Facebook (friends .json / .html)", "CSV generico / formato del vault": "Generic CSV / vault format", "Trascina qui i file oppure": "Drop files here or", "Scegli file…": "Choose files…", "Come esportare i dati": "How to export your data", "LinkedIn: Impostazioni → Privacy dei dati → Ottieni una copia dei tuoi dati → seleziona “Collegamenti” → scarica lo zip e usa Connections.csv.": "LinkedIn: Settings → Data privacy → Get a copy of your data → select “Connections” → download the zip and use Connections.csv.", "iPhone: iCloud.com → Contatti → seleziona tutti → Esporta vCard. Android / Google: contacts.google.com → Esporta → vCard (.vcf) oppure Google CSV.": "iPhone: iCloud.com → Contacts → select all → Export vCard. Android / Google: contacts.google.com → Export → vCard (.vcf) or Google CSV.", "Facebook: Impostazioni → Le tue informazioni → Scarica le tue informazioni → Amici e follower, formato JSON → file your_friends.json. Facebook esporta solo nome e data di amicizia: niente email, telefono o compleanni.": "Facebook: Settings → Your information → Download your information → Friends and followers, JSON format → your_friends.json. Facebook only exports name and friendship date: no email, phone or birthdays.", "CSV generico: qualsiasi CSV con intestazioni tipo Nome, Cognome, Email, Telefono, Azienda… (anche il formato del tuo contatti.csv, separatore ; o ,).": "Generic CSV: any CSV with headers such as First name, Last name, Email, Phone, Company… (separator ; or ,).", "${}: nessun contatto riconosciuto (${})": "${}: no contacts recognized (${})", "Cerca nell’elenco…": "Search the list…", "Tutti gli stati": "All statuses", "Solo nuovi": "New only", "Già presenti": "Already present", "Doppi nel file": "Duplicates in file", "Tutte le fonti": "All sources", "Seleziona visibili": "Select visible", "Deseleziona visibili": "Deselect visible", "Solo i nuovi": "Only new", "＋ Aggiungi altri file": "＋ Add more files", "Relazione per i nuovi (vuoto = come da fonte)": "Relationship for new contacts (empty = as in source)", "Contatti già presenti": "Existing contacts", "Salta (non toccare)": "Skip (leave untouched)", "Completa solo i campi vuoti": "Fill empty fields only", " Crea le note azienda mancanti": " Create missing company notes", "(senza nome)": "(no name)", "Fonte": "Source", "Nuovo": "New", "Già presente · ${}": "Already present · ${}", "Doppio nel file · ${}": "Duplicate in file · ${}", "Mostra altri ${} (${} nascosti)": "Show ${} more (${} hidden)", "Nessun contatto con questi filtri.": "No contacts match these filters.", "${} selezionati su ${} · ${} visibili": "${} selected of ${} · ${} visible", "Importa ${} nuovi${}": "Import ${} new${}", " e aggiorna ${}": " and update ${}", "Importazione in corso…": "Importing…", "Interrompi": "Stop", "Importazione interrotta": "Import stopped", "Importazione completata": "Import complete", "${} contatti creati": "${} contacts created", "${} contatti esistenti completati": "${} existing contacts completed", "${} saltati": "${} skipped", "${} errori": "${} errors", "Apri il CRM": "Open the CRM", "Chiudi": "Close", "Compleanno di ${}": "${}’s birthday", "(${} anni)": "(turns ${})", " (${} anni)": " (turns ${})", "Eliminare ${}?": "Delete ${}?", "nel cestino di sistema (recuperabile)": "to the system trash (recoverable)", "nella cartella .trash del vault (recuperabile)": "to the vault’s .trash folder (recoverable)", "in modo definitivo (NON recuperabile)": "permanently (NOT recoverable)", "nel cestino": "to the trash", "La nota “${}” verrà spostata ${}. Le interazioni collegate restano nel vault.": "The note “${}” will be moved ${}. Linked interactions stay in the vault.", "Puoi cambiare questo comportamento in Impostazioni → File e collegamenti → File eliminati.": "You can change this in Settings → Files and links → Deleted files.", "Archivia invece": "Archive instead", "Aggiungi il compleanno a Google Calendar": "Add the birthday to Google Calendar", "${}: prossimo compleanno ${}.": "${}: next birthday ${}.", "Si apre Google Calendar con un evento annuale, tutto il giorno, già compilato: devi solo premere “Salva”.": "Google Calendar opens with a pre-filled yearly all-day event: you only need to press “Save”.", "Non chiedermelo più quando creo un contatto": "Don’t ask again when I create a contact", "Non ora": "Not now", "Apri Google Calendar": "Open Google Calendar", "Cartella contatti": "Contacts folder", "Percorso (dalla radice del vault) delle note persona.": "Path (from the vault root) of the person notes.", "Cartella interazioni": "Interactions folder", "Dove salvare le interazioni registrate.": "Where to save logged interactions.", "Cartella aziende": "Companies folder", "Dove creare le note azienda mancanti.": "Where to create missing company notes.", "Collega le aziende con [[link]]": "Link companies with [[links]]", "Crea nota azienda se manca": "Create company note if missing", "Finestra compleanni (giorni)": "Birthday window (days)", "Vista predefinita": "Default view", "Calendario .ics: includi i follow-up": "Calendar .ics: include follow-ups", "L’export .ics contiene sempre i compleanni (ricorrenti ogni anno); attiva per aggiungere anche le scadenze di ricontatto.": "The .ics export always includes birthdays (repeating yearly); turn on to also add follow-up due dates.", "Conferma prima di eliminare un contatto": "Confirm before deleting a contact", "Se spento, “Elimina” sposta subito la nota nel cestino senza chiedere.": "If off, “Delete” moves the note to the trash immediately without asking.", "Widget “Oggi” nelle nuove daily note (sperimentale)": "“Today” widget in new daily notes (experimental)", "Aggiunge il blocco crm-oggi alle daily note appena create. Dipende dalle impostazioni del plugin Note giornaliere.": "Adds the crm-oggi block to newly created daily notes. Depends on the Daily notes plugin settings.", "Personalizza Kith": "Customize Kith", "Google Calendar": "Google Calendar", "Ripristina predefiniti": "Reset to defaults", "“Come il tema” usa il font di Obsidian/Minimal.": "“Like the theme” uses the Obsidian/Minimal font.", "Come il tema": "Like the theme", "Sans di sistema": "System sans", "Monospazio": "Monospace", "Famiglia font": "Font family", "Nome di un font installato, es. Inter o \"SF Pro Text\".": "Name of an installed font, e.g. Inter or \"SF Pro Text\".", "Dimensione testo": "Text size", "Scala tutta l’interfaccia del CRM (100% = dimensione del tema).": "Scales the whole CRM interface (100% = theme size).", "Densità righe": "Row density", "Altezza delle righe della tabella.": "Height of table rows.", "Compatta": "Compact", "Normale": "Normal", "Comoda": "Comfortable", "Arrotondamento angoli": "Corner radius", "Bordi tra le colonne": "Column borders", "Striscia KPI in alto": "KPI strip on top", "Di base il CRM usa i colori del tema attivo (Minimal). Qui puoi sovrascriverli solo per il CRM.": "By default the CRM uses your active theme’s colors (Minimal). Here you can override them for the CRM only.", "Usa il colore del tema": "Use theme color", "Accento": "Accent", "Pulsanti principali, selezione, filtro attivo.": "Primary buttons, selection, active filter.", "Scaduto / priorità alta": "Overdue / high priority", "Follow-up scaduti e priorità alta.": "Overdue follow-ups and high priority.", "In scadenza / priorità media": "Due soon / medium priority", "Follow-up nei prossimi giorni.": "Follow-ups in the coming days.", "Ok": "OK", "Follow-up non urgenti, vicinanza stretta.": "Non-urgent follow-ups, close relationships.", "Evidenziazione dei compleanni.": "Birthday highlighting.", "Avatar": "Avatar", "Colorati": "Colored", "Neutri": "Neutral", "Colorati (tenui, in base al nome) oppure tutti neutri.": "Colored (soft, based on the name) or all neutral.", "Etichette neutre": "Neutral tags", "Spento: ogni valore (relazione, interessi…) prende un colore automatico dal tema.": "Off: each value (relationship, interests…) gets an automatic color from the theme.", "Colore per relazione": "Color per relationship", "Neutro": "Neutral", "Rinomina i campi, nascondili dal form e dalla scheda, o aggiungine di nuovi. I dati nelle note non vengono mai cancellati.": "Rename fields, hide them from the form and the record, or add new ones. Data in your notes is never deleted.", " · personalizzato": " · custom", "Chiave nella nota: ${}": "Key in the note: ${}", "Mostra nel form e nella scheda": "Show in the form and record", "Rimuovi il campo (i dati nelle note restano)": "Remove the field (data in notes stays)", "Nuovo campo personalizzato": "New custom field", "Nome del campo": "Field name", "Es. Taglia regalo": "e.g. Gift size", "Chiave nella nota": "Key in the note", "Nome della proprietà nel frontmatter. Vuoto = ricavata dal nome.": "Property name in the frontmatter. Empty = derived from the name.", "Testo": "Text", "Testo lungo": "Long text", "Lista (valori separati da |)": "List (values separated by |)", "Scelta (suggerisce i valori già usati)": "Choice (suggests values already used)", "Sezione del form": "Form section", "Aggiungi campo": "Add field", "Inserisci un nome per il campo": "Enter a name for the field", "La chiave “${}” è già usata da “${}”": "The key “${}” is already used by “${}”", "Scegli quali colonne mostrare nella tabella e in che ordine. “Contatto” è sempre la prima.": "Choose which columns to show in the table and in what order. “Contact” is always first.", "Sposta a sinistra": "Move left", "Sposta a destra": "Move right", "Rimuovi colonna": "Remove column", "Aggiungi colonna": "Add column", "Aggiungi": "Add", "Ripristina colonne predefinite": "Reset default columns", "Il plugin apre Google Calendar con un evento annuale “tutto il giorno” già compilato; tu premi “Salva”. Non serve collegare nessun account al plugin.": "The plugin opens Google Calendar with a pre-filled yearly “all-day” event; you press “Save”. No account needs to be linked to the plugin.", "Abilita “Aggiungi a Google Calendar”": "Enable “Add to Google Calendar”", "Mostra il pulsante nella scheda del contatto e il comando dedicato.": "Shows the button on the contact record and the dedicated command.", "Proponi quando creo o modifico un contatto con compleanno": "Offer when I create or edit a contact with a birthday", "Dopo il salvataggio compare una finestra con il pulsante per aprire Google Calendar.": "After saving, a window appears with a button to open Google Calendar.", "Titolo evento": "Event title", "Segnaposto: {nome} {cognome} {eta}": "Placeholders: {first} {last} {age}", "Descrizione evento": "Event description", "Dopo l’inserimento la scheda riceve la proprietà compleanno_in_calendario, così il CRM sa che l’evento esiste. Promemoria e calendario di destinazione si scelgono su Google Calendar al momento del salvataggio.": "After insertion the record gets the property birthday_in_calendar, so the CRM knows the event exists. Reminders and the target calendar are chosen in Google Calendar when you save.", "Colori, font, campi dei contatti, colonne della tabella e Google Calendar.": "Colors, fonts, contact fields, table columns and Google Calendar.", "Apri “Personalizza”": "Open “Customize”", "Aspetto": "Appearance", "Colori": "Colors", "Campi": "Fields", "Generale": "General", "Font": "Font", "oggi! 🎂": "today! 🎂", "Caricamento…": "Loading…", "Elimina…": "Delete…", "Personalizzato…": "Custom…", "Compleanni": "Birthdays", "Personalizzazione": "Customization", "🎂 Compleanno di {nome} {cognome}": "🎂 {first} {last}’s birthday", "Compleanno di {nome} {cognome} {eta}": "{first} {last}’s birthday {age}", "gg/mm/aaaa": "dd/mm/yyyy", "mm/gg/aaaa": "mm/dd/yyyy", "aaaa-mm-gg": "yyyy-mm-dd", "Data non valida": "Invalid date", "Follow-up non valido": "Invalid follow-up", "email": "email", "telefono": "phone", "archiviato": "archived", "Lingua": "Language", "Automatica": "Automatic", "Automatica = segue la lingua di Obsidian. Dopo il cambio disattiva e riattiva il plugin (Impostazioni → Plugin della community).": "Automatic = follows Obsidian’s language. After changing it, turn the plugin off and on again (Settings → Community plugins).", "Lingua salvata: riavvia il plugin per applicarla.": "Language saved: restart the plugin to apply it.", "Formato data (visualizzazione)": "Date format (display)", "Nelle note le date vengono sempre scritte in formato ISO (AAAA-MM-GG), che non è ambiguo.": "In your notes dates are always written in ISO format (YYYY-MM-DD), which is unambiguous.", "Date con la barra (es. 03/04/2025)": "Dates with slashes (e.g. 03/04/2025)", "Come interpretare le date scritte con la barra nelle note esistenti.": "How to interpret slash-formatted dates in your existing notes.", "Automatico (dalla lingua)": "Automatic (from language)", "giorno/mese/anno": "day/month/year", "mese/giorno/anno": "month/day/year", "Analizza le note": "Analyze notes", "Nessuna data con la barra trovata: sei già a posto.": "No slash-formatted dates found: you’re all set.", "Trovate ${} date con la barra: ${} sono certamente giorno/mese. Imposto “giorno/mese/anno”.": "Found ${} slash-formatted dates: ${} are definitely day/month. Setting “day/month/year”.", "Trovate ${} date con la barra: ${} sono certamente mese/giorno. Imposto “mese/giorno/anno”.": "Found ${} slash-formatted dates: ${} are definitely month/day. Setting “month/day/year”.", "Trovate ${} date con la barra, ma i segnali sono misti o assenti (${} giorno/mese, ${} mese/giorno). Scegli a mano.": "Found ${} slash-formatted dates, but the signals are mixed or missing (${} day/month, ${} month/day). Please choose manually.", "Aggiungi al calendario": "Add to calendar", "Esporta compleanni e follow-up in un file .ics da importare nel calendario": "Export birthdays and follow-ups to an .ics file you can import into your calendar", "Importa da LinkedIn, rubrica del telefono, Facebook o CSV. Scegli esattamente chi importare prima della conferma: niente viene creato prima.": "Import from LinkedIn, your phone contacts, Facebook or CSV. You choose exactly who to import before confirming: nothing is created before that.", "Apri importatore": "Open importer", "Archiviati": "Archived", "Esplora": "Browse", "Azzera filtri": "Clear filters", "Nessun valore": "No values", "Cerca contatti…": "Search contacts…", "Mostra meno": "Show less", "vicinanza ${}": "closeness ${}", "frequenza": "frequency", "follow-up": "follow-up", "Apri scheda completa": "Open full record", "← Kith": "← Kith", "Trascina per ridimensionare": "Drag to resize", "Aggiungi campo": "Add field", "Nuovo campo personalizzato": "New custom field", "← Indietro": "← Back", "Persone in ${}": "People at ${}", "Persone collegate": "Connected people", "Nessuna": "None", "Scheda": "Record", "Cronologia": "Timeline", "Tutte le interazioni": "All interactions", "Esporta CSV": "Export CSV", "${} selezionati": "${} selected", "Deseleziona": "Clear selection", "Seleziona tutti": "Select all", "contatti esportati": "contacts exported"};
 function detectLang() {
   let l = '';
   try { l = localStorage.getItem('crm-contatti-lang') || ''; } catch (e) { l = ''; }
@@ -37,6 +37,7 @@ const FOLDER_DEF = LANG === 'it'
 const VIEW_TYPE = 'crm-contatti-view';
 const SIDE_TYPE = 'crm-contatti-side';
 const RECORD_TYPE = 'crm-contatti-record';
+const COMPANY_TYPE = 'crm-contatti-company';
 
 const DEFAULT_SETTINGS = {
   personeFolder: FOLDER_DEF[0],
@@ -47,6 +48,9 @@ const DEFAULT_SETTINGS = {
   slashOrder: 'auto',
   linkAziende: true,
   createAziende: true,
+  autoEnrichCompanies: true,
+  coEnrich: {},
+  coLayout: {},
   birthdayWindow: 30,
   defaultMode: 'tabella',
   groupBy: 'relazione',
@@ -60,7 +64,7 @@ const DEFAULT_SETTINGS = {
   },
   fields: {
     hidden: [], labels: {}, custom: [],
-    tableCols: ['relazione', 'vicinanza', 'citta', 'ultimo', 'followup', 'priorita'],
+    tableCols: ['ruolo', 'azienda', 'relazione', 'vicinanza', 'citta', 'ultimo', 'followup', 'priorita'],
   },
   gcal: {
     enabled: true, askOnCreate: true,
@@ -222,10 +226,15 @@ const CANON_EN = {
   yearly: 'annuale', annual: 'annuale', annually: 'annuale', high: 'alta', medium: 'media', low: 'bassa',
   close: 'stretta', distant: 'lontana', far: 'lontana', active: 'attivo', dormant: 'dormiente', archived: 'archiviato',
 };
+const REL_COLORS = {};
+['--color-pink', '--color-green', '--color-orange', '--color-blue', '--color-purple', '--color-cyan', '--color-red', '--color-yellow'].forEach((cssVar, i) => { REL_COLORS[norm(PRESETS_IT.relazione[i])] = REL_COLORS[norm(PRESETS_EN.relazione[i])] = cssVar; });
+const PALETTE_VARS = ['--color-red', '--color-orange', '--color-yellow', '--color-green', '--color-cyan', '--color-blue', '--color-purple', '--color-pink'];
+const relDefaultVar = (label) => REL_COLORS[norm(label)] || PALETTE_VARS[hue(norm(label)) % 8];
 const DV = {};
 for (const k of Object.keys(PRESETS_IT)) PRESETS_IT[k].forEach((it, i) => { DV[norm(it)] = DV[norm(PRESETS_EN[k][i])] = LANG === 'it' ? it : PRESETS_EN[k][i]; });
 const dv = (s) => DV[norm(s)] || s; // preset value shown in the UI language
 const nv = (s) => norm(dv(s));
+const relTone = (u, text) => (u.relColors && (u.relColors[cv(text)] || u.relColors[norm(text)])) || '';
 const cv = (s) => { const n = norm(s); return CANON_EN[n] || n; };
 
 /* Campi: k = chiave logica, dk = chiave frontmatter se nuova, al = alias normalizzati riconosciuti */
@@ -254,7 +263,7 @@ const FIELDS = [
   { k: 'settore', label: T('Settore'), group: T('Lavoro'), dk: 'settore', al: ['settore'] },
   { k: 'competenze', label: T('Competenze'), group: T('Lavoro'), dk: 'competenze', al: ['competenze'], type: 'list' },
 
-  { k: 'relazione', label: T('Relazione'), group: T('Relazione'), dk: 'relazione', al: ['relazione'], type: 'enum' },
+  { k: 'relazione', label: T('Relazione'), group: T('Relazione'), dk: 'relazione', al: ['relazione'], type: 'list' },
   { k: 'vicinanza', label: T('Vicinanza'), group: T('Relazione'), dk: 'vicinanza', al: ['vicinanza'], type: 'enum' },
   { k: 'stato', label: T('Stato'), group: T('Relazione'), dk: 'stato', al: ['stato'], type: 'enum' },
   { k: 'priorita', label: T('Priorità'), group: T('Relazione'), dk: 'priorita', al: ['priorita'], type: 'enum' },
@@ -298,6 +307,13 @@ for (const f of FIELDS) {
 }
 const FM = Object.fromEntries(FIELDS.map((f) => [f.k, f]));
 
+/* Relazioni multiple: "ex collega @ Azienda" = relazione + azienda collegata */
+function parseRel(e) {
+  const m = String(e || '').split(/\s+@\s*/);
+  return { raw: String(e || '').trim(), label: (m[0] || '').trim(), company: (m.slice(1).join(' @ ') || '').trim() };
+}
+const REL_LINKABLE = /collega|colleague|client|fornitor|supplier|business|mentor|socio|partner|manager|capo|boss/i;
+
 class Contact {
   constructor(file, fm) {
     this.file = file;
@@ -317,13 +333,14 @@ class Contact {
   }
   raw(f) { for (const a of f.al) if (a in this.nmap) return this.fm[this.nmap[a]]; return undefined; }
   realKey(f) { for (const a of f.al) if (a in this.nmap) return this.nmap[a]; return null; }
-  s(k) { return toStr(this.raw(FM[k])); }
+  get rels() { if (!this._rels) this._rels = toList(this.raw(FM.relazione)).map(parseRel).filter((r) => r.label); return this._rels; }
+  s(k) { if (k === 'relazione') { const r = this.rels[0]; return r ? r.label : ''; } return toStr(this.raw(FM[k])); }
   l(k) { return toList(this.raw(FM[k])); }
   get hay() {
     if (!this._hay) {
       this._hay = norm([this.name, this.s('soprannome'), this.s('azienda'), this.s('ruolo'), this.s('citta'),
         this.s('email'), this.s('telefono'), this.s('settore'), this.l('interessi').join(' '),
-        this.l('competenze').join(' '), this.s('relazione'), this.s('note')].join(' '));
+        this.l('competenze').join(' '), this.rels.map((r) => `${r.label} ${r.company}`).join(' '), this.s('note')].join(' '));
     }
     return this._hay;
   }
@@ -366,6 +383,9 @@ class CRMPlugin extends Plugin {
     this.registerView(VIEW_TYPE, (leaf) => new CRMView(leaf, this));
     this.registerView(SIDE_TYPE, (leaf) => new KithSidebar(leaf, this));
     this.registerView(RECORD_TYPE, (leaf) => new CRMRecordView(leaf, this));
+    this.registerView(COMPANY_TYPE, (leaf) => new CRMCompanyView(leaf, this));
+    this.addCommand({ id: 'kith-indietro', name: T('Kith: indietro'), checkCallback: (chk) => { const v = this.app.workspace.getActiveViewOfType(ItemView); const ok = !!v && typeof v.goBack === 'function'; if (ok && !chk) v.goBack(); return ok; } });
+    this.addCommand({ id: 'apri-azienda', name: T('Apri pagina azienda…'), callback: () => new CompanyPicker(this.app, allCompanyNames(this), (n) => this.openCompany(n)).open() });
     this.app.workspace.onLayoutReady(() => { this.syncSidebar(); });
     this.registerEvent(this.app.workspace.on('active-leaf-change', () => this.syncSidebar()));
     this.addRibbonIcon('users', T('Apri Kith'), () => this.activateView());
@@ -414,6 +434,8 @@ class CRMPlugin extends Plugin {
     for (const k of ['ui', 'fields', 'gcal']) {
       this.settings[k] = Object.assign(JSON.parse(JSON.stringify(DEFAULT_SETTINGS[k])), d[k] || {});
     }
+    const tc = this.settings.fields.tableCols;
+    if (JSON.stringify(tc) === JSON.stringify(['relazione', 'vicinanza', 'citta', 'ultimo', 'followup', 'priorita'])) this.settings.fields.tableCols = ['ruolo', 'azienda', ...tc];
   }
 
   onunload() {
@@ -431,7 +453,8 @@ class CRMPlugin extends Plugin {
   }
 
   refreshViews() {
-    for (const leaf of this.app.workspace.getLeavesOfType(VIEW_TYPE)) { const v = leaf.view; if (v && v.refresh) v.refresh(); }
+    for (const t of [VIEW_TYPE, RECORD_TYPE, COMPANY_TYPE]) for (const leaf of this.app.workspace.getLeavesOfType(t)) { const v = leaf.view; if (v && v.refresh) v.refresh(); else if (v && v.render) v.render(); }
+    this.refreshSidebar();
   }
 
   copyText(text, msg) {
@@ -537,7 +560,7 @@ class CRMPlugin extends Plugin {
     try {
       const ws = this.app.workspace;
       const act = ws.getActiveViewOfType(ItemView);
-      const onKith = !!act && (act.getViewType() === VIEW_TYPE || act.getViewType() === SIDE_TYPE || act.getViewType() === RECORD_TYPE);
+      const onKith = !!act && (act.getViewType() === VIEW_TYPE || act.getViewType() === SIDE_TYPE || act.getViewType() === RECORD_TYPE || act.getViewType() === COMPANY_TYPE);
       if (onKith) await this.ensureSidebar(!ws.leftSplit.collapsed);
       else if (ws.getLeavesOfType(SIDE_TYPE).length) this.closeSidebar();
     } finally { this._syncing = false; }
@@ -581,14 +604,44 @@ class CRMPlugin extends Plugin {
     return leaf;
   }
 
-  async openRecord(file) {
+  resolveImg(v, from) {
+    v = String(v || '').trim(); if (!v) return '';
+    if (/^(https?:|data:)/i.test(v)) return v;
+    const f = this.app.vault.getAbstractFileByPath(v) || this.app.metadataCache.getFirstLinkpathDest(v.replace(/^\[\[|\]\]$/g, ''), from || '');
+    return f instanceof TFile ? this.app.vault.getResourcePath(f) : '';
+  }
+  companyLogo(name) {
+    const f = this.findCompanyNote(name); if (!f) return '';
+    const fm = (this.app.metadataCache.getFileCache(f) || {}).frontmatter || {};
+    return this.resolveImg(toStr(fm.logo || ''), f.path);
+  }
+
+  findCompanyNote(name) {
+    const byFolder = this.app.vault.getAbstractFileByPath(normalizePath(this.settings.aziendeFolder) + '/' + name + '.md');
+    if (byFolder) return byFolder;
+    const f = this.app.metadataCache.getFirstLinkpathDest(name, '');
+    return f && f.path.startsWith(normalizePath(this.settings.aziendeFolder) + '/') ? f : null;
+  }
+
+  async openCompany(name, fromPath) {
+    const ws = this.app.workspace;
+    const cur = ws.getActiveViewOfType(ItemView);
+    let leaf = (cur && [RECORD_TYPE, COMPANY_TYPE].includes(cur.getViewType())) ? cur.leaf : (ws.getLeavesOfType(VIEW_TYPE)[0] || ws.getLeavesOfType(RECORD_TYPE)[0]);
+    if (!leaf) leaf = ws.getLeaf('tab');
+    const from = fromPath || (cur && cur.getViewType() === RECORD_TYPE ? cur.path : null);
+    await leaf.setViewState({ type: COMPANY_TYPE, active: true, state: { name, from } });
+    ws.revealLeaf(leaf);
+  }
+
+  async openRecord(file, opts) {
     const ws = this.app.workspace;
     // same tab as the list, so Obsidian's back arrow returns to it
     const cur = ws.getActiveViewOfType(ItemView);
-    let leaf = (cur && cur.getViewType() === RECORD_TYPE) ? cur.leaf : (ws.getLeavesOfType(VIEW_TYPE)[0] || ws.getLeavesOfType(RECORD_TYPE)[0]);
+    let leaf = (cur && [RECORD_TYPE, COMPANY_TYPE].includes(cur.getViewType())) ? cur.leaf : (ws.getLeavesOfType(VIEW_TYPE)[0] || ws.getLeavesOfType(RECORD_TYPE)[0]);
     if (!leaf) leaf = ws.getLeaf('tab');
     const stack = (cur && cur.getViewType() === RECORD_TYPE && cur.path && cur.path !== file.path) ? [...cur.stack, cur.path] : (cur && cur.getViewType() === RECORD_TYPE ? cur.stack : []);
-    await leaf.setViewState({ type: RECORD_TYPE, active: true, state: { path: file.path, stack } });
+    const co = (opts && opts.company) || (cur && cur.getViewType() === RECORD_TYPE && cur.path !== file.path ? cur.co : null) || null;
+    await leaf.setViewState({ type: RECORD_TYPE, active: true, state: { path: file.path, stack, co } });
     ws.revealLeaf(leaf);
   }
 
@@ -715,7 +768,9 @@ class CRMPlugin extends Plugin {
       file = await this.app.vault.create(path, T('\n## Note\n\n## Interazioni\n'));
     }
     const wrapLink = (v) => (this.settings.linkAziende && v && !/^\[\[/.test(v) ? `[[${v}]]` : v);
+    if (values.relazione != null) values.relazione = (Array.isArray(values.relazione) ? values.relazione : toList(values.relazione)).map((x) => String(x).replace(/\s*@\s*$/, '').trim()).filter(Boolean);
     for (const k of ['azienda']) if (values[k]) await this.ensureCompany(values[k]);
+    for (const r of (values.relazione || []).map(parseRel)) if (r.company) await this.ensureCompany(r.company);
 
     await this.app.fileManager.processFrontMatter(file, (fm) => {
       const nmap = {};
@@ -774,12 +829,13 @@ class CRMPlugin extends Plugin {
 
 class CRMView extends ItemView {
   constructor(leaf, plugin) {
-    super(leaf);
+    super(leaf); this.navigation = true;
     this.plugin = plugin;
     this.q = '';
     this.filters = { relazione: '', vicinanza: '', priorita: '', azienda: '', citta: '', stato: 'attivi' };
     this.quick = '';
     this.mode = plugin.settings.defaultMode;
+    this.colSort = null; this.colFilters = {};
     this.groupBy = plugin.settings.groupBy;
     this.sort = 'nome';
     this.selected = null;
@@ -824,6 +880,17 @@ class CRMView extends ItemView {
       .addEventListener('click', () => this.plugin.exportICS());
     h.createEl('button', { cls: 'crm-btn', text: T('Personalizza') })
       .addEventListener('click', () => new CustomizeModal(this.app, this.plugin).open());
+
+    const col = h.createEl('button', { cls: 'clickable-icon crm-collapse' });
+    const syncCol = () => {
+      const on = this.plugin.settings.headerCollapsed !== false;
+      root.toggleClass('crm-collapsed', on);
+      setIcon(col, on ? 'chevrons-up-down' : 'chevrons-down-up');
+      col.setAttribute('aria-label', on ? T('Espandi intestazione') : T('Comprimi intestazione'));
+      col.setAttribute('title', on ? T('Espandi intestazione') : T('Comprimi intestazione'));
+    };
+    col.addEventListener('click', () => { this.plugin.settings.headerCollapsed = this.plugin.settings.headerCollapsed === false; this.plugin.saveData(this.plugin.settings); syncCol(); });
+    syncCol();
 
     this.tabsEl = root.createDiv('crm-tabs');
     this.kpiEl = root.createDiv('crm-kpis');
@@ -891,7 +958,7 @@ class CRMView extends ItemView {
       if (this.quick === 'archiviati') { if (!c.archived) return false; }
       else if (f.stato === 'attivi') { if (c.archived) return false; }
       else if (f.stato !== 'tutti' && f.stato && nv(c.s('stato')) !== nv(f.stato)) return false;
-      if (f.relazione && nv(c.s('relazione')) !== nv(f.relazione)) return false;
+      if (f.relazione && !c.rels.some((r) => nv(r.label) === nv(f.relazione))) return false;
       if (f.vicinanza && nv(c.s('vicinanza')) !== nv(f.vicinanza)) return false;
       if (f.priorita && nv(c.s('priorita')) !== nv(f.priorita)) return false;
       if (f.azienda && norm(c.s('azienda')) !== norm(f.azienda)) return false;
@@ -904,6 +971,11 @@ class CRMView extends ItemView {
     });
     const sortKey = this.quick === 'compleanni' ? 'compleanno' : this.quick === 'scaduti' ? 'followup' : this.sort;
     list = list.sort(SORTS[sortKey]);
+    for (const [k, q2] of Object.entries(this.colFilters || {})) { const nq = norm(q2); if (nq) list = list.filter((c) => norm(colText(c, k)).includes(nq)); }
+    if (this.colSort && colDef(this.colSort.key)) {
+      const { key, dir } = this.colSort;
+      list = list.sort((a, b) => { const x = colSortVal(a, key), y = colSortVal(b, key); const r = (typeof x === 'number' && typeof y === 'number') ? x - y : String(x).localeCompare(String(y), LANG); return dir === 'desc' ? -r : r; });
+    }
     return list;
   }
 
@@ -956,7 +1028,7 @@ class CRMView extends ItemView {
   uniqueValues(key) {
     const seen = new Map();
     for (const p of (PRESETS[key] || [])) seen.set(nv(p), p);
-    for (const c of this.all) { const v = c.s(key); if (v && !seen.has(nv(v))) seen.set(nv(v), dv(v)); }
+    for (const c of this.all) for (const v of (key === 'relazione' ? c.rels.map((r) => r.label) : [c.s(key)])) if (v && !seen.has(nv(v))) seen.set(nv(v), dv(v));
     return [...seen.values()];
   }
 
@@ -979,6 +1051,17 @@ class CRMView extends ItemView {
     if (this.quick) {
       const chip = left.createEl('button', { cls: 'crm-chip-clear', text: T`Filtro rapido: ${this.quick} ✕` });
       chip.addEventListener('click', () => { this.quick = ''; this.renderKpi(); this.renderToolbar(); this.renderList(); });
+    }
+
+    for (const [fk, lab] of [['azienda', T('Azienda')], ['citta', T('Città')]]) {
+      if (!this.filters[fk]) continue;
+      const chip = left.createEl('button', { cls: 'crm-chip-clear', text: `${lab}: ${this.filters[fk]} ✕` });
+      chip.addEventListener('click', () => { this.filters[fk] = ''; this.renderKpi(); this.renderToolbar(); this.renderList(); });
+    }
+    for (const [k, q2] of Object.entries(this.colFilters || {})) {
+      if (!q2 || !colDef(k)) continue;
+      const chip = left.createEl('button', { cls: 'crm-chip-clear', text: `${colDef(k).label}: “${q2}” ✕` });
+      chip.addEventListener('click', () => { delete this.colFilters[k]; this.renderKpi(); this.renderToolbar(); this.renderList(); });
     }
 
     const right = el.createDiv('crm-tb-right');
@@ -1130,9 +1213,21 @@ class CRMView extends ItemView {
     if (!text) return null;
     const u = this.plugin.settings.ui;
     const b = parent.createSpan({ cls: 'crm-badge ' + (cls || (u.neutralTags ? '' : 't' + (hue(norm(text)) % 8))), text: cap(dv(text)) });
-    const custom = !cls && u.relColors[norm(text)];
-    if (custom) b.style.setProperty('--tone', custom);
+    const custom = !cls && relTone(u, text);
+    if (custom) { b.style.setProperty('--tone', custom); b.addClass('has-tone'); }
     return b;
+  }
+
+  relBadges(parent, c) {
+    for (const r of c.rels) {
+      const b = this.badge(parent, r.label);
+      if (b && !b.hasClass('has-tone')) { b.style.setProperty('--tone', `var(${relDefaultVar(r.label)})`); b.addClass('has-tone'); }
+      if (b && r.company) {
+        b.createSpan({ cls: 'crm-rel-sep', text: '·' });
+        const a = b.createEl('a', { cls: 'crm-rel-co', text: r.company, attr: { 'aria-label': T`Apri ${r.company}` } });
+        a.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); this.plugin.openCompany(r.company); });
+      }
+    }
   }
 
   dueChip(parent, c) {
@@ -1155,7 +1250,117 @@ class CRMView extends ItemView {
     return [c.s('ruolo'), c.s('azienda')].filter(Boolean).join(' · ') || c.s('citta');
   }
 
+  columnFilter(anchor, key, label) {
+    document.querySelectorAll('.crm-colpick').forEach((n) => n.remove());
+    const pop = document.body.createDiv('crm-colpick');
+    const r = anchor.getBoundingClientRect();
+    pop.style.top = (r.bottom + 6) + 'px';
+    pop.style.left = Math.max(8, Math.min(window.innerWidth - 280, r.left)) + 'px';
+    pop.createDiv({ cls: 'crm-colpick-h', text: T`Filtra: ${label}` });
+    const inp = pop.createEl('input', { type: 'text', placeholder: T('contiene…'), cls: 'crm-colpick-s' });
+    inp.value = this.colFilters[key] || '';
+    const apply = () => { if (inp.value.trim()) this.colFilters[key] = inp.value.trim(); else delete this.colFilters[key]; this.renderKpi(); this.renderToolbar(); this.renderList(); };
+    const close = () => { pop.remove(); document.removeEventListener('mousedown', away, true); };
+    const away = (e) => { if (!pop.contains(e.target)) close(); };
+    setTimeout(() => document.addEventListener('mousedown', away, true), 0);
+    inp.addEventListener('input', () => { apply(); });
+    inp.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === 'Escape') { close(); } });
+    setTimeout(() => { inp.focus(); inp.select(); }, 0);
+  }
+
+  applyPins(t, keys, pinned) {
+    const heads = [...t.querySelectorAll('thead th')];
+    const stickyIdx = [0, 1, ...keys.map((k, i) => (pinned.includes(k) ? i + 2 : -1)).filter((i) => i >= 0)];
+    let left = 0;
+    stickyIdx.forEach((ci, n) => {
+      const th = heads[ci]; if (!th) return;
+      const w = th.offsetWidth;
+      for (const row of t.rows) { const cell = row.cells[ci]; if (!cell) continue; cell.addClass('crm-sticky'); cell.style.left = left + 'px'; if (n === stickyIdx.length - 1) cell.addClass('crm-sticky-last'); }
+      left += w;
+    });
+  }
+
+  columnPicker(anchor, keys, onPick) {
+    document.querySelectorAll('.crm-colpick').forEach((n) => n.remove());
+    const pop = document.body.createDiv('crm-colpick');
+    const r = anchor.getBoundingClientRect();
+    pop.style.top = (r.bottom + 6) + 'px';
+    pop.style.left = Math.max(8, Math.min(window.innerWidth - 280, r.right - 270)) + 'px';
+    const inp = pop.createEl('input', { type: 'search', placeholder: T('Cerca un campo…'), cls: 'crm-colpick-s' });
+    const box = pop.createDiv('crm-colpick-list');
+    const free = allColKeys().filter((k) => !keys.includes(k) && colDef(k));
+    const draw = () => {
+      box.empty();
+      const q = norm(inp.value);
+      const hit = free.filter((k) => !q || norm(colDef(k).label).includes(q));
+      if (!hit.length) box.createDiv({ cls: 'crm-muted', text: T('Nessun campo') });
+      for (const k of hit) { const it = box.createDiv({ cls: 'crm-colpick-item', text: colDef(k).label }); it.addEventListener('click', () => { close(); onPick(k); }); }
+    };
+    const close = () => { pop.remove(); document.removeEventListener('mousedown', away, true); document.removeEventListener('keydown', esc, true); };
+    const away = (e) => { if (!pop.contains(e.target)) close(); };
+    const esc = (e) => { if (e.key === 'Escape') close(); };
+    setTimeout(() => { document.addEventListener('mousedown', away, true); document.addEventListener('keydown', esc, true); }, 0);
+    inp.addEventListener('input', draw); draw(); setTimeout(() => inp.focus(), 0);
+  }
+
+  bulkBar(el, picked, list) {
+    const p = this.plugin, n = picked.length;
+    const bar = el.createDiv('crm-bulkbar');
+    bar.createSpan({ cls: 'crm-bulk-count', text: n === 1 ? T`1 contatto selezionato: ${picked[0].name}` : T`${n} contatti selezionati` });
+    const btn = (icon, label, fn, cls) => { const b = bar.createEl('button', { cls: 'crm-bulk-btn' + (cls ? ' ' + cls : '') }); setIcon(b.createSpan('crm-bulk-ico'), icon); b.createSpan({ text: label }); b.addEventListener('click', fn); return b; };
+    const done = () => { this.checked.clear(); this.refresh(); };
+    btn('check', T('Contattato oggi'), async () => { for (const c of picked) await p.markContacted(c); new Notice(n === 1 ? T`${picked[0].name}: ultimo contatto = oggi` : T`${n} contatti: ultimo contatto = oggi`); this.refresh(); });
+    if (n === 1) btn('message-square-plus', T('Interazione'), () => new InteractionModal(this.app, p, picked[0]).open());
+    const sub = (m, title, icon, key, vals) => {
+      const apply = async (v) => {
+        for (const c of picked) {
+          if (key === 'relazione') { const cur = c.l('relazione'); if (!c.rels.some((r) => nv(r.label) === nv(v) && !r.company)) await p.saveContact(c.file, { relazione: [...cur, v] }); }
+          else await p.saveContact(c.file, { [key]: v });
+        }
+        this.refresh();
+      };
+      let sm = null;
+      m.addItem((it) => { it.setTitle(title).setIcon(icon); if (typeof it.setSubmenu === 'function') sm = it.setSubmenu(); });
+      if (sm) for (const v of vals) sm.addItem((i2) => i2.setTitle(cap(v)).onClick(() => apply(v)));
+      else for (const v of vals) m.addItem((i2) => i2.setTitle(`${title}: ${cap(v)}`).onClick(() => apply(v)));
+    };
+    btn('pencil', T('Modifica'), (e) => {
+      if (n === 1) { new ContactModal(this.app, p, picked[0], () => this.refresh()).open(); return; }
+      const m = new Menu();
+      sub(m, T('Aggiungi relazione'), 'users', 'relazione', PRESETS.relazione);
+      sub(m, T('Vicinanza'), 'heart', 'vicinanza', PRESETS.vicinanza);
+      sub(m, T('Priorità'), 'flag', 'priorita', PRESETS.priorita);
+      sub(m, T('Stato'), 'activity', 'stato', PRESETS.stato);
+      m.showAtMouseEvent(e);
+    });
+    btn('trash', T('Elimina'), () => new BulkDeleteModal(this.app, p, picked, done).open(), 'is-danger');
+    if (n === 1) btn('maximize-2', T('Apri scheda'), () => p.openRecord(picked[0].file));
+    btn('chevron-down', T('Altro'), (e) => {
+      const m = new Menu();
+      const allArch = picked.every((c) => c.archived);
+      m.addItem((i) => i.setTitle(allArch ? T('Ripristina') : T('Archivia')).setIcon('archive').onClick(async () => { for (const c of picked) await p.setArchived(c, !allArch); this.checked.clear(); this.refresh(); }));
+      if (n === 1) {
+        const c = picked[0];
+        for (const [icon, label, kind, val] of [['mail', T('Email'), 'email', c.s('email') || c.s('emaillavoro')], ['phone', T('Chiama'), 'tel', c.s('telefono')], ['message-circle', 'WhatsApp', 'whatsapp', c.s('whatsapp') || c.s('telefono')], ['link', 'LinkedIn', 'linkedin', c.s('linkedin')], ['at-sign', 'Instagram', 'instagram', c.s('instagram')]]) {
+          const href = val && linkFor(kind, val);
+          if (href) m.addItem((i) => i.setTitle(label).setIcon(icon).onClick(() => window.open(href, '_blank')));
+        }
+        m.addItem((i) => i.setTitle(T('Apri nota')).setIcon('file-text').onClick(() => this.app.workspace.getLeaf('tab').openFile(c.file)));
+      } else {
+        const mails = picked.map((c) => c.s('email') || c.s('emaillavoro')).filter(Boolean);
+        if (mails.length) m.addItem((i) => i.setTitle(T`Copia ${mails.length} email`).setIcon('mail').onClick(() => p.copyText(mails.join(', '), T('Email copiate'))));
+      }
+      m.addItem((i) => i.setTitle(T('Esporta CSV')).setIcon('download').onClick(() => this.exportCSV(picked)));
+      m.showAtMouseEvent(e);
+    });
+    const x = bar.createEl('button', { cls: 'clickable-icon crm-bulk-x', attr: { 'aria-label': T('Deseleziona'), title: T('Deseleziona') } });
+    setIcon(x, 'x'); if (!x.querySelector('svg')) x.setText('✕');
+    x.addEventListener('click', () => { this.checked.clear(); this.renderList(); });
+  }
+
   renderTable(el, list) {
+    const pickedNow = list.filter((c) => this.checked.has(c.file.path));
+    if (pickedNow.length) this.bulkBar(el, pickedNow, list);
     const wrap = el.createDiv('crm-table-wrap');
     const t = wrap.createEl('table', { cls: 'crm-table' });
     const cols = FIELD_CFG.tableCols.map((k) => colDef(k)).filter(Boolean);
@@ -1164,7 +1369,49 @@ class CRMView extends ItemView {
     hc.checked = list.length > 0 && list.every((c) => this.checked.has(c.file.path));
     hc.addEventListener('change', () => { for (const c of list) { if (hc.checked) this.checked.add(c.file.path); else this.checked.delete(c.file.path); } this.renderList(); });
     hr.createEl('th', { text: T('Contatto') });
-    for (const col of cols) hr.createEl('th', { text: col.label });
+    const keys = FIELD_CFG.tableCols.filter((k) => colDef(k));
+    const cfgSave = async (arr) => { const p = this.plugin; p.settings.fields.tableCols = arr; await p.saveSettings(); applyFieldConfig(p.settings.fields); p.refreshViews(); };
+    const pinned = (this.plugin.settings.pinnedCols || []).filter((k) => keys.includes(k));
+    const setPins = async (arr) => { this.plugin.settings.pinnedCols = arr; await this.plugin.saveSettings(); this.renderList(); };
+    keys.forEach((key, i) => {
+      const th = hr.createEl('th', { cls: 'crm-th' + (pinned.includes(key) ? ' is-pinned' : ''), attr: { draggable: 'true', 'data-col': key } });
+      const inner = th.createDiv('crm-th-in');
+      const lab = inner.createSpan({ cls: 'crm-th-l', text: cols[i].label });
+      if (this.colSort && this.colSort.key === key) { const si = inner.createSpan('crm-th-ico'); setIcon(si, this.colSort.dir === 'asc' ? 'arrow-up' : 'arrow-down'); }
+      if (this.colFilters[key]) { const fi = inner.createSpan('crm-th-ico'); setIcon(fi, 'filter'); }
+      if (pinned.includes(key)) { const pi = inner.createSpan('crm-th-ico'); setIcon(pi, 'pin'); }
+      const setSort = (dir) => { this.colSort = (this.colSort && this.colSort.key === key && this.colSort.dir === dir) ? null : { key, dir }; this.renderList(); };
+      lab.addEventListener('click', () => setSort(this.colSort && this.colSort.key === key && this.colSort.dir === 'asc' ? 'desc' : 'asc'));
+      const mb = inner.createSpan({ cls: 'clickable-icon crm-th-menu', attr: { 'aria-label': T('Opzioni colonna') } }); mb.setText('⋮');
+      mb.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const m = new Menu();
+        m.addItem((it) => it.setTitle(T('Ordine crescente')).setIcon('arrow-up').setChecked(!!(this.colSort && this.colSort.key === key && this.colSort.dir === 'asc')).onClick(() => setSort('asc')));
+        m.addItem((it) => it.setTitle(T('Ordine decrescente')).setIcon('arrow-down').setChecked(!!(this.colSort && this.colSort.key === key && this.colSort.dir === 'desc')).onClick(() => setSort('desc')));
+        m.addItem((it) => it.setTitle(T('Filtra per questa colonna')).setIcon('filter').onClick(() => this.columnFilter(th, key, cols[i].label)));
+        if (this.colFilters[key]) m.addItem((it) => it.setTitle(T('Rimuovi filtro colonna')).setIcon('filter-x').onClick(() => { delete this.colFilters[key]; this.renderKpi(); this.renderToolbar(); this.renderList(); }));
+        m.addSeparator();
+        m.addItem((it) => it.setTitle(pinned.includes(key) ? T('Sblocca colonna') : T('Blocca colonna')).setIcon(pinned.includes(key) ? 'pin-off' : 'pin').onClick(() => setPins(pinned.includes(key) ? pinned.filter((x) => x !== key) : [...pinned, key])));
+        m.addItem((it) => it.setTitle(T('Sposta a sinistra')).setIcon('arrow-left').setDisabled(i === 0).onClick(() => { const a = [...keys]; [a[i - 1], a[i]] = [a[i], a[i - 1]]; cfgSave(a); }));
+        m.addItem((it) => it.setTitle(T('Sposta a destra')).setIcon('arrow-right').setDisabled(i === keys.length - 1).onClick(() => { const a = [...keys]; [a[i + 1], a[i]] = [a[i], a[i + 1]]; cfgSave(a); }));
+        m.addItem((it) => it.setTitle(T('Aggiungi colonna')).setIcon('plus').onClick(() => this.columnPicker(th, keys, (k) => { const a = [...keys]; a.splice(i + 1, 0, k); cfgSave(a); })));
+        m.addSeparator();
+        m.addItem((it) => it.setTitle(T('Rimuovi colonna')).setIcon('x').onClick(() => cfgSave(keys.filter((x) => x !== key))));
+        m.showAtMouseEvent(e);
+      });
+      th.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/kith-col', key); e.dataTransfer.effectAllowed = 'move'; });
+      th.addEventListener('dragover', (e) => { if (e.dataTransfer.types.includes('text/kith-col')) { e.preventDefault(); th.addClass('is-over'); } });
+      th.addEventListener('dragleave', () => th.removeClass('is-over'));
+      th.addEventListener('drop', (e) => {
+        e.preventDefault(); th.removeClass('is-over');
+        const from = e.dataTransfer.getData('text/kith-col');
+        if (!from || from === key) return;
+        const a = keys.filter((x) => x !== from); a.splice(a.indexOf(key) + (keys.indexOf(from) < i ? 1 : 0), 0, from); cfgSave(a);
+      });
+    });
+    const addTh = hr.createEl('th', { cls: 'crm-th-add' });
+    const addBtn = addTh.createSpan({ cls: 'clickable-icon', attr: { 'aria-label': T('Aggiungi colonna'), title: T('Aggiungi colonna') } }); setIcon(addBtn, 'plus');
+    addBtn.addEventListener('click', (e) => { e.stopPropagation(); this.columnPicker(addBtn, keys, (k) => cfgSave([...keys, k])); });
     const tb = t.createEl('tbody');
     for (const c of list) {
       const tr = tb.createEl('tr', { cls: 'crm-row' + (this.selected === c.file.path ? ' is-selected' : '') });
@@ -1176,27 +1423,17 @@ class CRMView extends ItemView {
       this.avatar(n, c);
       const nt = n.createDiv('crm-nametext');
       nt.createDiv({ cls: 'crm-name', text: c.name });
-      nt.createDiv({ cls: 'crm-sub', text: this.subline(c) });
       for (const col of cols) col.cell(this, tr.createEl('td'), c);
+      tr.createEl('td', { cls: 'crm-th-add' });
       tr.addEventListener('click', (e) => { if (e.target.closest && (e.target.closest('.crm-nametext') || e.target.closest('.crm-avatar'))) this.plugin.openRecord(c.file); else this.select(c.file.path); });
       tr.addEventListener('dblclick', () => this.plugin.openRecord(c.file));
       tr.addEventListener('contextmenu', (e) => this.contactMenu(e, c));
     }
+    requestAnimationFrame(() => { try { this.applyPins(t, keys, pinned); } catch (e) { /* layout non pronto */ } });
     const picked = list.filter((c) => this.checked.has(c.file.path));
     const foot = el.createDiv('crm-foot');
     const left = foot.createDiv('crm-foot-l');
     left.createSpan({ cls: 'crm-foot-count', text: `${list.length} ${T(list.length === 1 ? 'contatto' : 'contatti')}` });
-    if (picked.length) {
-      left.createSpan({ cls: 'crm-foot-sel', text: T`${picked.length} selezionati` });
-      const arch = left.createEl('button', { cls: 'crm-btn', text: T('Archivia') });
-      arch.addEventListener('click', async () => {
-        for (const c of picked) await this.plugin.saveContact(c.file, { stato: PRESETS.stato[2] });
-        this.checked.clear(); this.refresh();
-      });
-      const del = left.createEl('button', { cls: 'crm-btn crm-btn-danger', text: T('Elimina') });
-      del.addEventListener('click', () => new BulkDeleteModal(this.app, this.plugin, picked, () => { this.checked.clear(); this.refresh(); }).open());
-      left.createEl('button', { cls: 'crm-btn', text: T('Deseleziona') }).addEventListener('click', () => { this.checked.clear(); this.renderList(); });
-    }
     const exp = foot.createEl('button', { cls: 'crm-btn', text: T('Esporta CSV') });
     exp.addEventListener('click', () => this.exportCSV(picked.length ? picked : list));
   }
@@ -1239,7 +1476,7 @@ class CRMView extends ItemView {
       nt.createDiv({ cls: 'crm-name', text: c.name });
       nt.createDiv({ cls: 'crm-sub', text: this.subline(c) });
       const tags = card.createDiv('crm-card-tags');
-      this.badge(tags, c.s('relazione'));
+      this.relBadges(tags, c);
       this.priChip(tags, c);
       const meta = card.createDiv('crm-card-meta');
       if (c.s('citta')) meta.createDiv({ text: '📍 ' + c.s('citta') });
@@ -1282,7 +1519,8 @@ class CRMView extends ItemView {
         const path = e.dataTransfer.getData('text/plain');
         const f = this.app.vault.getAbstractFileByPath(path);
         if (f instanceof TFile) {
-          await this.plugin.saveContact(f, { [key]: col.value });
+          if (key === 'relazione') { const cc = this.all.find((x) => x.file.path === path); const rest = cc ? cc.l('relazione').slice(1) : []; await this.plugin.saveContact(f, { relazione: col.value ? [col.value, ...rest] : rest }); }
+          else await this.plugin.saveContact(f, { [key]: col.value });
           new Notice(T`Spostato in “${col.title}”`);
         }
       });
@@ -1324,7 +1562,7 @@ class CRMView extends ItemView {
     if (c.s('soprannome')) head.createDiv({ cls: 'crm-sub', text: `“${c.s('soprannome')}”` });
     head.createDiv({ cls: 'crm-sub', text: this.subline(c) });
     const tags = head.createDiv('crm-card-tags');
-    this.badge(tags, c.s('relazione'));
+    this.relBadges(tags, c);
     this.badge(tags, c.s('vicinanza') && T`vicinanza ${dv(c.s('vicinanza'))}`);
     this.priChip(tags, c);
     if (c.archived) this.badge(tags, T('archiviato'), 'crm-pri crm-pri-bassa');
@@ -1540,18 +1778,43 @@ class CRMView extends ItemView {
 
 /* ───────────────────────── Modali ───────────────────────── */
 
+
+/* swipe orizzontale a due dita = indietro (Obsidian non lo gestisce per le viste personalizzate) */
+function installSwipeBack(view, goBack) {
+  let acc = 0, lock = false, reset = null;
+  view.registerDomEvent(view.contentEl, 'wheel', (e) => {
+    if (lock || Math.abs(e.deltaX) < Math.abs(e.deltaY) * 1.5) return;
+    for (let el = e.target; el && el !== view.contentEl; el = el.parentElement) {
+      if (el.scrollWidth > el.clientWidth + 2) {
+        const ov = getComputedStyle(el).overflowX;
+        if ((ov === 'auto' || ov === 'scroll') && (e.deltaX < 0 ? el.scrollLeft > 0 : el.scrollLeft + el.clientWidth < el.scrollWidth - 1)) return;
+      }
+    }
+    acc += e.deltaX;
+    clearTimeout(reset); reset = setTimeout(() => { acc = 0; }, 250);
+    if (acc < -140) { acc = 0; lock = true; setTimeout(() => { lock = false; }, 700); goBack(); }
+  }, { passive: true });
+}
+
 /* ───────────────────────── Scheda a pagina intera ───────────────────────── */
 class CRMRecordView extends ItemView {
-  constructor(leaf, plugin) { super(leaf); this.plugin = plugin; this.path = null; this.stack = []; this.adding = new Set(); this._t = null; }
+  constructor(leaf, plugin) { super(leaf); this.navigation = true; this.plugin = plugin; this.path = null; this.stack = []; this.co = null; this.adding = new Set(); this._t = null; }
   getViewType() { return RECORD_TYPE; }
   getIcon() { return 'user-round'; }
   getDisplayText() { const c = this.contact(); return c ? c.name : T('Scheda'); }
-  getState() { return { path: this.path, stack: this.stack }; }
-  async setState(state, result) { if (!state || state.path !== this.path) this.adding = new Set(); this.path = state && state.path; this.stack = (state && state.stack) || []; await super.setState(state, result); this.render(); this.leaf.updateHeader && this.leaf.updateHeader(); }
+  getState() { return { path: this.path, stack: this.stack, co: this.co }; }
+  async setState(state, result) { if (!state || state.path !== this.path) this.adding = new Set(); this.path = state && state.path; this.stack = (state && state.stack) || []; this.co = (state && state.co) || null; await super.setState(state, result); this.render(); this.leaf.updateHeader && this.leaf.updateHeader(); }
   saveCols(rc) { this.plugin.settings.recordCols = { l: rc.l, r: rc.r }; this.plugin.saveData(this.plugin.settings); }
+  async goBack() {
+    const prev = this.stack[this.stack.length - 1];
+    if (prev) await this.leaf.setViewState({ type: RECORD_TYPE, active: true, state: { path: prev, stack: this.stack.slice(0, -1), co: this.co } });
+    else if (this.co) await this.leaf.setViewState({ type: COMPANY_TYPE, active: true, state: { name: this.co, from: null } });
+    else await this.leaf.setViewState({ type: VIEW_TYPE, active: true });
+  }
   contact() { return this.path ? this.plugin.getContacts().find((x) => x.file.path === this.path) : null; }
   async onOpen() {
     this.contentEl.addClass('crm-root', 'crm-rec-root');
+    installSwipeBack(this, () => this.goBack());
     const later = (f) => { if (f && f.path && (f.path === this.path || f.path.startsWith(normalizePath(this.plugin.settings.interazioniFolder) + '/'))) { clearTimeout(this._t); this._t = setTimeout(() => this.render(), 350); } };
     this.registerEvent(this.app.metadataCache.on('changed', later));
     this.registerEvent(this.app.vault.on('rename', later));
@@ -1565,12 +1828,8 @@ class CRMRecordView extends ItemView {
     if (!c) { root.createDiv({ cls: 'crm-muted crm-rec-empty', text: T('Caricamento…') }); return; }
     const all = this.plugin.getContacts();
     const bar = root.createDiv('crm-rec-bar');
-    const goBack = async () => {
-      const prev = this.stack[this.stack.length - 1];
-      if (prev) await this.leaf.setViewState({ type: RECORD_TYPE, active: true, state: { path: prev, stack: this.stack.slice(0, -1) } });
-      else await this.leaf.setViewState({ type: VIEW_TYPE, active: true });
-    };
-    bar.createEl('button', { cls: 'crm-btn', text: this.stack.length ? T('← Indietro') : T('← Kith') }).addEventListener('click', goBack);
+    const goBack = () => this.goBack();
+    bar.createEl('button', { cls: 'crm-btn', text: (this.stack.length || this.co) ? T('← Indietro') : T('← Kith') }).addEventListener('click', goBack);
     const wrap = root.createDiv('crm-rec');
     const rc = Object.assign({ l: 22, r: 22 }, this.plugin.settings.recordCols || {});
     wrap.style.setProperty('--lf', rc.l); wrap.style.setProperty('--rf', rc.r);
@@ -1612,7 +1871,7 @@ class CRMRecordView extends ItemView {
     if (c.s('soprannome')) card.createDiv({ cls: 'crm-sub', text: `“${c.s('soprannome')}”` });
     card.createDiv({ cls: 'crm-sub', text: this.subline(c) });
     const tags = card.createDiv('crm-card-tags');
-    this.badge(tags, c.s('relazione'));
+    this.relBadges(tags, c);
     this.badge(tags, c.s('vicinanza') && T`vicinanza ${dv(c.s('vicinanza'))}`);
     this.priChip(tags, c);
     if (c.archived) this.badge(tags, T('archiviato'), 'crm-pri crm-pri-bassa');
@@ -1657,7 +1916,7 @@ class CRMRecordView extends ItemView {
       if (f.type === 'date') inp.placeholder = datePh();
       if (f.type === 'list' || f.type === 'companylist') inp.placeholder = T('valori separati da |');
       const sopts = suggestOptions(this.plugin, f, pool, c);
-      if (sopts) attachCombo(w, inp, sopts, { multi: f.type === 'companylist' });
+      if (sopts) attachCombo(w, inp, sopts, { multi: f.type === 'companylist' || f.k === 'relazione' });
       let done = false;
       const finish = (ok) => { if (done) return; done = true; if (ok) save(f, inp.value); else { this.adding.delete(f.k); this.render(); } };
       inp.addEventListener('keydown', (e) => {
@@ -1685,6 +1944,17 @@ class CRMRecordView extends ItemView {
         const kind = { email: 'email', emaillavoro: 'email', telefono: 'tel', whatsapp: 'whatsapp', instagram: 'instagram', linkedin: 'linkedin' }[f.k];
         const href = kind ? linkFor(kind, val) : null;
         if (href) host.createEl('a', { text: val, href, attr: { target: '_blank', rel: 'noopener' } });
+        else if (f.k === 'relazione') {
+          const box = host.createDiv('crm-card-tags'); this.relBadges(box, c);
+        }
+        else if (f.k === 'citta') {
+          const a = host.createEl('a', { cls: 'crm-int-title', text: val, attr: { 'aria-label': T`Mostra tutte le persone a ${val}` } });
+          a.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); this.plugin.navigate({ reset: true, toggle: { key: 'citta', v: c.s('citta') } }); });
+        }
+        else if (f.k === 'azienda' || f.k === 'aziendepassate') {
+          const names = (f.k === 'azienda' ? [c.s('azienda')] : c.l('aziendepassate')).map((x) => String(x || '').replace(/^\[\[|\]\]$/g, '').split('|').pop().trim()).filter(Boolean);
+          names.forEach((nm, i) => { if (i) host.appendText(', '); const a = host.createEl('a', { cls: 'crm-int-title', text: nm }); a.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); this.plugin.openCompany(nm, c.file.path); }); });
+        }
         else if (f.type === 'person') {
           val.split(/\s*[|,;]\s*/).filter(Boolean).forEach((nm, i) => {
             if (i) host.appendText(', ');
@@ -1756,13 +2026,44 @@ class CRMRecordView extends ItemView {
       r.addEventListener('click', () => openRec(x));
       r.addEventListener('keydown', (e) => { if (e.key === 'Enter') openRec(x); });
     };
-    const az = c.s('azienda');
-    const peers = az ? all.filter((x) => x !== c && !x.archived && norm(x.s('azienda')) === norm(az)) : [];
-    if (az) {
+    const cleanCo = (v) => String(v || '').replace(/^\[\[|\]\]$/g, '').split('|').pop().trim();
+    const coCur = [...new Set((c.l('azienda') || []).map(cleanCo).filter(Boolean))];
+    if (!coCur.length && c.s('azienda')) coCur.push(cleanCo(c.s('azienda')));
+    const coPast = [...new Set((c.l('aziendepassate') || []).map(cleanCo).filter(Boolean))].filter((x) => !coCur.some((y) => norm(y) === norm(x)));
+    const coRel = [...new Set(c.rels.map((r) => r.company).filter(Boolean))].filter((x) => ![...coCur, ...coPast].some((y) => norm(y) === norm(x)));
+    const coList = [...coCur, ...coPast, ...coRel];
+    const rel = (x, k) => (x.l(k) || []).map((v) => norm(cleanCo(v)));
+    const coOf = (x) => ({ cur: [...rel(x, 'azienda'), ...(x.s('azienda') ? [norm(cleanCo(x.s('azienda')))] : [])], past: rel(x, 'aziendepassate') });
+    if (coList.length) {
       const cc = right.createDiv('crm-rec-card');
-      cc.createDiv({ cls: 'crm-rec-h', text: T`Persone in ${az}` });
-      if (!peers.length) cc.createDiv({ cls: 'crm-muted', text: T('Nessuna') });
-      for (const x of peers) person(cc, x);
+      const ch = cc.createDiv('crm-rec-head');
+      ch.createSpan({ cls: 'crm-rec-h', text: T('Aziende') });
+      for (const co of coList) {
+        const isPast = coPast.includes(co) || coRel.includes(co), k = norm(co);
+        const peers = all.filter((x) => { if (x === c || x.archived) return false; const o = coOf(x); return o.cur.includes(k) || o.past.includes(k) || x.rels.some((r) => norm(r.company) === k); });
+        const box = cc.createDiv('crm-co');
+        const head = box.createDiv('crm-co-head'); head.tabIndex = 0;
+        setIcon(head.createSpan('crm-co-ico'), 'building-2');
+        const cn = head.createEl('a', { cls: 'crm-co-name', text: co }); cn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); this.plugin.openCompany(co, c.file.path); });
+        if (isPast) head.createSpan({ cls: 'crm-co-past', text: coRel.includes(co) ? (c.rels.find((r) => norm(r.company) === norm(co)) || {}).label : T('Passata') });
+        head.createSpan({ cls: 'crm-co-count', text: String(peers.length), attr: { title: T('Altri contatti in questa azienda') } });
+        const tools = head.createSpan('crm-co-tools');
+        const tb = (icon, tip, fn) => { const b = tools.createSpan({ cls: 'clickable-icon crm-co-btn', attr: { 'aria-label': tip, title: tip } }); setIcon(b, icon); b.addEventListener('click', (e) => { e.stopPropagation(); fn(); }); };
+        tb('table', T('Mostra tutte le persone in Kith'), () => this.plugin.navigate({ reset: true, toggle: { key: 'azienda', v: co } }));
+        const note = this.app.metadataCache.getFirstLinkpathDest(co, '');
+        if (note) tb('file-text', T('Apri nota azienda'), () => this.app.workspace.getLeaf('tab').openFile(note));
+        const list = box.createDiv('crm-co-list');
+        if (!peers.length) list.createDiv({ cls: 'crm-muted', text: T('Nessun altro contatto') });
+        for (const x of peers) {
+          person(list, x);
+          const o = coOf(x);
+          if (!o.cur.includes(k)) { const sub = list.lastElementChild.querySelector('.crm-sub'); if (sub) sub.setText([x.s('ruolo'), T('ex')].filter(Boolean).join(' · ')); }
+        }
+        let open = true;
+        const toggle = () => { open = !open; box.toggleClass('is-closed', !open); };
+        head.addEventListener('click', toggle);
+        head.addEventListener('keydown', (e) => { if (e.key === 'Enter') toggle(); });
+      }
     }
     const toks = (v) => String(v || '').split(/\s*[|,;]\s*/).map((t) => norm(t.replace(/^\[\[|\]\]$/g, ''))).filter(Boolean);
     const mine = toks(c.s('partner')), via = toks(c.s('conosciutitramite'));
@@ -1783,7 +2084,525 @@ class CRMRecordView extends ItemView {
     for (const [x, why] of seen) { person(lc, x); const last = lc.lastElementChild.querySelector('.crm-sub'); if (last) last.setText(why.join(' · ')); }
   }
 }
-for (const m of ['avatar', 'badge', 'priChip', 'dueChip', 'quickActions', 'subline']) CRMRecordView.prototype[m] = CRMView.prototype[m];
+for (const m of ['avatar', 'badge', 'relBadges', 'priChip', 'dueChip', 'quickActions', 'subline']) CRMRecordView.prototype[m] = CRMView.prototype[m];
+
+/* ───────────────────────── Pagina azienda ───────────────────────── */
+const miniView = (p) => { const v = Object.create(CRMView.prototype); v.plugin = p; v.app = p.app; return v; };
+const coClean = (v) => String(v || '').replace(/^\[\[|\]\]$/g, '').split('|').pop().trim();
+function companyPeople(plugin, name) {
+  const k = norm(name);
+  const cur = [], past = [], linked = [];
+  for (const x of plugin.getContacts()) {
+    const c1 = [x.s('azienda'), ...(x.l('azienda') || [])].map((v) => norm(coClean(v)));
+    const p1 = (x.l('aziendepassate') || []).map((v) => norm(coClean(v)));
+    if (c1.includes(k)) cur.push(x); else if (p1.includes(k)) past.push(x);
+    else if (x.rels.some((r) => norm(r.company) === k)) linked.push(x);
+  }
+  return { cur, past, linked };
+}
+function allCompanyNames(plugin) {
+  const m = new Map();
+  for (const x of plugin.getContacts()) for (const v of [x.s('azienda'), ...(x.l('azienda') || []), ...(x.l('aziendepassate') || [])]) { const n = coClean(v); if (n && !m.has(norm(n))) m.set(norm(n), n); }
+  return [...m.values()].sort((a, b) => a.localeCompare(b, LANG));
+}
+const CO_FIELDS = [
+  { k: 'sito', label: () => T('Sito web'), keys: ['sitoweb', 'sito', 'website', 'url'], dk: () => (LANG === 'it' ? 'sito_web' : 'website'), kind: 'url' },
+  { k: 'descrizione', label: () => T('Descrizione'), keys: ['descrizione', 'description', 'about'], dk: () => (LANG === 'it' ? 'descrizione' : 'description') },
+  { k: 'linkedin', label: () => 'LinkedIn', keys: ['linkedin'], dk: () => 'linkedin', kind: 'linkedin' },
+  { k: 'instagram', label: () => 'Instagram', keys: ['instagram'], dk: () => 'instagram', kind: 'instagram' },
+  { k: 'settore', label: () => T('Settore'), keys: ['settore', 'industry'], dk: () => (LANG === 'it' ? 'settore' : 'industry'), derive: 'settore' },
+  { k: 'citta', label: () => T('Città'), keys: ['citta', 'city'], dk: () => (LANG === 'it' ? 'citta' : 'city'), derive: 'citta' },
+  { k: 'indirizzo', label: () => T('Indirizzo'), keys: ['indirizzo', 'address'], dk: () => (LANG === 'it' ? 'indirizzo' : 'address') },
+  { k: 'telefono', label: () => T('Telefono'), keys: ['telefono', 'phone', 'tel'], dk: () => (LANG === 'it' ? 'telefono' : 'phone'), kind: 'tel' },
+  { k: 'email', label: () => T('Email'), keys: ['email', 'mail'], dk: () => 'email', kind: 'email' },
+];
+
+/* ───────── Arricchimento automatico aziende (Wikidata + sito ufficiale) ───────── */
+const CO_STOP = new Set(['srl', 'spa', 'sas', 'snc', 'inc', 'ltd', 'llc', 'gmbh', 'group', 'holding', 'italia', 'italy', 'the', 'di', 'and', 'co', 'company', 'corp', 'sa']);
+const coTokens = (name) => String(name).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter((t) => t && !CO_STOP.has(t));
+async function httpText(url) {
+  try {
+    const r = await requestUrl({ url, throw: false, headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Kith-Obsidian)', 'Accept-Language': LANG === 'it' ? 'it,en;q=0.8' : 'en,it;q=0.6' } });
+    return r.status >= 200 && r.status < 400 ? (r.text || '') : '';
+  } catch (e) { return ''; }
+}
+async function httpJson(url) {
+  try { const r = await requestUrl({ url, throw: false }); return r.status === 200 ? r.json : null; } catch (e) { return null; }
+}
+const wdApi = (params) => httpJson('https://www.wikidata.org/w/api.php?' + new URLSearchParams({ format: 'json', origin: '*', ...params }));
+async function wikidataLookup(name) {
+  const nk = norm(name);
+  const s = await wdApi({ action: 'wbsearchentities', search: name, language: LANG, uselang: LANG, type: 'item', limit: '8' });
+  const cands = ((s && s.search) || []).filter((c) => { const l = norm(c.label || ''); return l === nk || l.includes(nk) || nk.includes(l); }).slice(0, 5);
+  if (!cands.length) return null;
+  const ents = await wdApi({ action: 'wbgetentities', ids: cands.map((c) => c.id).join('|'), props: 'claims|descriptions', languages: 'it|en' });
+  if (!ents || !ents.entities) return null;
+  const val = (e, p) => ((e.claims && e.claims[p]) || []).map((c) => c.mainsnak && c.mainsnak.datavalue && c.mainsnak.datavalue.value).filter(Boolean);
+  let pick = null;
+  for (const c of cands) {
+    const e = ents.entities[c.id]; if (!e) continue;
+    if (val(e, 'P856').length) { pick = e; break; }
+  }
+  if (!pick) return null;
+  const ids = [...val(pick, 'P452'), ...val(pick, 'P159')].map((v) => v && v.id).filter(Boolean);
+  const labels = {};
+  if (ids.length) {
+    const l = await wdApi({ action: 'wbgetentities', ids: [...new Set(ids)].join('|'), props: 'labels', languages: LANG + '|en' });
+    for (const [id, e] of Object.entries((l && l.entities) || {})) labels[id] = (e.labels && ((e.labels[LANG] || e.labels.en) || {}).value) || '';
+  }
+  const first = (p) => { const v = val(pick, p)[0]; return v && typeof v === 'object' && v.id ? (labels[v.id] || '') : (typeof v === 'string' ? v : ''); };
+  const out = {
+    sito: String(val(pick, 'P856')[0] || ''),
+    settore: first('P452'),
+    citta: first('P159'),
+    telefono: String(val(pick, 'P1329')[0] || '').replace(/^tel:/i, ''),
+    email: String(val(pick, 'P968')[0] || '').replace(/^mailto:/i, ''),
+  };
+  const li = val(pick, 'P4264')[0]; if (li) out.linkedin = 'https://www.linkedin.com/company/' + li;
+  const ig = val(pick, 'P2003')[0]; if (ig) out.instagram = ig;
+  return out;
+}
+const SKIP_DOMAINS = /(wikipedia|wikidata|linkedin|facebook|instagram|twitter|x\.com|youtube|crunchbase|bloomberg|glassdoor|indeed|paginegialle|pagine|tripadvisor|trustpilot|amazon|google|bing|duckduckgo|reddit|tiktok|pinterest)\./i;
+function siteMatches(html, name, origin) {
+  const toks = coTokens(name); if (!toks.length) return false;
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const hay = norm([doc.title, (doc.querySelector('meta[property="og:site_name"]') || {}).content, origin].join(' ')).replace(/[^a-z0-9]/g, '');
+  return hay.includes(toks[0]);
+}
+async function guessSite(name) {
+  const toks = coTokens(name); if (!toks.length) return '';
+  const slug = toks.join('');
+  const doms = [...new Set([slug + '.com', slug + '.it', toks[0] + '.com', toks[0] + '.it'])].slice(0, 4);
+  for (const d of doms) {
+    const origin = 'https://www.' + d;
+    const html = await httpText(origin);
+    if (html && siteMatches(html, name, origin)) return origin;
+  }
+  return '';
+}
+async function searchSite(name) {
+  const html = await httpText('https://html.duckduckgo.com/html/?q=' + encodeURIComponent(name + ' sito ufficiale'));
+  if (!html) return '';
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  for (const a of [...doc.querySelectorAll('a.result__a')].slice(0, 6)) {
+    let href = a.getAttribute('href') || '';
+    const m = href.match(/[?&]uddg=([^&]+)/); if (m) href = decodeURIComponent(m[1]);
+    let u; try { u = new URL(href.startsWith('//') ? 'https:' + href : href); } catch (e) { continue; }
+    if (SKIP_DOMAINS.test(u.hostname + '.')) continue;
+    const origin = u.origin;
+    const page = await httpText(origin);
+    if (page && siteMatches(page, name, origin)) return origin;
+  }
+  return '';
+}
+function parseSitePage(html, origin, out) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const abs = (h) => { try { return new URL(h, origin).href; } catch (e) { return ''; } };
+  const set = (k, v) => { v = String(v || '').replace(/\s+/g, ' ').trim(); if (v && !out[k]) out[k] = v; };
+  // JSON-LD (schema.org)
+  const walk = (n) => {
+    if (!n || typeof n !== 'object') return;
+    if (Array.isArray(n)) { n.forEach(walk); return; }
+    const t = [].concat(n['@type'] || []).join(' ');
+    if (/Organization|Corporation|LocalBusiness|Company|Store|NGO/i.test(t)) {
+      set('descrizione', n.description); set('telefono', n.telephone); set('email', n.email);
+      const ad = Array.isArray(n.address) ? n.address[0] : n.address;
+      if (ad && typeof ad === 'object') { set('indirizzo', [ad.streetAddress, [ad.postalCode, ad.addressLocality].filter(Boolean).join(' ')].filter(Boolean).join(', ')); set('citta', ad.addressLocality); }
+      else if (typeof ad === 'string') set('indirizzo', ad);
+      for (const u of [].concat(n.sameAs || [])) { const s = String(u); if (/linkedin\.com\/company\//i.test(s)) set('linkedin', s.split('?')[0]); const ig = s.match(/instagram\.com\/([^/?#]+)/i); if (ig) set('instagram', ig[1]); }
+      if (typeof n.logo === 'string') set('logo', abs(n.logo)); else if (n.logo && n.logo.url) set('logo', abs(n.logo.url));
+    }
+    if (n['@graph']) walk(n['@graph']);
+  };
+  for (const sc of doc.querySelectorAll('script[type="application/ld+json"]')) { try { walk(JSON.parse(sc.textContent)); } catch (e) { /* JSON-LD malformato */ } }
+  // meta
+  set('descrizione', (doc.querySelector('meta[property="og:description"]') || {}).content);
+  set('descrizione', (doc.querySelector('meta[name="description"]') || {}).content);
+  // link
+  const hrefs = [...doc.querySelectorAll('a[href]')].map((a) => a.getAttribute('href') || '');
+  const dom = new URL(origin).hostname.replace(/^www\./, '');
+  const mails = hrefs.filter((h) => /^mailto:/i.test(h)).map((h) => decodeURIComponent(h.replace(/^mailto:/i, '').split('?')[0]).trim()).filter((m) => /@/.test(m) && !/noreply|no-reply|\.(png|jpg|gif)$/i.test(m));
+  set('email', mails.find((m) => m.toLowerCase().endsWith(dom)) || mails[0]);
+  set('telefono', (hrefs.find((h) => /^tel:/i.test(h)) || '').replace(/^tel:/i, ''));
+  for (const h of hrefs) {
+    const li = h.match(/linkedin\.com\/company\/[^/?#]+/i); if (li) set('linkedin', 'https://www.' + li[0].replace(/^.*?linkedin/i, 'linkedin'));
+    const ig = h.match(/instagram\.com\/([^/?#]+)/i); if (ig && !/^(p|explore|reel|reels|accounts|tv|stories)$/i.test(ig[1])) set('instagram', ig[1]);
+  }
+  // logo
+  const icon = doc.querySelector('link[rel="apple-touch-icon"], link[rel="apple-touch-icon-precomposed"]') || doc.querySelector('link[rel~="icon"]');
+  if (icon && icon.getAttribute('href')) set('logo', abs(icon.getAttribute('href')));
+  set('logo', abs((doc.querySelector('meta[property="og:image"]') || {}).content || ''));
+  // indirizzo italiano nel testo
+  if (!out.indirizzo) {
+    const txt = (doc.body ? doc.body.textContent : '').replace(/\s+/g, ' ');
+    const m = txt.match(/((?:Via|Viale|Piazza|Piazzale|Corso|Largo|Vicolo|Strada)\s+[^,\d]{2,50}?,?\s*\d{1,4}[A-Za-z]?)[\s,–-]+(\d{5})\s+([A-ZÀ-Ý][A-Za-zÀ-ÿ' ]{2,28})/);
+    if (m) { set('indirizzo', `${m[1].trim().replace(/,$/, '')}, ${m[2]} ${m[3].trim()}`); set('citta', m[3].trim()); }
+  }
+}
+async function scrapeSite(site) {
+  let origin; try { origin = new URL(/^https?:/i.test(site) ? site : 'https://' + site).origin; } catch (e) { return {}; }
+  const out = {};
+  const home = await httpText(origin);
+  if (home) parseSitePage(home, origin, out);
+  for (const path of ['/contatti', '/contact', '/contacts', '/chi-siamo', '/about']) {
+    if (out.email && out.telefono && out.indirizzo) break;
+    const html = await httpText(origin + path);
+    if (html) parseSitePage(html, origin, out);
+  }
+  return out;
+}
+async function enrichCompany(name, siteHint) {
+  const found = {}, sources = [];
+  let site = siteHint || '';
+  if (!site) {
+    const wd = await wikidataLookup(name);
+    if (wd) { Object.assign(found, Object.fromEntries(Object.entries(wd).filter(([, v]) => v))); site = wd.sito || ''; sources.push('Wikidata'); }
+  }
+  if (!site) { site = await guessSite(name); if (!site) site = await searchSite(name); }
+  if (site) {
+    found.sito = found.sito || site;
+    const sc = await scrapeSite(site);
+    for (const [k, v] of Object.entries(sc)) if (v && !found[k]) found[k] = v;
+    if (Object.keys(sc).length) sources.push(new URL(/^https?:/i.test(site) ? site : 'https://' + site).hostname.replace(/^www\./, ''));
+  }
+  return { found, sources };
+}
+
+function colHandle(wrap, rc, side, save) {
+  const h = wrap.createDiv({ cls: 'crm-rec-handle h-' + side, attr: { 'aria-label': T('Trascina per ridimensionare'), role: 'separator' } });
+  const prop = side === 'l' ? '--lf' : '--rf';
+  h.addEventListener('dblclick', () => { rc[side] = 22; wrap.style.setProperty(prop, 22); save(); });
+  h.addEventListener('pointerdown', (e) => {
+    e.preventDefault(); h.setPointerCapture(e.pointerId); h.addClass('is-drag');
+    const W = wrap.clientWidth, x0 = e.clientX, start = rc[side];
+    const move = (ev) => {
+      const dx = (ev.clientX - x0) / W * 100;
+      let v = side === 'l' ? start + dx : start - dx;
+      const other = side === 'l' ? rc.r : rc.l;
+      v = Math.max(14, Math.min(v, Math.min(46, 68 - other)));
+      rc[side] = Math.round(v * 10) / 10; wrap.style.setProperty(prop, rc[side]);
+    };
+    const up = () => { h.removeClass('is-drag'); h.removeEventListener('pointermove', move); h.removeEventListener('pointerup', up); try { h.releasePointerCapture(e.pointerId); } catch (er) { /* già rilasciato */ } save(); };
+    h.addEventListener('pointermove', move); h.addEventListener('pointerup', up);
+  });
+}
+
+const CO_SECTIONS = [['info', T('Informazioni')], ['summary', T('Riepilogo')], ['people', T('Persone')], ['past', T('Ex colleghi')], ['linked', T('Collegate via relazione')], ['timeline', T('Cronologia azienda')], ['note', T('Nota azienda')]];
+
+class CRMCompanyView extends ItemView {
+  constructor(leaf, plugin) { super(leaf); this.navigation = true; this.plugin = plugin; this.name = null; this.from = null; this.editing = null; this._t = null; this.enriching = false; this.status = ''; }
+  getViewType() { return COMPANY_TYPE; }
+  getIcon() { return 'building'; }
+  getDisplayText() { return this.name || T('Azienda'); }
+  getState() { return { name: this.name, from: this.from }; }
+  async setState(state, result) { this.name = state && state.name; this.from = (state && state.from) || null; this.editing = null; await super.setState(state, result); this.render(); this.leaf.updateHeader && this.leaf.updateHeader(); }
+  async onOpen() {
+    this.contentEl.addClass('crm-root', 'crm-rec-root', 'crm-co-root');
+    installSwipeBack(this, () => this.goBack());
+    const later = (f) => { if (f && f.path) { clearTimeout(this._t); this._t = setTimeout(() => this.render(), 400); } };
+    this.registerEvent(this.app.metadataCache.on('changed', later));
+    this.registerEvent(this.app.vault.on('rename', later));
+    this.registerEvent(this.app.vault.on('delete', later));
+    this.render();
+    this.plugin.syncSidebar();
+  }
+  note() { return this.plugin.findCompanyNote(this.name); }
+  fmValue(f) {
+    const file = this.note(); if (!file) return '';
+    const fm = (this.app.metadataCache.getFileCache(file) || {}).frontmatter || {};
+    for (const key of Object.keys(fm)) if (f.keys.includes(norm(key).replace(/\s|_/g, ''))) return toStr(fm[key]);
+    return '';
+  }
+  async setFm(f, val) {
+    let file = this.note();
+    if (!file) { await this.plugin.ensureCompany(this.name, null, true); file = this.note(); }
+    if (!file) return;
+    await this.app.fileManager.processFrontMatter(file, (fm) => {
+      let key = Object.keys(fm).find((x) => f.keys.includes(norm(x).replace(/\s|_/g, ''))) || f.dk();
+      if (val) fm[key] = val; else delete fm[key];
+    });
+    if (f.k === 'sito' && val) setTimeout(() => this.enrich(val, true), 200);
+  }
+  fmGet(keys) {
+    const file = this.note(); if (!file) return '';
+    const fm = (this.app.metadataCache.getFileCache(file) || {}).frontmatter || {};
+    for (const key of Object.keys(fm)) if (keys.includes(norm(key).replace(/\s|_/g, ''))) return toStr(fm[key]);
+    return '';
+  }
+  async writeFields(found, sources) {
+    const entries = [...CO_FIELDS.filter((f) => found[f.k] && !this.fmValue(f)).map((f) => [f, found[f.k]])];
+    if (found.logo && !this.fmGet(['logo'])) entries.push([{ keys: ['logo'], dk: () => 'logo' }, found.logo]);
+    if (!entries.length) return 0;
+    let file = this.note();
+    if (!file) { await this.plugin.ensureCompany(this.name, null, true); file = this.note(); }
+    if (!file) return 0;
+    await this.app.fileManager.processFrontMatter(file, (fm) => {
+      for (const [f, v] of entries) { const key = Object.keys(fm).find((x) => f.keys.includes(norm(x).replace(/\s|_/g, ''))) || f.dk(); if (!fm[key]) fm[key] = v; }
+      fm[LANG === 'it' ? 'info_fonte' : 'info_source'] = `${sources.join(' + ')} · ${fmtDate(new Date())}`;
+    });
+    return entries.length;
+  }
+  async enrich(siteHint, manual) {
+    if (this.enriching || !this.name) return;
+    const name = this.name, key = norm(name);
+    this.enriching = true; this.status = T('Recupero informazioni…'); this.render();
+    let n = 0;
+    try {
+      const { found, sources } = await enrichCompany(name, siteHint);
+      if (this.name === name) n = await this.writeFields(found, sources);
+      this.plugin.settings.coEnrich[key] = { t: Date.now(), ok: n > 0 };
+      this.plugin.saveData(this.plugin.settings);
+      this.status = n ? T`Aggiunti ${n} campi (${sources.join(' + ')})` : (manual ? T('Nessuna nuova informazione trovata') : '');
+    } catch (e) { console.error('Kith enrich', e); this.status = T('Recupero non riuscito'); }
+    this.enriching = false;
+    if (this.name === name) this.render();
+  }
+  maybeAutoEnrich() {
+    const p = this.plugin;
+    if (p.settings.autoEnrichCompanies === false || this.enriching || !this.name) return;
+    const rec = p.settings.coEnrich[norm(this.name)];
+    if (rec && Date.now() - rec.t < 30 * 86400000) return;
+    if (this.fmValue(CO_FIELDS[0]) && this.fmValue(CO_FIELDS.find((f) => f.k === 'telefono')) && this.fmValue(CO_FIELDS.find((f) => f.k === 'email'))) return;
+    setTimeout(() => this.enrich(this.fmValue(CO_FIELDS[0]) || '', false), 300);
+  }
+  async setLogo(val) {
+    let file = this.note();
+    if (!file) { if (!val) return; await this.plugin.ensureCompany(this.name, null, true); file = this.note(); }
+    if (!file) return;
+    await this.app.fileManager.processFrontMatter(file, (fm) => { if (val) fm.logo = val; else delete fm.logo; });
+  }
+  async setLogoFile(f) {
+    let file = this.note();
+    if (!file) { await this.plugin.ensureCompany(this.name, null, true); file = this.note(); }
+    if (!file) return;
+    const ext = (f.name.split('.').pop() || 'png').toLowerCase().replace(/[^a-z0-9]/g, '') || 'png';
+    let path;
+    try { path = await this.app.fileManager.getAvailablePathForAttachment(`${this.name} logo.${ext}`, file.path); }
+    catch (e) { path = `${normalizePath(this.plugin.settings.aziendeFolder)}/${this.name} logo ${Date.now()}.${ext}`; }
+    await this.app.vault.createBinary(path, await f.arrayBuffer());
+    await this.setLogo(path);
+  }
+  layout() {
+    const L = this.plugin.settings.coLayout || {};
+    const eff = L[norm(this.name)] || L['*'] || {};
+    return { hidden: new Set(eff.hidden || []), hiddenFields: new Set(eff.hiddenFields || []), own: !!L[norm(this.name)] };
+  }
+  async setLayout(lay) {
+    const s = this.plugin.settings; s.coLayout = s.coLayout || {};
+    s.coLayout[norm(this.name)] = { hidden: [...lay.hidden], hiddenFields: [...lay.hiddenFields] };
+    await this.plugin.saveData(s); this.render();
+  }
+  layoutMenu(e) {
+    const lay = this.layout(), s = this.plugin.settings;
+    const m = new Menu();
+    for (const [id, label] of CO_SECTIONS) m.addItem((it) => it.setTitle(label).setChecked(!lay.hidden.has(id)).onClick(() => { if (lay.hidden.has(id)) lay.hidden.delete(id); else lay.hidden.add(id); this.setLayout(lay); }));
+    m.addSeparator();
+    m.addItem((it) => it.setTitle(T('Usa questa disposizione per tutte le aziende')).setIcon('copy').onClick(async () => { s.coLayout = s.coLayout || {}; s.coLayout['*'] = { hidden: [...lay.hidden], hiddenFields: [...lay.hiddenFields] }; await this.plugin.saveData(s); new Notice(T('Disposizione salvata come predefinita')); }));
+    if (lay.own) m.addItem((it) => it.setTitle(T('Ripristina questa pagina')).setIcon('rotate-ccw').onClick(async () => { delete s.coLayout[norm(this.name)]; await this.plugin.saveData(s); this.render(); }));
+    if ((s.coLayout || {})['*']) m.addItem((it) => it.setTitle(T('Ripristina predefinito di tutte le aziende')).setIcon('eraser').onClick(async () => { delete s.coLayout['*']; await this.plugin.saveData(s); this.render(); }));
+    m.showAtMouseEvent(e);
+  }
+  async goBack() {
+    if (this.from) await this.leaf.setViewState({ type: RECORD_TYPE, active: true, state: { path: this.from, stack: [] } });
+    else await this.leaf.setViewState({ type: VIEW_TYPE, active: true });
+  }
+  render() {
+    const root = this.contentEl; if (!root.hasClass('crm-co-root')) return;
+    root.empty();
+    if (!this.name) { root.createDiv({ cls: 'crm-muted crm-rec-empty', text: T('Caricamento…') }); return; }
+    const p = this.plugin, name = this.name;
+    const { cur, past, linked } = companyPeople(p, name);
+    const live = cur.filter((c) => !c.archived), archivedCur = cur.filter((c) => c.archived);
+    const bar = root.createDiv('crm-rec-bar');
+    bar.createEl('button', { cls: 'crm-btn', text: this.from ? T('← Indietro') : T('← Kith') }).addEventListener('click', () => this.goBack());
+    const lay = this.layout();
+    const cust = bar.createEl('button', { cls: 'crm-btn crm-co-cust', attr: { title: T('Personalizza questa pagina') } });
+    setIcon(cust.createSpan('crm-bulk-ico'), 'sliders-horizontal'); cust.createSpan({ text: T('Personalizza pagina') });
+    cust.addEventListener('click', (e) => this.layoutMenu(e));
+    const wrap = root.createDiv('crm-co-page');
+    const rc = Object.assign({ l: 22, r: 22 }, this.plugin.settings.coCols || {});
+    wrap.style.setProperty('--lf', rc.l); wrap.style.setProperty('--rf', rc.r);
+    const left = wrap.createDiv('crm-co-col co-left'), mid = wrap.createDiv('crm-co-col crm-co-mid co-mid'), right = wrap.createDiv('crm-co-col co-right');
+
+    /* identità */
+    const id = left.createDiv('crm-rec-card crm-d-head');
+    const logo = id.createDiv('crm-co-logo');
+    const logoRaw = this.fmGet(['logo']);
+    const logoUrl = this.plugin.resolveImg(logoRaw, (this.note() || {}).path);
+    const iconFallback = () => { logo.empty(); setIcon(logo, 'building-2'); if (!logo.querySelector('svg')) logo.setText(name.slice(0, 1).toUpperCase()); };
+    if (logoUrl) { const im = logo.createEl('img', { attr: { src: logoUrl, alt: name } }); im.addEventListener('error', iconFallback); logo.addClass('has-img'); } else iconFallback();
+    logo.addClass('crm-av-edit'); logo.setAttribute('title', T('Cambia logo'));
+    const pickLogo = id.createEl('input', { type: 'file', attr: { accept: 'image/*', style: 'display:none' } });
+    pickLogo.addEventListener('change', async () => { const f = pickLogo.files && pickLogo.files[0]; if (f) { await this.setLogoFile(f); this.render(); } });
+    logo.addEventListener('click', (e) => {
+      const m = new Menu();
+      m.addItem((it) => it.setTitle(T('Carica immagine…')).setIcon('image-plus').onClick(() => pickLogo.click()));
+      m.addItem((it) => it.setTitle(T('Incolla link immagine…')).setIcon('link').onClick(() => new TextPromptModal(this.app, T('Link o percorso dell’immagine'), 'https://…', /^https?:/.test(logoRaw) ? logoRaw : '', async (v) => { await this.setLogo(v); this.render(); }).open()));
+      if (logoRaw) m.addItem((it) => it.setTitle(T('Rimuovi logo')).setIcon('trash').onClick(async () => { await this.setLogo(''); this.render(); }));
+      m.showAtMouseEvent(e);
+    });
+    id.createDiv({ cls: 'crm-d-name', text: name });
+    const descr = this.fmGet(['descrizione', 'description', 'about']);
+    if (descr) id.createDiv({ cls: 'crm-sub crm-co-descr', text: descr });
+    id.createDiv({ cls: 'crm-sub', text: `${live.length} ${T(live.length === 1 ? 'persona' : 'persone')}${past.length ? ` · ${past.length} ${T('ex')}` : ''}` });
+    const acts = id.createDiv('crm-d-actions');
+    const act = (text, cls, fn) => acts.createEl('button', { cls: 'crm-btn ' + cls, text }).addEventListener('click', fn);
+    act(T('+ Persona'), 'crm-btn-primary', () => new ContactModal(this.app, p, null, async (f) => { await p.saveContact(f, { azienda: name }); this.render(); }).open());
+    act(T('Mostra in Kith'), '', () => p.navigate({ reset: true, toggle: { key: 'azienda', v: name } }));
+    const nf = this.note();
+    act(this.enriching ? T('Recupero…') : T('Aggiorna info'), '', () => this.enrich(this.fmValue(CO_FIELDS[0]) || '', true));
+    if (nf) act(T('Apri nota'), '', () => this.app.workspace.getLeaf('tab').openFile(nf));
+    else act(T('Crea nota azienda'), '', async () => { await p.ensureCompany(name, null, true); this.render(); });
+    if (this.status) id.createDiv({ cls: 'crm-muted crm-co-status', text: this.status });
+    const srcInfo = this.fmGet(['infofonte', 'infosource']);
+    if (srcInfo && !this.status) id.createDiv({ cls: 'crm-muted crm-co-status', text: T`Fonte: ${srcInfo}` });
+
+    /* info */
+    const info = left.createDiv('crm-rec-card'); info.dataset.section = 'info';
+    info.createDiv({ cls: 'crm-rec-head' }).createSpan({ cls: 'crm-rec-h', text: T('Informazioni') });
+    const top = (key) => { const m = new Map(); for (const c of live) { const v = c.s(key); if (v) m.set(v, (m.get(v) || 0) + 1); } return [...m.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || ''; };
+    for (const f of CO_FIELDS) {
+      if (lay.hiddenFields.has(f.k)) continue;
+      const r = info.createDiv('crm-kv crm-rec-kv'); r.dataset.field = f.k;
+      r.createSpan({ cls: 'crm-k', text: f.label() });
+      const host = r.createSpan('crm-v');
+      const val = this.fmValue(f);
+      if (this.editing === f.k) {
+        const inp = host.createEl('input', { type: 'text' }); inp.value = val;
+        let done = false;
+        const fin = async (ok) => { if (done) return; done = true; this.editing = null; if (ok && inp.value.trim() !== val) await this.setFm(f, inp.value.trim()); this.render(); };
+        inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') fin(true); else if (e.key === 'Escape') fin(false); });
+        inp.addEventListener('blur', () => fin(true));
+        setTimeout(() => inp.focus(), 0);
+        continue;
+      }
+      const hint = !val && f.derive ? top(f.derive) : '';
+      if (f.k === 'citta' && (val || hint)) {
+        const cityName = val || hint;
+        const a = host.createEl('a', { cls: 'crm-int-title', text: cityName });
+        a.addEventListener('click', (e) => { e.preventDefault(); this.plugin.navigate({ reset: true, toggle: { key: 'citta', v: cityName } }); });
+        if (!val) host.createSpan({ cls: 'crm-muted crm-co-derived', text: ` (${T('dai contatti')})` });
+        const pen2 = r.createSpan({ cls: 'crm-rec-pen clickable-icon', attr: { 'aria-label': T('Modifica') } }); setIcon(pen2, 'pencil');
+        pen2.addEventListener('click', () => { this.editing = f.k; this.render(); });
+        continue;
+      }
+      const href = val && f.kind ? (f.kind === 'url' ? (/^https?:/i.test(val) ? val : 'https://' + val) : linkFor(f.kind, val)) : null;
+      if (href) host.createEl('a', { text: val, href, attr: { target: '_blank', rel: 'noopener' } });
+      else if (val) host.setText(val);
+      else if (hint) { host.createSpan({ cls: 'crm-muted', text: hint }); host.createSpan({ cls: 'crm-muted crm-co-derived', text: ` (${T('dai contatti')})` }); }
+      else host.createSpan({ cls: 'crm-muted', text: '—' });
+      const pen = r.createSpan({ cls: 'crm-rec-pen clickable-icon', attr: { 'aria-label': T('Modifica') } }); setIcon(pen, 'pencil');
+      pen.addEventListener('click', () => { this.editing = f.k; this.render(); });
+    }
+
+    /* riepilogo */
+    const sum = left.createDiv('crm-rec-card'); sum.dataset.section = 'summary';
+    sum.createDiv({ cls: 'crm-rec-head' }).createSpan({ cls: 'crm-rec-h', text: T('Riepilogo') });
+    const kv = (k, fn) => { const r = sum.createDiv('crm-kv'); r.createSpan({ cls: 'crm-k', text: k }); fn(r.createSpan('crm-v')); };
+    const lasts = live.map((c) => c.due.last).filter(Boolean).sort((a, b) => b - a);
+    kv(T('Ultimo contatto'), (v) => v.setText(lasts[0] ? `${fmtDate(lasts[0])} · ${relTime(lasts[0])}` : '—'));
+    const nexts = live.filter((c) => c.due.due).sort((a, b) => a.due.due - b.due.due);
+    kv(T('Prossimo follow-up'), (v) => { if (nexts[0]) { v.createSpan({ text: fmtDate(nexts[0].due.due) + ' · ' }); const a = v.createEl('a', { cls: 'crm-int-title', text: nexts[0].name }); a.addEventListener('click', (e) => { e.preventDefault(); p.openRecord(nexts[0].file); }); } else v.setText('—'); });
+    const overdue = live.filter((c) => c.due.state === 'scaduto').length;
+    kv(T('Follow-up scaduti'), (v) => v.setText(String(overdue)));
+    const rel = new Map(); for (const c of live) for (const rr of c.rels) rel.set(rr.label, (rel.get(rr.label) || 0) + 1);
+    if (rel.size) { const r = sum.createDiv('crm-card-tags'); for (const [k2, n] of [...rel.entries()].sort((a, b) => b[1] - a[1])) { const b = miniView(p).badge(r, k2); if (b) b.appendText(` ${n}`); } }
+
+    /* persone */
+    const peopleCard = (parent, title, list, isPast, secId) => {
+      if (lay.hidden.has(secId)) return;
+      const card = parent.createDiv('crm-rec-card'); card.dataset.section = secId;
+      const h = card.createDiv('crm-rec-head'); h.createSpan({ cls: 'crm-rec-h', text: `${title} (${list.length})` });
+      if (!list.length) { card.createDiv({ cls: 'crm-muted', text: T('Nessuna') }); return; }
+      const wrapT = card.createDiv('crm-table-wrap'); const t = wrapT.createEl('table', { cls: 'crm-table crm-co-table' });
+      const hr = t.createEl('thead').createEl('tr');
+      for (const lab of [T('Contatto'), T('Ruolo'), T('Relazione'), T('Email'), T('Telefono'), T('Ultimo contatto'), T('Follow-up')]) hr.createEl('th', { text: lab });
+      const tb = t.createEl('tbody');
+      const view = miniView(p);
+      for (const c of list) {
+        const tr = tb.createEl('tr', { cls: 'crm-row' });
+        const n = tr.createEl('td').createDiv('crm-namecell');
+        view.avatar(n, c); n.createDiv('crm-nametext').createDiv({ cls: 'crm-name', text: c.name });
+        n.addEventListener('click', () => p.openRecord(c.file, { company: name }));
+        tr.createEl('td', { text: c.s('ruolo') || '—' });
+        view.relBadges(tr.createEl('td'), c);
+        const lk = (td, kind, val) => { const href = val && linkFor(kind, val); if (href) td.createEl('a', { cls: 'crm-cell-link', text: val, href, attr: { target: '_blank', rel: 'noopener' } }); else td.setText('—'); };
+        lk(tr.createEl('td'), 'email', c.s('email') || c.s('emaillavoro'));
+        lk(tr.createEl('td'), 'tel', c.s('telefono'));
+        tr.createEl('td', { text: c.due.last ? relTime(c.due.last) : '—' });
+        if (isPast) tr.createEl('td', { text: '—' }); else view.dueChip(tr.createEl('td'), c);
+      }
+    };
+    peopleCard(mid, T('Persone'), [...live, ...archivedCur], false, 'people');
+    if (past.length) peopleCard(mid, T('Ex colleghi'), past, true, 'past');
+    if (linked.length) peopleCard(mid, T('Collegate via relazione'), linked, true, 'linked');
+
+    /* cronologia aggregata */
+    const tl = mid.createDiv('crm-rec-card'); tl.dataset.section = 'timeline';
+    tl.createDiv({ cls: 'crm-rec-head' }).createSpan({ cls: 'crm-rec-h', text: T('Cronologia azienda') });
+    const byPath = new Map([...cur, ...past, ...linked].map((c) => [c.file.path, c]));
+    const entries = [];
+    const folder = normalizePath(p.settings.interazioniFolder) + '/';
+    for (const f of (lay.hidden.has('timeline') ? [] : this.app.vault.getMarkdownFiles())) {
+      if (!f.path.startsWith(folder)) continue;
+      const cache = this.app.metadataCache.getFileCache(f); if (!cache) continue;
+      const ppl = new Set();
+      for (const l of [...(cache.links || []), ...(cache.frontmatterLinks || [])]) { const d = this.app.metadataCache.getFirstLinkpathDest(String(l.link).split('#')[0], f.path); if (d && byPath.has(d.path)) ppl.add(d.path); }
+      if (!ppl.size) continue;
+      const fm = cache.frontmatter || {}; const nm = {}; for (const k2 of Object.keys(fm)) nm[norm(k2)] = fm[k2];
+      entries.push({ file: f, tipo: toStr(nm.tipo || nm.type), date: toDate(parseDate(nm.data || nm.date)) || new Date(f.stat.ctime), ppl: [...ppl].map((x) => byPath.get(x)) });
+    }
+    entries.sort((a, b) => b.date - a.date);
+    if (!entries.length) tl.createDiv({ cls: 'crm-muted', text: T('Nessuna interazione registrata.') });
+    const view2 = miniView(p);
+    for (const it of entries.slice(0, 40)) {
+      const r = tl.createDiv('crm-int crm-rec-int');
+      r.createSpan({ cls: 'crm-int-date', text: fmtDate(it.date) });
+      if (it.tipo) view2.badge(r, it.tipo);
+      const a = r.createEl('a', { cls: 'crm-int-title', text: it.file.basename });
+      a.addEventListener('click', (e) => { e.preventDefault(); this.app.workspace.getLeaf('tab').openFile(it.file); });
+      for (const c of it.ppl) { const chip = r.createSpan({ cls: 'crm-co-chip', text: c.name }); chip.addEventListener('click', () => p.openRecord(c.file)); }
+    }
+
+    /* note */
+    const nc = right.createDiv('crm-rec-card'); nc.dataset.section = 'note';
+    const nh = nc.createDiv('crm-rec-head'); nh.createSpan({ cls: 'crm-rec-h', text: T('Nota azienda') });
+    const body = nc.createDiv('crm-note');
+    if (nf) { this.app.vault.cachedRead(nf).then((txt) => { const t2 = txt.replace(/^---[\s\S]*?---\s*/, '').trim(); if (t2) body.setText(t2.slice(0, 1500)); else { body.className = 'crm-muted'; body.setText('—'); } }); }
+    else { body.className = 'crm-muted'; body.setText(T('Nessuna nota. Creala dal pulsante a sinistra.')); }
+    for (const card of [...root.querySelectorAll('[data-section]')]) {
+      const id = card.dataset.section;
+      if (lay.hidden.has(id)) { card.remove(); continue; }
+      const head = card.querySelector('.crm-rec-head'); if (!head) continue;
+      const tools = head.createSpan('crm-sec-tools');
+      if (id === 'info' && lay.hiddenFields.size) {
+        const plus = tools.createSpan({ cls: 'clickable-icon crm-sec-btn', attr: { 'aria-label': T('Aggiungi campo'), title: T('Aggiungi campo') } }); setIcon(plus, 'plus');
+        plus.addEventListener('click', (e) => { const m = new Menu(); for (const f of CO_FIELDS.filter((x) => lay.hiddenFields.has(x.k))) m.addItem((it) => it.setTitle(f.label()).onClick(() => { lay.hiddenFields.delete(f.k); this.setLayout(lay); })); m.showAtMouseEvent(e); });
+      }
+      const x = tools.createSpan({ cls: 'clickable-icon crm-sec-btn', attr: { 'aria-label': T('Rimuovi sezione da questa pagina'), title: T('Rimuovi sezione da questa pagina') } }); setIcon(x, 'x');
+      x.addEventListener('click', () => { lay.hidden.add(id); this.setLayout(lay); });
+    }
+    for (const r of [...root.querySelectorAll('[data-field]')]) {
+      const fk = r.dataset.field;
+      const hx = r.createSpan({ cls: 'crm-rec-pen clickable-icon', attr: { 'aria-label': T('Nascondi campo in questa pagina'), title: T('Nascondi campo in questa pagina') } }); setIcon(hx, 'eye-off');
+      hx.addEventListener('click', () => { lay.hiddenFields.add(fk); this.setLayout(lay); });
+    }
+    const hasL = left.children.length > 0, hasR = right.children.length > 0;
+    if (!hasL) left.remove(); if (!hasR) right.remove();
+    wrap.toggleClass('no-left', !hasL); wrap.toggleClass('no-right', !hasR);
+    const saveCols = () => { this.plugin.settings.coCols = { l: rc.l, r: rc.r }; this.plugin.saveData(this.plugin.settings); };
+    if (hasL) colHandle(wrap, rc, 'l', saveCols);
+    if (hasR) colHandle(wrap, rc, 'r', saveCols);
+    this.maybeAutoEnrich();
+  }
+}
+
+class CompanyPicker extends FuzzySuggestModal {
+  constructor(app, names, onChoose) { super(app); this.names = names; this.onChoose = onChoose; this.setPlaceholder(T('Scegli un’azienda…')); }
+  getItems() { return this.names; }
+  getItemText(n) { return n; }
+  onChooseItem(n) { this.onChoose(n); }
+}
 
 class KithSidebar extends ItemView {
   constructor(leaf, plugin) { super(leaf); this.plugin = plugin; this.closedGroups = new Set(); this.expand = new Set(); }
@@ -1858,9 +2677,11 @@ class KithSidebar extends ItemView {
     for (const [key, label] of [['relazione', T('Relazione')], ['vicinanza', T('Vicinanza')], ['priorita', T('Priorità')], ['azienda', T('Azienda')], ['citta', T('Città')], ['stato', T('Stato')]]) {
       const counts = new Map();
       for (const c of (key === 'stato' ? all : active)) {
-        const v = c.s(key); if (!v) continue;
-        const k = nv(v), e = counts.get(k);
-        if (e) e.n++; else counts.set(k, { v: dv(v), n: 1 });
+        for (const v of (key === 'relazione' ? c.rels.map((r) => r.label) : [c.s(key)])) {
+          if (!v) continue;
+          const k = nv(v), e = counts.get(k);
+          if (e) e.n++; else counts.set(k, { v: dv(v), n: 1 });
+        }
       }
       if (!counts.size) continue;
       const g = browse.createEl('details', { cls: 'crm-side-group' });
@@ -1881,7 +2702,24 @@ class KithSidebar extends ItemView {
   }
 }
 
+function companyOptions(plugin, pool, self) {
+  const m = new Map();
+  const mine = self ? [self.s('azienda'), ...self.l('azienda'), ...self.l('aziendepassate')].map(coClean).filter(Boolean) : [];
+  for (const x of pool) for (const v of [x.s('azienda'), ...x.l('aziendepassate'), ...x.rels.map((r) => r.company)]) { const n = coClean(v); if (n) m.set(norm(n), n); }
+  const folder = normalizePath(plugin.settings.aziendeFolder) + '/';
+  for (const file of plugin.app.vault.getMarkdownFiles()) if (file.path.startsWith(folder)) m.set(norm(file.basename), file.basename);
+  const first = [...new Set(mine.map((n) => m.get(norm(n)) || n))];
+  return [...first, ...[...m.values()].filter((n) => !first.some((x) => norm(x) === norm(n))).sort((a, b) => a.localeCompare(b, LANG))];
+}
 function suggestOptions(plugin, f, pool, self) {
+  if (f.k === 'relazione') {
+    const vals = new Map();
+    for (const p of PRESETS.relazione) vals.set(nv(p), p);
+    for (const x of pool) for (const r of x.rels) if (!vals.has(nv(r.label))) vals.set(nv(r.label), dv(r.label));
+    const arr = [...vals.values()];
+    arr.companies = companyOptions(plugin, pool, self);
+    return arr;
+  }
   if (f.type === 'enum') {
     const vals = new Map();
     for (const p of PRESETS[f.k] || []) vals.set(nv(p), p);
@@ -1909,15 +2747,31 @@ function attachCombo(wrap, inp, options, opts = {}) {
   const list = wrap.createDiv('crm-combo-list');
   let idx = -1, shown = [];
   const close = () => { list.removeClass('is-open'); idx = -1; };
-  const pick = (v) => { if (multi) { const pre = inp.value.split('|').slice(0, -1).map((x) => x.trim()).filter(Boolean); inp.value = [...pre, v].join(' | '); } else inp.value = v; inp.dispatchEvent(new Event('input')); close(); };
+  const comps = options.companies || null;
+  const pick = (v) => {
+    const linkable = comps && !v.includes('@') && REL_LINKABLE.test(v);
+    const val = linkable ? v + ' @ ' : v;
+    if (multi) { const pre = inp.value.split('|').slice(0, -1).map((x) => x.trim()).filter(Boolean); inp.value = [...pre, val].join(' | '); } else inp.value = val;
+    inp.dispatchEvent(new Event('input'));
+    if (!linkable) close();
+  };
   const render = (all) => {
     list.empty();
-    const q = all ? '' : norm(seg());
-    const u = used();
-    shown = options.filter((v) => (!q || norm(v).includes(q)) && !u.includes(norm(v)));
+    const sg = seg();
+    let labels;
+    if (comps && sg.includes('@')) {
+      const lab = sg.split('@')[0].trim(), rest = norm(sg.split('@').slice(1).join('@'));
+      shown = comps.filter((co) => !rest || norm(co).includes(rest)).map((co) => `${lab} @ ${co}`);
+      labels = shown.map((x) => x.split(/\s+@\s*/).slice(1).join(' @ '));
+    } else {
+      const q = all ? '' : norm(sg);
+      const u = used();
+      shown = options.filter((v) => (!q || norm(v).includes(q)) && !u.includes(norm(v)));
+      labels = shown.map((v) => cap(v));
+    }
     if (!shown.length) { close(); return; }
     shown.forEach((v, i) => {
-      const it = list.createDiv({ cls: 'crm-combo-item' + (i === idx ? ' is-sel' : ''), text: cap(v) });
+      const it = list.createDiv({ cls: 'crm-combo-item' + (i === idx ? ' is-sel' : ''), text: labels[i] });
       it.addEventListener('mousedown', (e) => { e.preventDefault(); pick(v); });
     });
     list.addClass('is-open');
@@ -1979,7 +2833,7 @@ class ContactModal extends Modal {
           if (f.type === 'date') inp.placeholder = datePh();
           if (f.type === 'list' || f.type === 'companylist') inp.placeholder = T('valori separati da |');
           const opts = suggestOptions(this.plugin, f, pool, this.contact);
-          if (opts) attachCombo(w, inp, opts, { multi: f.type === 'companylist' });
+          if (opts) attachCombo(w, inp, opts, { multi: f.type === 'companylist' || f.k === 'relazione' });
         }
         inp.value = init;
         this.inputs[f.k] = inp;
@@ -3170,7 +4024,7 @@ function applyFieldConfig(cfg) {
 
 /* Colonne della tabella */
 const COLS = {
-  relazione: { label: T('Relazione'), cell: (v, td, c) => v.badge(td, c.s('relazione')) },
+  relazione: { label: T('Relazione'), cell: (v, td, c) => v.relBadges(td, c) },
   vicinanza: {
     label: T('Vicinanza'),
     cell: (v, td, c) => {
@@ -3178,7 +4032,11 @@ const COLS = {
       if (x) { td.createSpan({ cls: `crm-prox prox-${x}` }); td.createSpan({ cls: 'crm-prox-t', text: cap(dv(c.s('vicinanza'))) }); }
     },
   },
-  citta: { label: T('Città'), cell: (v, td, c) => td.setText(c.s('citta') || '—') },
+  citta: { label: T('Città'), cell: (v, td, c) => {
+    const city = c.s('citta'); if (!city) { td.setText('—'); return; }
+    const a = td.createEl('a', { cls: 'crm-cell-link', text: city, attr: { 'aria-label': T`Mostra tutte le persone a ${city}` } });
+    a.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); v.plugin.navigate({ reset: true, toggle: { key: 'citta', v: city } }); });
+  } },
   ultimo: { label: T('Ultimo contatto'), cell: (v, td, c) => td.setText(c.due.last ? relTime(c.due.last) : '—') },
   followup: { label: T('Follow-up'), cell: (v, td, c) => v.dueChip(td, c) },
   priorita: { label: T('Priorità'), cell: (v, td, c) => v.priChip(td, c) },
@@ -3193,9 +4051,48 @@ function colDef(key) {
     label: f.label,
     cell: (v, td, c) => {
       const val = (f.type === 'list' || f.type === 'companylist') ? c.l(key).join(', ') : c.s(key);
-      td.setText(val || '—');
+      if (!val) { td.setText('—'); return; }
+      const kind = { email: 'email', emaillavoro: 'email', telefono: 'tel', whatsapp: 'whatsapp', instagram: 'instagram', linkedin: 'linkedin' }[key];
+      const href = kind ? linkFor(kind, val) : null;
+      if (href) {
+        const a = td.createEl('a', { cls: 'crm-cell-link', text: val, href, attr: { target: '_blank', rel: 'noopener' } });
+        a.addEventListener('click', (e) => e.stopPropagation());
+        return;
+      }
+      if (key === 'azienda' || key === 'aziendepassate') {
+        const names = (key === 'azienda' ? [c.s('azienda')] : c.l(key)).map((x) => String(x || '').replace(/^\[\[|\]\]$/g, '').split('|').pop().trim()).filter(Boolean);
+        names.forEach((co, i) => {
+          if (i) td.appendText(', ');
+          const mini = td.createSpan('crm-co-mini');
+          const logo = v.plugin.companyLogo ? v.plugin.companyLogo(co) : '';
+          const fallback = () => { mini.empty(); mini.removeClass('has-img'); setIcon(mini, 'building-2'); };
+          if (logo) { mini.addClass('has-img'); const im = mini.createEl('img', { attr: { src: logo, alt: '' } }); im.addEventListener('error', fallback); } else fallback();
+          const a = td.createEl('a', { cls: 'crm-cell-link', text: co });
+          a.addEventListener('click', (e) => {
+            e.preventDefault(); e.stopPropagation();
+            v.plugin.openCompany(co);
+          });
+        });
+        return;
+      }
+      td.setText(val);
     },
   };
+}
+function colText(c, key) {
+  if (key === 'ultimo') return c.due.last ? `${fmtDate(c.due.last)} ${relTime(c.due.last)}` : '';
+  if (key === 'followup') return c.due.due ? fmtDate(c.due.due) : '';
+  if (key === 'compleanno') return c.bday ? fmtDM(c.bday.date) : '';
+  const f = FM[key];
+  const v = (f && (f.type === 'list' || f.type === 'companylist')) ? c.l(key).join(', ') : c.s(key);
+  return ['relazione', 'vicinanza', 'priorita', 'stato', 'canale'].includes(key) ? `${v} ${dv(v)}` : v;
+}
+function colSortVal(c, key) {
+  if (key === 'ultimo') return c.due.last ? c.due.last.getTime() : -BIG;
+  if (key === 'followup') return c.due.due ? c.due.due.getTime() : BIG;
+  if (key === 'compleanno') return c.bday ? c.bday.days : 1e9;
+  if (key === 'priorita') return prioRank(c);
+  return norm(colText(c, key));
 }
 function allColKeys() {
   return [...Object.keys(COLS), ...FIELDS.map((f) => f.k).filter((k) => !COLS[k] && !['nome', 'cognome', 'note'].includes(k))];
@@ -3273,6 +4170,22 @@ class BulkDeleteModal extends Modal {
       this.done();
     });
     setTimeout(() => del.focus(), 0);
+  }
+  onClose() { this.contentEl.empty(); }
+}
+
+class TextPromptModal extends Modal {
+  constructor(app, title, placeholder, initial, onSubmit) { super(app); this.t = title; this.ph = placeholder; this.init = initial || ''; this.onSubmit = onSubmit; }
+  onOpen() {
+    const { contentEl } = this; contentEl.empty(); this.titleEl.setText(this.t);
+    const inp = contentEl.createEl('input', { type: 'text', attr: { placeholder: this.ph, style: 'width:100%' } }); inp.value = this.init;
+    const foot = contentEl.createDiv('crm-form-foot');
+    foot.createEl('button', { cls: 'crm-btn', text: T('Annulla') }).addEventListener('click', () => this.close());
+    const ok = foot.createEl('button', { cls: 'crm-btn crm-btn-primary', text: T('Salva') });
+    const go = () => { const v = inp.value.trim(); this.close(); this.onSubmit(v); };
+    ok.addEventListener('click', go);
+    inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
+    setTimeout(() => { inp.focus(); inp.select(); }, 0);
   }
   onClose() { this.contentEl.empty(); }
 }
@@ -3382,6 +4295,8 @@ function renderGeneral(el, plugin) {
     .addToggle((t) => t.setValue(s.linkAziende).onChange(async (v) => { s.linkAziende = v; await save(); }));
   new Setting(el).setName(T('Crea nota azienda se manca'))
     .addToggle((t) => t.setValue(s.createAziende).onChange(async (v) => { s.createAziende = v; await save(); }));
+  new Setting(el).setName(T('Arricchisci le aziende in automatico')).setDesc(T('Aprendo la pagina di un’azienda, Kith cerca sito, settore, contatti e logo su Wikidata e sul sito ufficiale. Invia in rete solo il nome dell’azienda. Spegni per usare solo i dati inseriti a mano.'))
+    .addToggle((t) => t.setValue(s.autoEnrichCompanies !== false).onChange(async (v) => { s.autoEnrichCompanies = v; await save(); }));
   new Setting(el).setName(T('Finestra compleanni (giorni)'))
     .addText((t) => t.setValue(String(s.birthdayWindow)).onChange(async (v) => { s.birthdayWindow = Math.max(1, parseInt(v, 10) || 30); await save(); }));
   new Setting(el).setName(T('Vista predefinita'))
@@ -3396,6 +4311,30 @@ function renderGeneral(el, plugin) {
   new Setting(el).setName(T('Widget “Oggi” nelle nuove daily note (sperimentale)'))
     .setDesc(T('Aggiunge il blocco crm-oggi alle daily note appena create. Dipende dalle impostazioni del plugin Note giornaliere.'))
     .addToggle((t) => t.setValue(s.autoDailyWidget).onChange(async (v) => { s.autoDailyWidget = v; await save(); }));
+}
+
+/* selettore colore con conferma esplicita (Salva / Annulla) */
+function addColorWithSave(setting, initial, onSave) {
+  let cur = initial, pending = initial;
+  const wrap = setting.controlEl.createDiv('crm-colorsave');
+  const inp = wrap.createEl('input', { type: 'color', cls: 'crm-colorsave-inp' });
+  inp.value = /^#[0-9a-f]{6}$/i.test(initial) ? initial : '#888888';
+  const hex = wrap.createEl('input', { type: 'text', cls: 'crm-colorsave-hex', attr: { maxlength: '7', spellcheck: 'false' } });
+  hex.value = inp.value;
+  const ok = wrap.createEl('button', { cls: 'clickable-icon crm-colorsave-ok', attr: { 'aria-label': T('Salva colore'), title: T('Salva colore') } });
+  setIcon(ok, 'check');
+  const no = wrap.createEl('button', { cls: 'clickable-icon crm-colorsave-no', attr: { 'aria-label': T('Annulla'), title: T('Annulla') } });
+  setIcon(no, 'x');
+  const sync = () => { const dirty = pending.toLowerCase() !== cur.toLowerCase(); wrap.toggleClass('is-dirty', dirty); };
+  const set = (v) => { pending = v; inp.value = v; hex.value = v; sync(); };
+  let tm = null;
+  const commit = async () => { clearTimeout(tm); if (pending.toLowerCase() === cur.toLowerCase()) return; cur = pending; sync(); await onSave(cur); };
+  inp.addEventListener('input', () => { set(inp.value); clearTimeout(tm); tm = setTimeout(commit, 400); });
+  inp.addEventListener('change', commit);
+  hex.addEventListener('input', () => { let v = hex.value.trim(); if (v && v[0] !== '#') v = '#' + v; if (/^#[0-9a-f]{6}$/i.test(v)) { pending = v; inp.value = v; sync(); clearTimeout(tm); tm = setTimeout(commit, 600); } });
+  ok.addEventListener('click', commit);
+  no.addEventListener('click', () => set(cur));
+  hex.addEventListener('keydown', (e) => { if (e.key === 'Enter') ok.click(); if (e.key === 'Escape') no.click(); });
 }
 
 class CustomizeModal extends Modal {
@@ -3465,9 +4404,9 @@ class CustomizeModal extends Modal {
   tab_colori(el) {
     const u = this.s.ui;
     el.createEl('p', { cls: 'crm-muted', text: T('Di base il CRM usa i colori del tema attivo (Minimal). Qui puoi sovrascriverli solo per il CRM.') });
-    const color = (name, desc, key, cssVar) => new Setting(el).setName(name).setDesc(desc)
-      .addColorPicker((cp) => cp.setValue(u[key] || themeColor(cssVar)).onChange(async (v) => { u[key] = v; await this.changed(); }))
-      .addExtraButton((b) => b.setIcon('rotate-ccw').setTooltip(T('Usa il colore del tema')).onClick(async () => { u[key] = ''; await this.changed({ rerender: true }); }));
+    const color = (name, desc, key, cssVar) => { const st = new Setting(el).setName(name).setDesc(desc);
+      addColorWithSave(st, u[key] || themeColor(cssVar), async (v) => { u[key] = v; await this.changed(); });
+      st.addExtraButton((b) => b.setIcon('rotate-ccw').setTooltip(T('Usa il colore del tema')).onClick(async () => { u[key] = ''; await this.changed({ rerender: true }); })); };
     color(T('Accento'), T('Pulsanti principali, selezione, filtro attivo.'), 'accent', '--interactive-accent');
     color(T('Scaduto / priorità alta'), T('Follow-up scaduti e priorità alta.'), 'cDanger', '--color-red');
     color(T('In scadenza / priorità media'), T('Follow-up nei prossimi giorni.'), 'cWarn', '--color-orange');
@@ -3481,12 +4420,13 @@ class CustomizeModal extends Modal {
 
     el.createEl('h4', { cls: 'crm-form-h', text: T('Colore per relazione') });
     const rels = new Map();
-    for (const c of this.plugin.getContacts()) { const v = c.s('relazione'); if (v) rels.set(norm(v), v); }
-    for (const p of PRESETS.relazione) if (!rels.has(norm(p))) rels.set(norm(p), p);
-    for (const [kk, label] of rels) {
-      new Setting(el).setName(cap(label))
-        .addColorPicker((cp) => cp.setValue(u.relColors[kk] || '#888888').onChange(async (v) => { u.relColors[kk] = v; await this.changed(); }))
-        .addExtraButton((b) => b.setIcon('rotate-ccw').setTooltip(T('Neutro')).onClick(async () => { delete u.relColors[kk]; await this.changed({ rerender: true }); }));
+    const addRel = (v) => { const kk = cv(v); if (kk && !rels.has(kk)) rels.set(kk, v); };
+    for (const c of this.plugin.getContacts()) for (const r of c.rels) addRel(r.label);
+    for (const p of PRESETS.relazione) addRel(p);
+    for (const [kk, raw] of rels) {
+      const st = new Setting(el).setName(cap(dv(raw)));
+      addColorWithSave(st, relTone(u, raw) || themeColor(relDefaultVar(raw)) || '#888888', async (v) => { u.relColors[kk] = v; delete u.relColors[norm(raw)]; await this.changed(); });
+      st.addExtraButton((bt) => bt.setIcon('rotate-ccw').setTooltip(T('Neutro')).onClick(async () => { delete u.relColors[kk]; delete u.relColors[norm(raw)]; await this.changed({ rerender: true }); }));
     }
     this.reset(el, ['accent', 'cDanger', 'cWarn', 'cOk', 'cBday', 'avatarStyle', 'neutralTags', 'relColors']);
   }
