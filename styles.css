@@ -92,8 +92,10 @@ body {
 .crm-bday { font-size: 12px; color: var(--color-purple); }
 
 /* Tabella */
-.crm-table-wrap { border: 1px solid var(--crm-line); border-radius: var(--crm-r-lg); overflow: hidden; background: var(--background-primary); }
+.crm-table-wrap { border: 1px solid var(--crm-line); border-radius: var(--crm-r-lg); overflow-x: auto; overflow-y: hidden; background: var(--background-primary); }
 .crm-table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 0; }
+.crm-table-wrap > .crm-table { width: max-content; min-width: 100%; }
+.crm-table-wrap > .crm-table th, .crm-table-wrap > .crm-table td { white-space: nowrap; }
 .crm-table th { text-align: left; font-size: 12px; font-weight: 500; color: var(--text-muted); padding: 0 12px; height: calc(var(--crm-row-h) - 6px); background: var(--background-secondary); border: none; border-bottom: 1px solid var(--crm-line); border-right: 1px solid var(--crm-line); white-space: nowrap; position: sticky; top: 0; z-index: 1; }
 .crm-table td { padding: 0 12px; height: var(--crm-row-h); border: none; border-bottom: 1px solid var(--crm-line); border-right: 1px solid var(--crm-line); vertical-align: middle; font-size: var(--font-ui-small); white-space: nowrap; }
 .crm-table th:last-child, .crm-table td:last-child { border-right: none; }
@@ -290,3 +292,28 @@ body .crm-root .crm-btn.crm-btn-danger:hover { background: color-mix(in srgb, va
 .crm-side-item.is-person:hover .crm-side-quick, .crm-side-item.is-person:focus-within .crm-side-quick { display: inline-flex; }
 .crm-side-item.is-person:hover .crm-side-meta, .crm-side-item.is-person:focus-within .crm-side-meta { display: none; }
 .crm-side-quick .clickable-icon { padding: 2px; height: auto; }
+
+/* ── Collapsible form sections ── */
+.crm-form-sec { margin: 10px 0; border: 1px solid var(--background-modifier-border); border-radius: var(--crm-r-lg, 8px); }
+.crm-form-sec > summary { display: flex; align-items: center; gap: 8px; padding: 9px 12px; cursor: pointer; list-style: none; font-weight: 600; font-size: var(--font-ui-small); color: var(--text-normal); background: var(--background-secondary); border-radius: inherit; }
+.crm-form-sec[open] > summary { border-bottom: 1px solid var(--background-modifier-border); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.crm-form-sec > summary::-webkit-details-marker { display: none; }
+.crm-form-sec > summary:hover { background: var(--background-modifier-hover); }
+.crm-form-chev { display: inline-flex; transition: transform .12s; color: var(--text-muted); }
+.crm-form-chev svg { width: 14px; height: 14px; }
+.crm-form-sec[open] .crm-form-chev { transform: rotate(90deg); }
+.crm-form-sec-t { flex: 1 1 auto; }
+.crm-form-sec-n { font-weight: 400; font-size: var(--font-ui-smaller); color: var(--text-faint); }
+.crm-form-sec-n.has-values { color: var(--interactive-accent); font-weight: 500; }
+.crm-form-sec > .crm-form-grid { padding: 12px; }
+
+/* ── Combo (suggestions) ── */
+.crm-form-item.has-combo { position: relative; }
+.crm-combo-chev { position: absolute; right: 10px; bottom: 9px; color: var(--text-faint); cursor: pointer; display: inline-flex; }
+.crm-combo-chev svg { width: 14px; height: 14px; }
+.crm-form-item.has-combo input { padding-right: 30px; }
+.crm-combo-list { display: none; position: absolute; left: 0; right: 0; top: 100%; z-index: 50; margin-top: 4px; max-height: 220px; overflow-y: auto; padding: 4px; background: var(--background-primary); border: 1px solid var(--background-modifier-border); border-radius: var(--crm-r-lg, 8px); box-shadow: var(--shadow-s); }
+.crm-combo-list.is-open { display: block; }
+.crm-combo-item { padding: 6px 10px; border-radius: var(--crm-r, 6px); font-size: var(--font-ui-small); font-weight: 400; color: var(--text-normal); cursor: pointer; }
+.crm-combo-item:hover, .crm-combo-item.is-sel { background: var(--background-modifier-hover); }
+.crm-combo-item.is-sel { color: var(--text-normal); }

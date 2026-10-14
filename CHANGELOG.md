@@ -7,6 +7,9 @@
 - Cumulative filters (e.g. Close friends + High priority), "Clear filters", search box in the panel
 - The panel appears only while a Kith tab is active and disappears when you switch to another tab (the left sidebar returns to Files)
 - Company and City facets; hover quick actions (Contacted today, Log interaction); empty rows hidden
+- New/Edit contact form: collapsible sections with filled-field counters; Obsidian-styled suggestion menu replaces the native datalist
+- Preset values (relationship, closeness, priority, status…) and a few leftover strings now follow the UI language
+- Table scrolls horizontally instead of clipping columns
 
 ## 0.5.1
 - Header: **New contact** is now the first button; "Calendar .ics" renamed **Add to calendar**
