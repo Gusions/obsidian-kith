@@ -276,3 +276,11 @@ body .crm-root .crm-btn.crm-btn-danger:hover { background: color-mix(in srgb, va
 .crm-side-group .crm-side-item { padding-left: 20px; }
 .crm-side-actions { display: flex; gap: 6px; padding: 0 6px; }
 .crm-side-actions button { flex: 1 1 0; }
+.crm-side-search { width: calc(100% - 12px); margin: 0 6px 12px; }
+.crm-side-meta { flex: none; font-size: var(--font-ui-smaller); color: var(--text-faint); font-variant-numeric: tabular-nums; }
+.crm-side-meta.tone-danger { color: var(--color-red); }
+.crm-side-meta.tone-accent { color: var(--color-purple); }
+.crm-side-item.is-more { color: var(--text-faint); font-size: var(--font-ui-smaller); }
+.crm-side-h-row { display: flex; justify-content: space-between; align-items: center; }
+.crm-side-clear { cursor: pointer; text-transform: none; letter-spacing: 0; color: var(--text-accent); }
+.crm-side-group > summary.has-filter { color: var(--interactive-accent); font-weight: 500; }

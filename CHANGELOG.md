@@ -3,6 +3,8 @@
 ## 0.6.0
 - **Sidebar panel** (desktop): opening Kith adds a Kith tab to the left sidebar, next to Files/Search/Bookmarks. Quick views (active, overdue follow-ups, birthdays, high priority, archived) and filters by relationship, closeness, priority and status, with counts. Closes together with the Kith tab
 - New quick view: Archived
+- Panel lists the overdue follow-ups and upcoming birthdays by name (click to open, "… and N more")
+- Cumulative filters (e.g. Close friends + High priority), "Clear filters", search box in the panel
 
 ## 0.5.1
 - Header: **New contact** is now the first button; "Calendar .ics" renamed **Add to calendar**
