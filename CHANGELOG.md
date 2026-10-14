@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.0
+- **Sidebar panel** (desktop): opening Kith adds a Kith tab to the left sidebar, next to Files/Search/Bookmarks. Quick views (active, overdue follow-ups, birthdays, high priority, archived) and filters by relationship, closeness, priority and status, with counts. Closes together with the Kith tab
+- New quick view: Archived
+
 ## 0.5.1
 - Header: **New contact** is now the first button; "Calendar .ics" renamed **Add to calendar**
 - **Import** moved into *Customize → Import* (also shown on the empty state and as a command)

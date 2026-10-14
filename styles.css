@@ -255,3 +255,24 @@ body .crm-root .crm-btn.crm-btn-danger:hover { background: color-mix(in srgb, va
 .crm-detail button, .crm-detail .crm-qa-btn { -webkit-user-select: none; user-select: none; }
 .crm-root:focus { outline: none; }
 .crm-empty-actions { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
+
+/* ── Sidebar panel (left tab) ── */
+.crm-side { padding: 8px 10px 14px; }
+.crm-side .crm-side-title { font-size: var(--font-ui-large); font-weight: 600; margin: 4px 6px 10px; }
+.crm-side-section { margin-bottom: 14px; }
+.crm-side-h { font-size: var(--font-ui-smaller); text-transform: uppercase; letter-spacing: .04em; color: var(--text-faint); margin: 0 6px 4px; }
+.crm-side-item { display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: var(--crm-r, 6px); cursor: pointer; color: var(--text-muted); font-size: var(--font-ui-small); }
+.crm-side-item:hover { background: var(--background-modifier-hover); color: var(--text-normal); }
+.crm-side-item:focus-visible { outline: 2px solid var(--interactive-accent); outline-offset: -2px; }
+.crm-side-item.is-active { background: var(--background-modifier-active-hover, var(--background-modifier-hover)); color: var(--text-normal); font-weight: 500; }
+.crm-side-icon { display: inline-flex; width: 16px; height: 16px; flex: none; }
+.crm-side-icon svg { width: 16px; height: 16px; }
+.crm-side-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.crm-side-count { flex: none; font-size: var(--font-ui-smaller); color: var(--text-faint); font-variant-numeric: tabular-nums; }
+.crm-side-group { margin-bottom: 2px; }
+.crm-side-group > summary { display: flex; align-items: center; justify-content: space-between; padding: 4px 8px; cursor: pointer; color: var(--text-normal); font-size: var(--font-ui-small); border-radius: var(--crm-r, 6px); list-style: none; }
+.crm-side-group > summary::-webkit-details-marker { display: none; }
+.crm-side-group > summary:hover { background: var(--background-modifier-hover); }
+.crm-side-group .crm-side-item { padding-left: 20px; }
+.crm-side-actions { display: flex; gap: 6px; padding: 0 6px; }
+.crm-side-actions button { flex: 1 1 0; }
