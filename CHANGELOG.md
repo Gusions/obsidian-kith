@@ -10,6 +10,11 @@
 - New/Edit contact form: collapsible sections with filled-field counters; Obsidian-styled suggestion menu replaces the native datalist
 - Preset values (relationship, closeness, priority, status…) and a few leftover strings now follow the UI language
 - Table scrolls horizontally instead of clipping columns
+- HubSpot-style table: tabs with counts, pill filters, row checkboxes, footer with bulk Archive / Delete / Clear selection, CSV export
+- Full-page contact record (click a name): inline editing, add-field menu, resizable columns, back button, connected people with reason (partner, introduced you / introduced by you)
+- Custom contact photo instead of initials (click the avatar in the record)
+- "Partner" and "Met through" suggest existing contacts, save as links and are clickable
+- Detail side pane removed from Table / Cards / Kanban (kept in Network); icon-only view switcher
 
 ## 0.5.1
 - Header: **New contact** is now the first button; "Calendar .ics" renamed **Add to calendar**
