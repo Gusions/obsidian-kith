@@ -67,7 +67,7 @@ Requires Obsidian **1.5.0+**. Developed and tested on desktop; mobile is not fla
 
 1. Open **Settings → Kith** and set the three folders (by default `Contacts/People`, `Contacts/Interactions`, `Contacts/Companies` in English; `Persone/Persone`, `Persone/Interazioni`, `Persone/Aziende` in Italian). If you already have contact notes, point *Contacts folder* to them.
 2. Click the **users** icon in the left ribbon (or run *Open Kith*).
-3. Either **+ New contact**, or **Import** your LinkedIn / phone / Facebook export.
+3. Either **+ New contact**, or import your LinkedIn / phone / Facebook export from **Customize → Import** (or the *Import contacts* command).
 4. Select a contact → **Contacted today**, **+ Interaction**, **Edit**.
 
 ## How contacts are stored
@@ -158,7 +158,7 @@ Interaction notes (created by *+ Interaction*) live in the interactions folder a
 
 ## Importing contacts
 
-Open **Import** (or the command *Import contacts*). Drop one or more files, check the preview, choose who to import, and confirm. Nothing is created before that.
+Open **Customize → Import** (or run the command *Import contacts*; on an empty CRM there is also an Import button). Drop one or more files, check the preview, choose who to import, and confirm. Nothing is created before that.
 
 | Source | How to export |
 |---|---|
@@ -183,7 +183,7 @@ No account linking, no OAuth, no API keys. For a birthday the plugin opens Googl
 
 - Offered automatically after you save a contact with a birthday (can be turned off), via the **+ Google Calendar** button on the record, or the command *Add the contact's birthday to Google Calendar*.
 - Title and description templates are editable (placeholders `{first} {last} {age}`; the Italian `{nome} {cognome} {eta}` also work).
-- **Calendar .ics** exports all birthdays (yearly recurrence) and, optionally, follow-up due dates to a `.ics` file you can import into Apple Calendar, Outlook, Google Calendar…
+- **Add to calendar** (header button) exports all birthdays (yearly recurrence) and, optionally, follow-up due dates to a `.ics` file you can import into Apple Calendar, Outlook, Google Calendar…
 
 ## "Today" widget
 

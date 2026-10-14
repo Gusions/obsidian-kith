@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.1
+- Header: **New contact** is now the first button; "Calendar .ics" renamed **Add to calendar**
+- **Import** moved into *Customize → Import* (also shown on the empty state and as a command)
+
 ## 0.5.0
 - Renamed to **Kith** (plugin id `kith`)
 - English / Italian UI (follows Obsidian), English + Italian frontmatter keys, bilingual presets

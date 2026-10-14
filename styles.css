@@ -254,3 +254,4 @@ body .crm-root .crm-btn.crm-btn-danger:hover { background: color-mix(in srgb, va
 .crm-detail, .crm-detail * { -webkit-user-select: text; user-select: text; }
 .crm-detail button, .crm-detail .crm-qa-btn { -webkit-user-select: none; user-select: none; }
 .crm-root:focus { outline: none; }
+.crm-empty-actions { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
