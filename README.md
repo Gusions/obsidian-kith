@@ -5,6 +5,10 @@
 
 Table, cards, kanban and relationship-graph views · bulk importer (LinkedIn, phone, Facebook, CSV) · follow-up reminders · birthdays → Google Calendar · "Today" widget for your daily note · fully customizable fields, colors and fonts. It follows your theme (designed with the *Minimal* theme in mind) and takes its visual cues from tools like Attio and the new HubSpot: flat, dense, quiet.
 
+![Kith table view with 120+ contacts, agenda panel and KPI strip](docs/screenshot-table.png)
+
+*Table view with a demo vault of 124 fictional contacts (Italian and US names): KPI strip, filters, follow-up states, and the agenda panel on the right.*
+
 🇮🇹 [Vai alla sezione in italiano](#-italiano)
 
 ---
