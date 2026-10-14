@@ -284,3 +284,9 @@ body .crm-root .crm-btn.crm-btn-danger:hover { background: color-mix(in srgb, va
 .crm-side-h-row { display: flex; justify-content: space-between; align-items: center; }
 .crm-side-clear { cursor: pointer; text-transform: none; letter-spacing: 0; color: var(--text-accent); }
 .crm-side-group > summary.has-filter { color: var(--interactive-accent); font-weight: 500; }
+.crm-side-sub { margin: 0 0 6px; }
+.crm-side-sub .crm-side-item { padding-left: 32px; }
+.crm-side-quick { display: none; gap: 2px; flex: none; }
+.crm-side-item.is-person:hover .crm-side-quick, .crm-side-item.is-person:focus-within .crm-side-quick { display: inline-flex; }
+.crm-side-item.is-person:hover .crm-side-meta, .crm-side-item.is-person:focus-within .crm-side-meta { display: none; }
+.crm-side-quick .clickable-icon { padding: 2px; height: auto; }

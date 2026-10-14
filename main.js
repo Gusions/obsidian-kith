@@ -359,7 +359,8 @@ class CRMPlugin extends Plugin {
     this.applyTheme();
     this.registerView(VIEW_TYPE, (leaf) => new CRMView(leaf, this));
     this.registerView(SIDE_TYPE, (leaf) => new KithSidebar(leaf, this));
-    this.app.workspace.onLayoutReady(() => { if (!this.app.workspace.getLeavesOfType(VIEW_TYPE).length) this.closeSidebar(); else this.ensureSidebar(false); });
+    this.app.workspace.onLayoutReady(() => { this.syncSidebar(); });
+    this.registerEvent(this.app.workspace.on('active-leaf-change', () => this.syncSidebar()));
     this.addRibbonIcon('users', T('Apri Kith'), () => this.activateView());
 
     this.addCommand({ id: 'apri-crm', name: T('Apri Kith'), callback: () => this.activateView() });
@@ -522,16 +523,34 @@ class CRMPlugin extends Plugin {
     new ContactPicker(this.app, this.getContacts().filter((c) => !c.archived), fn).open();
   }
 
+  /* the side panel lives only while a Kith tab is the active one; elsewhere the left sidebar returns to what it was */
+  async syncSidebar() {
+    if (obsidian.Platform.isMobile || this._syncing) return;
+    this._syncing = true;
+    try {
+      const ws = this.app.workspace;
+      const act = ws.getActiveViewOfType(ItemView);
+      const onKith = !!act && (act.getViewType() === VIEW_TYPE || act.getViewType() === SIDE_TYPE);
+      if (onKith) await this.ensureSidebar(!ws.leftSplit.collapsed);
+      else if (ws.getLeavesOfType(SIDE_TYPE).length) this.closeSidebar();
+    } finally { this._syncing = false; }
+  }
   async ensureSidebar(reveal = true) {
     if (obsidian.Platform.isMobile) return;
     const ws = this.app.workspace;
     if (ws.getLeavesOfType(SIDE_TYPE).length) return;
     const leaf = ws.getLeftLeaf(false);
     if (!leaf) return;
+    this._prevLeft = ws.getLeavesOfType('file-explorer').find((l) => l.view.containerEl.offsetParent !== null) || null;
     await leaf.setViewState({ type: SIDE_TYPE, active: reveal });
     if (reveal) ws.revealLeaf(leaf);
   }
-  closeSidebar() { this.app.workspace.detachLeavesOfType(SIDE_TYPE); }
+  closeSidebar() {
+    const ws = this.app.workspace;
+    ws.detachLeavesOfType(SIDE_TYPE);
+    const prev = this._prevLeft; this._prevLeft = null;
+    if (prev && ws.getLeavesOfType('file-explorer').includes(prev) && !ws.leftSplit.collapsed) ws.revealLeaf(prev);
+  }
   onMainClosed(view) {
     const others = this.app.workspace.getLeavesOfType(VIEW_TYPE).filter((l) => l.view !== view);
     if (!others.length) this.closeSidebar();
@@ -548,7 +567,7 @@ class CRMPlugin extends Plugin {
   }
 
   async activateView() {
-    await this.ensureSidebar();
+    await this.ensureSidebar(!this.app.workspace.leftSplit.collapsed);
     let leaf = this.app.workspace.getLeavesOfType(VIEW_TYPE)[0];
     if (!leaf) {
       leaf = this.app.workspace.getLeaf('tab');
@@ -712,7 +731,7 @@ class CRMView extends ItemView {
     super(leaf);
     this.plugin = plugin;
     this.q = '';
-    this.filters = { relazione: '', vicinanza: '', priorita: '', stato: 'attivi' };
+    this.filters = { relazione: '', vicinanza: '', priorita: '', azienda: '', citta: '', stato: 'attivi' };
     this.quick = '';
     this.mode = plugin.settings.defaultMode;
     this.groupBy = plugin.settings.groupBy;
@@ -729,7 +748,7 @@ class CRMView extends ItemView {
   async onClose() { if (this.graph) { this.graph.destroy(); this.graph = null; } this.plugin.onMainClosed(this); }
 
   applyNav(p) {
-    if (p.reset) { this.filters = { relazione: '', vicinanza: '', priorita: '', stato: 'attivi' }; this.quick = ''; this.q = ''; if (this.searchEl) this.searchEl.value = ''; }
+    if (p.reset) { this.filters = { relazione: '', vicinanza: '', priorita: '', azienda: '', citta: '', stato: 'attivi' }; this.quick = ''; this.q = ''; if (this.searchEl) this.searchEl.value = ''; }
     if (p.quick !== undefined) this.quick = (p.quick && this.quick === p.quick) ? '' : p.quick;
     if (p.toggle) { const { key, v } = p.toggle; const same = norm(this.filters[key] || '') === norm(v); this.filters[key] = same ? (key === 'stato' ? 'attivi' : '') : v; }
     if (p.q !== undefined) { this.q = p.q; if (this.searchEl) this.searchEl.value = p.q; if (Object.keys(p).length === 1) { this.renderList(); return; } }
@@ -826,6 +845,8 @@ class CRMView extends ItemView {
       if (f.relazione && norm(c.s('relazione')) !== norm(f.relazione)) return false;
       if (f.vicinanza && norm(c.s('vicinanza')) !== norm(f.vicinanza)) return false;
       if (f.priorita && norm(c.s('priorita')) !== norm(f.priorita)) return false;
+      if (f.azienda && norm(c.s('azienda')) !== norm(f.azienda)) return false;
+      if (f.citta && norm(c.s('citta')) !== norm(f.citta)) return false;
       if (q && !c.hay.includes(q)) return false;
       if (this.quick === 'scaduti' && c.due.state !== 'scaduto') return false;
       if (this.quick === 'compleanni' && !(c.bday && c.bday.days <= win)) return false;
@@ -1401,7 +1422,7 @@ class CRMView extends ItemView {
 /* ───────────────────────── Modali ───────────────────────── */
 
 class KithSidebar extends ItemView {
-  constructor(leaf, plugin) { super(leaf); this.plugin = plugin; this.openGroups = new Set(['relazione']); this.expand = new Set(); }
+  constructor(leaf, plugin) { super(leaf); this.plugin = plugin; this.closedGroups = new Set(); this.expand = new Set(); }
   getViewType() { return SIDE_TYPE; }
   getDisplayText() { return T('Kith'); }
   getIcon() { return 'users'; }
@@ -1422,13 +1443,13 @@ class KithSidebar extends ItemView {
     const top = this.contentEl.scrollTop;
     root.empty();
     const mv = this.mainView();
-    const filters = mv ? mv.filters : { relazione: '', vicinanza: '', priorita: '', stato: 'attivi' };
+    const filters = mv ? mv.filters : { relazione: '', vicinanza: '', priorita: '', azienda: '', citta: '', stato: 'attivi' };
     const quick = mv ? mv.quick : '';
     if (mv && this.searchEl && document.activeElement !== this.searchEl && this.searchEl.value !== mv.q) this.searchEl.value = mv.q;
     const all = p.getContacts();
     const active = all.filter((c) => !c.archived);
     const win = p.settings.birthdayWindow;
-    const facetOn = ['relazione', 'vicinanza', 'priorita'].some((k) => filters[k]) || filters.stato !== 'attivi';
+    const facetOn = ['relazione', 'vicinanza', 'priorita', 'azienda', 'citta'].some((k) => filters[k]) || filters.stato !== 'attivi';
     const clean = !quick && !facetOn && !(mv && mv.q);
     const row = (parent, o) => {
       const r = parent.createDiv({ cls: 'crm-side-item' + (o.active ? ' is-active' : '') + (o.cls ? ' ' + o.cls : '') });
@@ -1444,28 +1465,33 @@ class KithSidebar extends ItemView {
     const overdue = active.filter((c) => c.due.state === 'scaduto').sort(SORTS.followup);
     const bdays = active.filter((c) => c.bday && c.bday.days <= win).sort(SORTS.compleanno);
     const nav = root.createDiv('crm-side-section');
-    row(nav, { icon: 'users', label: T('Contatti attivi'), count: active.length, active: clean, onClick: () => p.navigate({ reset: true }) });
-    row(nav, { icon: 'alarm-clock', label: T('Follow-up scaduti'), count: overdue.length, active: quick === 'scaduti', onClick: () => p.navigate({ quick: 'scaduti' }) });
-    row(nav, { icon: 'cake', label: T`Compleanni (${win} gg)`, count: bdays.length, active: quick === 'compleanni', onClick: () => p.navigate({ quick: 'compleanni' }) });
-    row(nav, { icon: 'star', label: T('Priorità alta'), count: active.filter((c) => cv(c.s('priorita')) === 'alta').length, active: quick === 'alta', onClick: () => p.navigate({ quick: 'alta' }) });
-    row(nav, { icon: 'archive', label: T('Archiviati'), count: all.length - active.length, active: quick === 'archiviati', onClick: () => p.navigate({ quick: 'archiviati' }) });
-
-    const people = (title, list, key, metaFn, tone) => {
+    const people = (list, key, metaFn, tone) => {
       if (!list.length) return;
-      const sec = root.createDiv('crm-side-section');
-      sec.createDiv({ cls: 'crm-side-h', text: title });
+      const sub = nav.createDiv('crm-side-sub');
       const open = this.expand.has(key), shown = open ? list : list.slice(0, 5);
-      for (const c of shown) row(sec, { cls: 'is-person', label: c.name, meta: metaFn(c), tone, active: mv && mv.selected === c.file.path, onClick: () => p.focusContact(c.file) });
-      if (list.length > 5) row(sec, { cls: 'is-more', label: open ? T('Mostra meno') : T`… e altri ${list.length - 5}`, onClick: () => { if (open) this.expand.delete(key); else this.expand.add(key); this.update(); } });
+      for (const c of shown) {
+        const r = row(sub, { cls: 'is-person', label: c.name, meta: metaFn(c), tone, active: mv && mv.selected === c.file.path, onClick: () => p.focusContact(c.file) });
+        const q = r.createSpan('crm-side-quick');
+        const mk = (icon, tip, fn) => { const b = q.createEl('button', { cls: 'clickable-icon', attr: { 'aria-label': tip } }); setIcon(b, icon); b.addEventListener('click', (e) => { e.stopPropagation(); fn(); }); b.addEventListener('keydown', (e) => e.stopPropagation()); };
+        mk('check', T('Contattato oggi'), () => p.markContacted(c));
+        mk('message-square-plus', T('Registra interazione'), () => new InteractionModal(p.app, p, c).open());
+      }
+      if (list.length > 5) row(sub, { cls: 'is-more', label: open ? T('Mostra meno') : T`… e altri ${list.length - 5}`, onClick: () => { if (open) this.expand.delete(key); else this.expand.add(key); this.update(); } });
     };
-    people(T('Follow-up scaduti'), overdue, 'od', (c) => `${-c.due.days}${T(' gg')}`, 'danger');
-    people(T('Compleanni'), bdays, 'bd', (c) => (c.bday.days === 0 ? T('oggi') : T`tra ${c.bday.days} gg`), 'accent');
+    const item = (icon, label, count, on, onClick, always) => { if (count || on || always) row(nav, { icon, label, count, active: on, onClick }); };
+    item('users', T('Contatti attivi'), active.length, clean, () => p.navigate({ reset: true }), true);
+    item('alarm-clock', T('Follow-up scaduti'), overdue.length, quick === 'scaduti', () => p.navigate({ quick: 'scaduti' }));
+    people(overdue, 'od', (c) => `${-c.due.days}${T(' gg')}`, 'danger');
+    item('cake', T`Compleanni (${win} gg)`, bdays.length, quick === 'compleanni', () => p.navigate({ quick: 'compleanni' }));
+    people(bdays, 'bd', (c) => (c.bday.days === 0 ? T('oggi') : T`tra ${c.bday.days} gg`), 'accent');
+    item('star', T('Priorità alta'), active.filter((c) => cv(c.s('priorita')) === 'alta').length, quick === 'alta', () => p.navigate({ quick: 'alta' }));
+    item('archive', T('Archiviati'), all.length - active.length, quick === 'archiviati', () => p.navigate({ quick: 'archiviati' }));
 
     const browse = root.createDiv('crm-side-section');
     const bh = browse.createDiv({ cls: 'crm-side-h crm-side-h-row' });
     bh.createSpan({ text: T('Esplora') });
     if (facetOn) { const x = bh.createEl('a', { cls: 'crm-side-clear', text: T('Azzera filtri') }); x.addEventListener('click', () => p.navigate({ reset: true })); }
-    for (const [key, label] of [['relazione', T('Relazione')], ['vicinanza', T('Vicinanza')], ['priorita', T('Priorità')], ['stato', T('Stato')]]) {
+    for (const [key, label] of [['relazione', T('Relazione')], ['vicinanza', T('Vicinanza')], ['priorita', T('Priorità')], ['azienda', T('Azienda')], ['citta', T('Città')], ['stato', T('Stato')]]) {
       const counts = new Map();
       for (const c of (key === 'stato' ? all : active)) {
         const v = c.s(key); if (!v) continue;
@@ -1475,13 +1501,14 @@ class KithSidebar extends ItemView {
       if (!counts.size) continue;
       const g = browse.createEl('details', { cls: 'crm-side-group' });
       const sel = key === 'stato' ? (filters.stato !== 'attivi' && filters.stato !== 'tutti' ? filters.stato : '') : filters[key];
-      g.open = this.openGroups.has(key) || !!sel;
-      g.addEventListener('toggle', () => { if (g.open) this.openGroups.add(key); else this.openGroups.delete(key); });
+      g.open = !this.closedGroups.has(key) || !!sel;
+      g.addEventListener('toggle', () => { if (g.open) this.closedGroups.delete(key); else this.closedGroups.add(key); });
       const sm = g.createEl('summary'); sm.createSpan({ text: label + (sel ? ': ' + cap(sel) : '') }); sm.createSpan({ cls: 'crm-side-count', text: String(counts.size) });
       if (sel) sm.addClass('has-filter');
-      for (const { v, n } of [...counts.values()].sort((a, b) => b.n - a.n || a.v.localeCompare(b.v))) {
-        row(g, { label: cap(v), count: n, active: norm(sel || '') === norm(v), onClick: () => p.navigate({ toggle: { key, v } }) });
-      }
+      const vals = [...counts.values()].sort((a, b) => b.n - a.n || a.v.localeCompare(b.v));
+      const fk = 'f-' + key, more = this.expand.has(fk), cut = !more && vals.length > 8 && !sel ? 8 : vals.length;
+      for (const { v, n } of vals.slice(0, cut)) row(g, { label: cap(v), count: n, active: norm(sel || '') === norm(v), onClick: () => p.navigate({ toggle: { key, v } }) });
+      if (vals.length > 8 && !sel) row(g, { cls: 'is-more', label: more ? T('Mostra meno') : T`… e altri ${vals.length - 8}`, onClick: () => { if (more) this.expand.delete(fk); else this.expand.add(fk); this.update(); } });
     }
     const foot = root.createDiv('crm-side-actions');
     foot.createEl('button', { cls: 'mod-cta', text: T('Nuovo contatto') }).addEventListener('click', () => new ContactModal(p.app, p, null, (f) => p.focusContact(f)).open());

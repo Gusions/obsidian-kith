@@ -5,6 +5,8 @@
 - New quick view: Archived
 - Panel lists the overdue follow-ups and upcoming birthdays by name (click to open, "… and N more")
 - Cumulative filters (e.g. Close friends + High priority), "Clear filters", search box in the panel
+- The panel appears only while a Kith tab is active and disappears when you switch to another tab (the left sidebar returns to Files)
+- Company and City facets; hover quick actions (Contacted today, Log interaction); empty rows hidden
 
 ## 0.5.1
 - Header: **New contact** is now the first button; "Calendar .ics" renamed **Add to calendar**
