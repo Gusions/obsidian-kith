@@ -1,14 +1,49 @@
 # Changelog
 
+## 0.8.0
+
+### Home
+- New header: round buttons (settings, collapse) and a **New contact ▾** pill with *New contact* and *Import contacts*
+- Pill search and filters, sort control with icon, saved-view tabs with icons
+- Sticky footer with the contact count, refresh and **Export CSV**. CSV exports only the selected contacts; with nothing selected you get a notice instead of a download. *Select all* in the table header selects every contact in the current filter
+- Redesigned bulk action bar (pill, icon buttons, selection count)
+- The calendar button appears only when contacts are selected; the "download .ics for everyone" action moved to **Settings → General → Reminders and calendar**
+
+### Importer
+- **One importer with automatic detection** of LinkedIn, phone (`.vcf` / Google CSV), Facebook and generic CSV files
+- Load LinkedIn and your address book together and Kith **cross-checks them** by email, LinkedIn profile and name (accent- and abbreviation-tolerant); homonyms are flagged, existing contacts are detected, and you confirm each row before anything is created
+- Merge rules: LinkedIn wins for role, company and profile; the address book wins for phone and personal data
+- The importer and every Kith dialog share the same look: white surface, divided header, pill fields and buttons, dashed drop zone
+
+### Customization and settings
+- Customize Kith and Settings redesigned: grouped cards, uniform spacing, one font and one control width everywhere
+- **Menus**: drop-downs are now Kith pills that open the same popover as every other menu; a second click on a button closes its menu
+- **Resizable dialogs** (Customize and Import): drag the corner handle, double-click it to reset; the content adapts and the size is remembered
+- Lists (relationship, interests, past companies…) are separated with **commas** when editing; `|` is still understood and used only when a value contains a comma
+
+### Contact page
+- Header chips (closeness, priority) removed; the same information stays in the list and the card views
+- Field rows aligned: label, value and edit button share one baseline, clearer labels
+- *+ New custom field* now opens Customize directly on **Fields**, scrolled to the form with the name focused
+
+### Company page
+- *Hidden items (N)* shortcut next to the sections; logo fetch from Instagram; people list integrated in the page
+
+### Fixes
+- Side panel starts collapsed and closes when you leave Kith
+- Fixed doubled controls, mis-centered text and missing arrows in drop-downs under some themes
+- Fixed uneven spacing in settings cards (first and last row touching the border)
+- Icons no longer depend on the theme's sizing; fixed text scaling inside dialogs when the text-size setting is above 100%
+
 ## 0.7.5
 
 ### Navigation
-- **Side panel** in the left sidebar, HubSpot-style: search, filters and quick access. It opens with Kith, stays collapsed until you open it, and closes when you leave Kith
+- **Side panel** in the left sidebar: search, filters and quick access. It opens with Kith, stays collapsed until you open it, and closes when you leave Kith
 - **Saved views**: save filters, quick filter, search, sort, mode and column filters as tabs; update, rename, delete
 - Startup alert for overdue follow-ups and upcoming birthdays
 
 ### Contact page
-- Redesigned header (HubSpot-style): large photo, name, role, round action buttons (contacted today, interaction, email, call, edit, other) and an *Actions* menu
+- Redesigned header: large photo, name, role, round action buttons (contacted today, interaction, email, call, edit, other) and an *Actions* menu
 - *Other* popover with grouped actions and search: communicate, log a call / meeting / message / email, calendar, photo, copy
 - Photo: upload, paste from the clipboard, paste a link, or fetch from Instagram (several fallback sources); the camera badge only shows on hover when a photo exists
 - Adding a partner asks whether to add that person to your contacts
@@ -21,13 +56,13 @@
 - Hidden sections and fields can be restored from *Actions → Customize page* or the *Hidden items* shortcut; section and field controls are always visible
 
 ### Interface
-- Every menu uses the same HubSpot-style popover (context menus, column headers, bulk edit with drill-in submenus, calendar menu)
+- Every menu uses the same popover (context menus, column headers, bulk edit with drill-in submenus, calendar menu)
 - Consistent buttons across all views; icons no longer depend on the theme's sizing
 
 ## 0.7.0
 
 ### Table & views
-- HubSpot-style table: tabs with counts, pill filters, row checkboxes, CSV export
+- Table: tabs with counts, pill filters, row checkboxes, CSV export
 - Customizable columns with a header menu: sort, filter, pin, move, add and remove fields; table scrolls horizontally instead of clipping
 - Bulk action bar above the table (contacted today, interaction, edit, delete, archive, calendar); delete with confirmation
 - Detail side pane removed from Table / Cards / Kanban (kept in Network); icon-only view switcher; collapsible header (collapsed by default)
@@ -80,7 +115,7 @@
 - Customize dialog: colors, fonts, density, radius, custom / hidden / renamed fields, table columns, Google Calendar birthday link
 
 ## 0.3.0
-- Flat redesign (Attio / HubSpot inspired), follows the active theme
+- Flat redesign, follows the active theme
 
 ## 0.2.0
 - Importer (LinkedIn, phone, Facebook, CSV), relationship graph, .ics export, "Today" widget

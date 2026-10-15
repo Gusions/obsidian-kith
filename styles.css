@@ -523,7 +523,7 @@ a.crm-co-name:hover { color: var(--interactive-accent); text-decoration: underli
 .crm-cell-cal { display: inline-flex; vertical-align: middle; margin-left: 8px; opacity: .6; }
 .crm-cell-cal:hover { opacity: 1; }
 
-/* ── Sidebar panel · HubSpot-like proportions ── */
+/* ── Sidebar panel · compact proportions ── */
 .crm-side { padding: 0; display: flex; flex-direction: column; height: 100%; --sb-row: 32px; }
 .crm-side-head { display: flex; align-items: center; gap: 8px; padding: 14px 14px 10px; }
 .crm-side-logo { display: inline-flex; color: var(--interactive-accent); }
@@ -575,7 +575,7 @@ a.crm-co-name:hover { color: var(--interactive-accent); text-decoration: underli
 .crm-tab-add svg { width: 14px; height: 14px; }
 .crm-tab-add.is-hot { color: var(--interactive-accent); background: color-mix(in srgb, var(--interactive-accent) 10%, transparent); font-weight: 500; }
 
-/* ── Contact record · HubSpot-like header card ── */
+/* ── Contact record · header card ── */
 .crm-rec-card.crm-hs-card { padding: 0; overflow: hidden; border-radius: 12px; }
 .crm-hs-top { display: flex; align-items: center; justify-content: space-between; padding: 0 16px; height: 52px; border-bottom: 1px solid var(--crm-line); }
 .crm-hs-back, .crm-hs-menu { display: inline-flex; align-items: center; gap: 6px; background: none; border: 0; box-shadow: none; padding: 6px 4px; height: auto; cursor: pointer; color: var(--text-normal); font-size: 14px; font-weight: 600; border-radius: 6px; }
@@ -609,7 +609,7 @@ a.crm-co-name:hover { color: var(--interactive-accent); text-decoration: underli
 .crm-hs-ico { text-decoration: none; }
 .crm-hs-circle { box-sizing: border-box; flex: none; }
 
-/* ── Action popover (HubSpot-like) ── */
+/* ── Action popover ── */
 .crm-pop { position: fixed; z-index: 1000; display: flex; flex-direction: column; background: var(--background-primary); border: 1px solid var(--background-modifier-border); border-radius: 14px; box-shadow: 0 8px 28px rgba(0,0,0,.18); overflow: hidden; color: var(--text-normal); }
 .crm-pop-search { position: relative; padding: 14px 14px 10px; background: var(--background-secondary); flex: none; }
 .crm-pop-search input { width: 100%; box-sizing: border-box; height: 40px; padding: 0 40px 0 18px; border-radius: 20px; border: 1.5px solid var(--text-faint); background: var(--background-primary); font-size: 15px; box-shadow: none; }
@@ -734,3 +734,306 @@ button.crm-btn.crm-btn.crm-rec-newfield { background: transparent; }
 /* Back / Actions in the record header: ghost style (no border, no fill) */
 .crm-hs-card .crm-hs-back, .crm-hs-card .crm-hs-menu { background: transparent; border: 1px solid transparent; color: var(--text-muted); }
 .crm-hs-card .crm-hs-back:hover, .crm-hs-card .crm-hs-menu:hover { background: var(--background-modifier-hover); border-color: transparent; color: var(--text-normal); }
+
+/* Secondary buttons everywhere: ghost style (no border, no fill), same as Back / Actions */
+button.crm-btn.crm-btn:not(.crm-btn-primary), button.crm-btn.crm-btn.crm-rec-newfield { background: transparent; border: 1px solid transparent; box-shadow: none; color: var(--text-muted); }
+button.crm-btn.crm-btn:not(.crm-btn-primary):hover, button.crm-btn.crm-btn.crm-rec-newfield:hover { background: var(--background-modifier-hover); border-color: transparent; color: var(--text-normal); }
+button.crm-btn.crm-btn.crm-btn-danger { color: var(--color-red); }
+button.crm-btn.crm-btn.crm-btn-danger:hover { background: color-mix(in srgb, var(--color-red) 12%, transparent); color: var(--color-red); }
+
+/* ───────── Home (table view) · list-page style ───────── */
+.crm-header { padding: 18px 24px 10px; border-bottom: none; align-items: center; }
+.crm-title { font-size: 24px; font-weight: 500; letter-spacing: -.01em; margin-right: 0; }
+.crm-root.crm-collapsed .crm-header { padding-top: 14px; padding-bottom: 8px; }
+.crm-header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.crm-circ { width: 36px; height: 36px; padding: 0; flex: none; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--background-primary); border: 1.5px solid var(--text-faint); color: var(--text-normal); box-shadow: none; cursor: pointer; }
+.crm-circ:hover { background: var(--background-modifier-hover); border-color: var(--text-muted); }
+.crm-circ svg { width: 16px !important; height: 16px !important; }
+.crm-newpill { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 18px; border-radius: 999px; border: none; background: var(--interactive-accent); color: var(--text-on-accent); font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: none; }
+.crm-newpill:hover { background: var(--interactive-accent-hover); }
+.crm-newpill-caret { display: inline-flex; } .crm-newpill-caret svg { width: 14px !important; height: 14px !important; }
+.crm-pill { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 18px; border-radius: 999px; background: var(--background-primary); border: 1.5px solid var(--text-faint); color: var(--text-normal); font-size: 13px; font-weight: 500; cursor: pointer; box-shadow: none; }
+.crm-pill:hover { background: var(--background-modifier-hover); border-color: var(--text-muted); }
+.crm-pill-ico { display: inline-flex; } .crm-pill-ico svg { width: 15px !important; height: 15px !important; }
+
+.crm-tabs { padding: 0 24px; gap: 2px; }
+.crm-tab { padding: 9px 14px; border-radius: 8px 8px 0 0; }
+.crm-tab-ico { display: inline-flex; color: var(--text-muted); }
+.crm-tab-ico svg { width: 15px !important; height: 15px !important; }
+.crm-tab.is-active { background: var(--background-secondary); border-bottom-color: var(--text-normal); }
+.crm-tab.is-active .crm-tab-n { color: var(--text-muted); }
+
+.crm-toolbar { padding: 14px 24px 10px; }
+.crm-tb-left, .crm-root .crm-tb-right { gap: 8px; }
+.crm-search-wrap { flex: none; width: 240px; max-width: none; }
+.crm-search-icon { left: auto; right: 14px; color: var(--text-muted); }
+.crm-search-icon svg { width: 16px; height: 16px; }
+.crm-search { height: 34px; border-radius: 999px !important; padding: 0 38px 0 16px !important; border: 1.5px solid var(--text-faint); background: var(--background-primary); }
+.crm-search:focus { border-color: var(--interactive-accent); }
+.crm-root .crm-tb-left .crm-select, .crm-root .crm-tb-right .crm-select { height: 34px; border-radius: 999px; border: 1.5px solid var(--text-faint); background-color: var(--background-primary); color: var(--text-normal); padding-left: 16px; }
+.crm-root .crm-tb-left .crm-select:hover, .crm-root .crm-tb-right .crm-select:hover { background-color: var(--background-modifier-hover); border-color: var(--text-muted); }
+.crm-sortwrap { position: relative; display: inline-flex; align-items: center; }
+.crm-sortico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); display: inline-flex; color: var(--text-muted); pointer-events: none; z-index: 1; }
+.crm-sortico svg { width: 14px !important; height: 14px !important; }
+.crm-sortwrap .crm-select { padding-left: 34px !important; }
+.crm-root .crm-seg { border-radius: 999px; padding: 3px; border-width: 1.5px; border-color: var(--background-modifier-border); background: var(--background-primary); }
+.crm-root .crm-seg-btn { width: 32px; height: 28px; border-radius: 999px; }
+.crm-root .crm-seg-btn.is-active { background: var(--background-primary); box-shadow: 0 0 0 1.5px var(--text-faint) inset; }
+
+.crm-main { padding: 0 24px 0; }
+.crm-foot { position: sticky; bottom: 0; margin: 12px -24px 0; padding: 12px 24px; border-top: 1px solid var(--crm-line); background: var(--background-primary); }
+.crm-foot-r { display: flex; align-items: center; gap: 10px; }
+.crm-foot-count { padding: 6px 14px; font-weight: 600; font-size: 13px; }
+.crm-main > .crm-count, .crm-root .crm-count { display: none; }
+
+/* Bulk action bar: quiet, same language as the home */
+.crm-bulkbar { margin: 0 0 12px; padding: 6px 8px 6px 18px; gap: 2px; border: 1px solid var(--crm-line); border-radius: 999px; box-shadow: none; background: var(--background-primary); }
+.crm-bulk-count { font-weight: 600; font-size: 13px; margin-right: 12px; padding-right: 14px; border-right: 1px solid var(--crm-line); line-height: 22px; }
+button.crm-bulk-btn.crm-bulk-btn { height: 30px; padding: 0 12px; border-radius: 999px; background: transparent; border: 1px solid transparent; box-shadow: none; font-size: 13px; font-weight: 500; color: var(--text-normal); }
+button.crm-bulk-btn.crm-bulk-btn:hover { background: var(--background-modifier-hover); }
+button.crm-bulk-btn.crm-bulk-btn.is-danger { color: var(--color-red); }
+button.crm-bulk-btn.crm-bulk-btn.is-danger:hover { background: color-mix(in srgb, var(--color-red) 12%, transparent); }
+.crm-bulk-ico svg { width: 16px !important; height: 16px !important; }
+.crm-bulk-btn .crm-bulk-ico { color: var(--text-muted); }
+.crm-bulk-btn.is-danger .crm-bulk-ico { color: inherit; }
+
+/* Guided import: LinkedIn × address book */
+.crm-xi-steps { display: flex; gap: 18px; margin: 0 0 14px; }
+.crm-xi-step { display: inline-flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 13px; }
+.crm-xi-n { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--text-faint); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+.crm-xi-step.is-active { color: var(--text-normal); font-weight: 600; }
+.crm-xi-step.is-active .crm-xi-n { background: var(--interactive-accent); border-color: var(--interactive-accent); color: var(--text-on-accent); }
+.crm-xi-step.is-done .crm-xi-n { border-color: var(--interactive-accent); color: var(--interactive-accent); }
+.crm-xi-sum { margin-bottom: 8px; }
+.crm-xi-table td { vertical-align: top; white-space: normal !important; padding-top: 8px; padding-bottom: 8px; }
+.crm-xi-table tr.is-sel { background: color-mix(in srgb, var(--interactive-accent) 7%, transparent); }
+.crm-xi-match { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.crm-xi-conf { font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--crm-line); }
+.crm-xi-conf.is-alta { color: var(--color-green); border-color: var(--color-green); }
+.crm-xi-conf.is-media { color: var(--color-orange); border-color: var(--color-orange); }
+.crm-xi-conf.is-bassa { color: var(--color-red); border-color: var(--color-red); }
+.crm-xi-warn { font-size: 12px; color: var(--color-orange); margin-top: 2px; }
+.crm-xi-state { font-size: 12px; font-weight: 500; }
+.crm-xi-state.is-new { color: var(--color-green); }
+.crm-xi-state.is-ex { color: var(--text-muted); }
+.crm-xi-left, .crm-xi-opt { margin-top: 10px; font-size: 13px; }
+.crm-xi-count { margin-right: auto; margin-left: 8px; align-self: center; }
+.crm-xi-empty { padding: 18px; text-align: center; }
+
+/* ───────── Settings: grouped cards, same language as the rest of Kith ───────── */
+.crm-set-h { margin: 28px 2px 8px; font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: .01em; }
+.crm-set-root > .crm-set-h:first-child { margin-top: 8px; }
+.crm-set-card { border: 1px solid var(--background-modifier-border); border-radius: 14px; padding: 2px 18px; background: var(--background-primary); }
+.crm-set-card .setting-item { padding: 16px 0; border-top: 1px solid var(--background-modifier-border); align-items: center; gap: 16px; }
+.crm-set-card .setting-item:first-child { border-top: none; }
+.crm-set-card .setting-item-name { font-size: 14px; font-weight: 600; color: var(--text-normal); }
+.crm-set-card .setting-item-description { font-size: 12.5px; color: var(--text-muted); margin-top: 3px; line-height: 1.45; }
+.crm-set-card .setting-item-control { gap: 10px; }
+.crm-set-card input[type="text"], .crm-set-card input[type="number"], .crm-set-card select.dropdown { height: 34px; border-radius: 999px; border: 1.5px solid var(--text-faint); background: var(--background-primary); padding: 0 16px; box-shadow: none; font-size: 13px; color: var(--text-normal); }
+.crm-set-card input[type="text"]:focus, .crm-set-card select.dropdown:focus { border-color: var(--interactive-accent); box-shadow: none; }
+.crm-set-card select.dropdown { padding-right: 32px; }
+.crm-set-card button:not(.clickable-icon):not(.mod-cta) { height: 34px; padding: 0 18px; border-radius: 999px; border: 1.5px solid var(--text-faint); background: var(--background-primary); color: var(--text-normal); box-shadow: none; font-size: 13px; font-weight: 500; }
+.crm-set-card button:not(.clickable-icon):not(.mod-cta):hover { background: var(--background-modifier-hover); border-color: var(--text-muted); }
+.crm-set-card button.mod-cta { height: 36px; padding: 0 20px; border-radius: 999px; border: none; background: var(--interactive-accent); color: var(--text-on-accent); font-weight: 600; box-shadow: none; }
+.crm-set-card button.mod-cta:hover { background: var(--interactive-accent-hover); }
+.crm-set-hero { background: var(--background-secondary); border-color: transparent; }
+.crm-set-hero .setting-item { padding: 18px 0; }
+/* same card language inside the Customize modal body */
+.crm-cz-body .setting-item { border-top: none; }
+.crm-cz-body input[type="text"], .crm-cz-body select.dropdown { border-radius: 999px; }
+
+/* ───────── Kith modals (Customize, Import…): same surface and controls as the rest ───────── */
+.modal.crm-modal { background: var(--background-primary); border-radius: 16px; border: 1px solid var(--background-modifier-border); }
+.modal.crm-modal .modal-title { font-size: 20px; font-weight: 600; letter-spacing: -.01em; }
+.modal.crm-modal .modal-close-button { color: var(--text-muted); }
+
+/* nav of the Customize modal */
+body .crm-cz .crm-cz-nav { width: 170px; gap: 2px; }
+body .crm-cz .crm-cz-tab { text-align: left; height: 36px; padding: 0 14px; border-radius: 999px; color: var(--text-muted); font-size: 14px; font-weight: 500; background: transparent; }
+body .crm-cz .crm-cz-tab:hover { background: var(--background-modifier-hover); color: var(--text-normal); }
+body .crm-cz .crm-cz-tab.is-active { background: var(--background-secondary); color: var(--text-normal); font-weight: 600; }
+
+/* controls: pills, accent toggles and sliders (Customize body + settings cards) */
+.crm-cz-body input[type="text"], .crm-cz-body input[type="number"], .crm-cz-body select.dropdown, .crm-cz-body .dropdown { height: 34px; border-radius: 999px; border: 1.5px solid var(--text-faint); background: var(--background-primary); padding: 0 16px; box-shadow: none; font-size: 13px; color: var(--text-normal); }
+.crm-cz-body select.dropdown { padding-right: 32px; }
+.crm-cz-body input[type="text"]:focus, .crm-cz-body select.dropdown:focus { border-color: var(--interactive-accent); box-shadow: none; }
+.crm-cz-body button:not(.clickable-icon):not(.mod-cta):not(.crm-colorsave-ok):not(.crm-colorsave-no) { height: 34px; padding: 0 18px; border-radius: 999px; border: 1.5px solid var(--text-faint); background: var(--background-primary); color: var(--text-normal); box-shadow: none; font-size: 13px; font-weight: 500; }
+.crm-cz-body button:not(.clickable-icon):not(.mod-cta):not(.crm-colorsave-ok):not(.crm-colorsave-no):hover { background: var(--background-modifier-hover); border-color: var(--text-muted); }
+.crm-cz-body button.mod-cta { height: 36px; padding: 0 20px; border-radius: 999px; border: none; background: var(--interactive-accent); color: var(--text-on-accent); font-weight: 600; box-shadow: none; }
+.crm-cz-body .setting-item { padding: 14px 0; border-top: 1px solid var(--background-modifier-border); }
+.crm-cz-body .setting-item:first-child { border-top: none; }
+.crm-cz-body .setting-item-name { font-weight: 600; }
+.crm-cz-body .setting-item-description { color: var(--text-muted); font-size: 12.5px; }
+.crm-cz-body, .crm-set-card { --slider-progress-color: var(--interactive-accent); --toggle-color-on: var(--interactive-accent); }
+.crm-cz-body .checkbox-container.is-enabled, .crm-set-card .checkbox-container.is-enabled { background-color: var(--interactive-accent); }
+.crm-cz-body input[type="range"], .crm-set-card input[type="range"] { accent-color: var(--interactive-accent); }
+
+/* ───────── Customize Kith: consistent with the rest of the CRM (hard overrides over theme) ───────── */
+body .modal.crm-custom { background: var(--background-primary) !important; border-radius: 16px; padding: 24px 28px 22px; font-size: 14px !important; }
+body .modal.crm-custom .modal-header { margin: 0 0 18px; padding: 0; }
+body .modal.crm-custom .modal-title { font-size: 20px !important; font-weight: 600 !important; line-height: 1.2; letter-spacing: -.01em; }
+body .modal.crm-custom .modal-content { padding: 0; }
+body .modal.crm-custom .crm-cz { gap: 0; min-height: 460px; }
+body .modal.crm-custom .crm-cz-nav { width: 178px; flex: none; padding: 2px 16px 2px 0; margin-right: 24px; border-right: 1px solid var(--background-modifier-border); gap: 2px; }
+body .modal.crm-custom .crm-cz-tab { display: flex !important; justify-content: flex-start !important; align-items: center; text-align: left !important; width: 100%; height: 34px; padding: 0 14px; border-radius: 999px; background: transparent !important; border: none !important; box-shadow: none !important; color: var(--text-muted); font-size: 14px !important; font-weight: 500; }
+body .modal.crm-custom .crm-cz-tab:hover { background: var(--background-modifier-hover) !important; color: var(--text-normal); }
+body .modal.crm-custom .crm-cz-tab.is-active { background: var(--background-secondary) !important; color: var(--text-normal); font-weight: 600; }
+body .modal.crm-custom .crm-cz-body { padding-right: 4px; font-size: 14px !important; }
+body .modal.crm-custom .setting-item { padding: 14px 0; border-top: 1px solid var(--background-modifier-border); }
+body .modal.crm-custom .setting-item:first-child { border-top: none; padding-top: 4px; }
+body .modal.crm-custom .setting-item-name { font-size: 14px !important; font-weight: 600; color: var(--text-normal); }
+body .modal.crm-custom .setting-item-description { font-size: 12.5px !important; color: var(--text-muted); line-height: 1.45; margin-top: 2px; }
+body .modal.crm-custom .setting-item-control { gap: 10px; }
+body .modal.crm-custom .setting-item-control input[type="text"], body .modal.crm-custom .setting-item-control select, body .modal.crm-custom .setting-item-control .dropdown { height: 34px; font-size: 13px !important; border-radius: 999px; }
+body .modal.crm-custom .checkbox-container.is-enabled { background-color: var(--interactive-accent) !important; }
+body .modal.crm-custom .setting-item-control > span, body .modal.crm-custom .slider-value { font-size: 13px !important; color: var(--text-muted); }
+body .modal.crm-custom h3, body .modal.crm-custom h4 { font-size: 15px !important; font-weight: 600; margin: 18px 0 6px; }
+body .modal.crm-custom button.mod-warning { color: var(--color-red); }
+
+/* Customize modal: clear separation between title, menu and content */
+body .modal.crm-custom .modal-header { margin: 0 -28px 20px; padding: 0 28px 18px; border-bottom: 1px solid var(--background-modifier-border); }
+body .modal.crm-custom .modal-title { margin: 0; }
+body .modal.crm-custom .crm-cz-nav { padding-top: 4px; margin-right: 28px; }
+body .modal.crm-custom .crm-cz-tab.is-active { background: var(--background-secondary) !important; }
+body .modal.crm-custom .crm-cz-tab:hover:not(.is-active) { background: transparent !important; color: var(--text-normal); }
+body .modal.crm-custom .crm-cz-body { padding-top: 4px; }
+
+/* ───────── All Kith modals (importer, contact form, interactions…): same surface, header and controls ───────── */
+body .modal.crm-modal { background: var(--background-primary) !important; border-radius: 16px; padding: 24px 28px 22px; font-size: 14px !important; }
+body .modal.crm-modal .modal-header { margin: 0 -28px 20px; padding: 0 28px 18px; border-bottom: 1px solid var(--background-modifier-border); }
+body .modal.crm-modal .modal-title { margin: 0; font-size: 20px !important; font-weight: 600 !important; line-height: 1.2; letter-spacing: -.01em; }
+body .modal.crm-modal .modal-content { padding: 0; }
+body .modal.crm-modal p, body .modal.crm-modal label, body .modal.crm-modal li, body .modal.crm-modal summary { font-size: 14px !important; }
+body .modal.crm-modal p.crm-muted { color: var(--text-muted); margin: 0 0 16px; line-height: 1.5; }
+body .modal.crm-modal .crm-form-item label { font-size: 12.5px !important; color: var(--text-muted); font-weight: 500; }
+body .modal.crm-modal input[type="text"], body .modal.crm-modal input[type="search"], body .modal.crm-modal input[type="email"], body .modal.crm-modal input[type="number"], body .modal.crm-modal input[type="date"], body .modal.crm-modal select { height: 36px; border-radius: 999px; border: 1.5px solid var(--text-faint); background: var(--background-primary); padding: 0 16px; font-size: 13px !important; box-shadow: none; color: var(--text-normal); }
+body .modal.crm-modal select { padding-right: 32px; }
+body .modal.crm-modal textarea { border-radius: 14px; border: 1.5px solid var(--text-faint); background: var(--background-primary); padding: 10px 14px; font-size: 13px !important; box-shadow: none; }
+body .modal.crm-modal input:focus, body .modal.crm-modal select:focus, body .modal.crm-modal textarea:focus { border-color: var(--interactive-accent); box-shadow: none; }
+
+/* stepper + dropzone */
+.crm-xi-steps { margin: 0 0 22px; padding-bottom: 0; gap: 24px; }
+.crm-dropzone { border: 1.5px dashed var(--text-faint); border-radius: 16px; background: var(--background-primary); padding: 44px 20px; display: flex; flex-direction: column; align-items: center; gap: 14px; color: var(--text-muted); }
+.crm-dropzone.is-over { border-color: var(--interactive-accent); background: color-mix(in srgb, var(--interactive-accent) 6%, transparent); }
+body .modal.crm-modal .crm-dropzone button.crm-btn-primary { height: 38px; padding: 0 22px; border-radius: 999px; }
+.crm-import-how { margin-top: 16px; color: var(--text-muted); }
+.crm-import-how summary { cursor: pointer; font-weight: 500; }
+
+/* footers: outlined secondary pills, accent primary pill */
+body .modal.crm-modal .crm-form-foot { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--background-modifier-border); gap: 10px; align-items: center; }
+body .modal.crm-modal .crm-form-foot button.crm-btn:not(.crm-btn-primary), body .modal.crm-modal .crm-imp-actions button.crm-btn { height: 36px; padding: 0 18px; border-radius: 999px; border: 1.5px solid var(--text-faint); background: var(--background-primary); color: var(--text-normal); font-size: 13px; font-weight: 500; }
+body .modal.crm-modal .crm-form-foot button.crm-btn:not(.crm-btn-primary):hover, body .modal.crm-modal .crm-imp-actions button.crm-btn:hover { background: var(--background-modifier-hover); border-color: var(--text-muted); }
+body .modal.crm-modal .crm-form-foot button.crm-btn-primary { height: 38px; padding: 0 24px; border-radius: 999px; font-size: 14px; font-weight: 600; }
+body .modal.crm-modal .crm-form-foot button.crm-btn-primary:disabled { opacity: .45; cursor: default; }
+body .modal.crm-modal .crm-imp-bar { gap: 10px; margin-bottom: 10px; }
+body .modal.crm-modal .crm-imp-actions { gap: 8px; margin-bottom: 12px; }
+.crm-imp-table-wrap { border: 1px solid var(--background-modifier-border); border-radius: 14px; }
+
+/* Spaziature uniformi nelle card impostazioni (anche dentro «Personalizza») */
+body .crm-set-card { padding: 4px 22px; }
+body .crm-set-card .setting-item,
+body .modal.crm-custom .crm-set-card .setting-item { padding: 18px 0; gap: 20px; }
+body .crm-set-card .setting-item:first-child,
+body .modal.crm-custom .crm-set-card .setting-item:first-child { padding-top: 18px; }
+body .crm-set-card .setting-item:last-child { padding-bottom: 18px; }
+body .crm-set-card .setting-item-info { margin-right: 8px; }
+body .crm-set-card .setting-item-description { margin-top: 4px; }
+body .crm-set-card .setting-item-name { line-height: 1.3; }
+body .crm-set-h { margin: 32px 4px 12px; }
+body .crm-set-root > .crm-set-h:first-child, body .crm-cz-body .crm-set-h:first-child { margin-top: 4px; }
+body .crm-set-card .setting-item-control { flex-shrink: 0; }
+
+/* Allineamento controlli (menu a tendina, campi, bottoni): testo centrato in verticale in tutte le finestre e impostazioni */
+body :is(.crm-cz-body, .crm-set-card, .modal.crm-custom, .modal.crm-modal) select,
+body :is(.crm-cz-body, .crm-set-card, .modal.crm-custom, .modal.crm-modal) select.dropdown {
+  -webkit-appearance: none; appearance: none; box-sizing: border-box;
+  height: 34px; min-height: 34px; line-height: 32px; padding: 0 36px 0 16px !important; margin: 0;
+  border: 1.5px solid var(--text-faint); border-radius: 999px; background-color: var(--background-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center; background-size: 12px;
+  font-size: 13px !important; color: var(--text-normal); box-shadow: none; text-align: left; cursor: pointer;
+}
+body :is(.crm-cz-body, .crm-set-card, .modal.crm-custom, .modal.crm-modal) select:hover { border-color: var(--text-muted); }
+body :is(.crm-cz-body, .crm-set-card, .modal.crm-custom, .modal.crm-modal) :is(input[type="text"], input[type="number"], input[type="search"], input[type="email"], input[type="date"]) {
+  box-sizing: border-box; height: 34px; line-height: 32px; padding-top: 0; padding-bottom: 0;
+}
+body :is(.crm-cz-body, .crm-set-card, .modal.crm-custom, .modal.crm-modal) button:not(.clickable-icon):not(.crm-pop-item) {
+  display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; line-height: 1; white-space: nowrap; text-align: center;
+}
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control { align-items: center; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control > * { margin: 0; }
+
+/* Larghezza uniforme dei menu a tendina nelle impostazioni + freccia garantita sopra qualsiasi tema */
+body :is(.crm-cz-body, .crm-set-card, .modal.crm-custom) .setting-item-control select { width: 220px !important; min-width: 220px !important; max-width: 220px; text-overflow: ellipsis; }
+body :is(.crm-cz-body, .crm-set-card, .modal.crm-custom, .modal.crm-modal) select {
+  -webkit-appearance: none !important; appearance: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important; background-position: right 14px center !important; background-size: 12px !important;
+  height: 34px !important; line-height: 32px !important; padding-top: 0 !important; padding-bottom: 0 !important;
+}
+body :is(.crm-cz-body, .crm-set-card, .modal.crm-custom) .setting-item-control input[type="text"], body :is(.crm-cz-body, .crm-set-card, .modal.crm-custom) .setting-item-control input[type="number"] { height: 34px !important; }
+
+/* Finestre ridimensionabili */
+body .modal.crm-resizable { position: relative; }
+.crm-resize-grip { position: absolute; right: 6px; bottom: 6px; width: 18px; height: 18px; cursor: nwse-resize; z-index: 5; touch-action: none; opacity: .55; border-radius: 4px;
+  background: linear-gradient(135deg, transparent 0 52%, var(--text-faint) 52% 58%, transparent 58% 68%, var(--text-faint) 68% 74%, transparent 74% 84%, var(--text-faint) 84% 90%, transparent 90%); }
+.crm-resize-grip:hover { opacity: 1; }
+body.crm-resizing, body.crm-resizing * { user-select: none !important; cursor: nwse-resize !important; }
+/* il contenuto segue la dimensione scelta */
+body .modal.crm-resizable.is-resized { display: flex; flex-direction: column; overflow: hidden; }
+body .modal.crm-resizable.is-resized .modal-header { flex: none; }
+body .modal.crm-resizable.is-resized .modal-content { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: auto; }
+body .modal.crm-custom.is-resized .modal-content { overflow: hidden; }
+body .modal.crm-custom.is-resized .crm-cz { flex: 1 1 auto; min-height: 0; height: 100%; }
+body .modal.crm-custom.is-resized .crm-cz-body { max-height: none; height: 100%; overflow: auto; }
+body .modal.crm-custom.is-resized .crm-cz-nav { overflow: auto; }
+body .modal.crm-import.is-resized .crm-imp-table-wrap { flex: 1 1 auto; min-height: 140px; max-height: none; }
+body .modal.crm-import.is-resized .crm-form-foot { flex: none; }
+body .modal.crm-import.is-resized .crm-dropzone { flex: 1 1 auto; min-height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+/* Impostazioni: stesso font, peso e larghezza dei controlli ovunque */
+body :is(.crm-cz-body, .crm-set-card, .modal.crm-modal) :is(select, input, button, textarea) { font-family: inherit !important; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control :is(select, input[type="text"], input[type="number"]) { font-weight: 500; letter-spacing: 0; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control select,
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control input[type="text"] { width: 220px !important; min-width: 220px !important; max-width: 220px; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control input[type="number"] { width: 96px; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-info { flex: 1 1 0; min-width: 0; padding-right: 24px; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control { flex: 0 0 auto; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-name { font-size: 14px !important; font-weight: 600; line-height: 1.35; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-description { font-size: 12.5px !important; font-weight: 400; line-height: 1.5; margin-top: 4px; overflow-wrap: break-word; hyphens: none; }
+body :is(.crm-cz-body, .crm-set-card) .crm-set-h { font-size: 12.5px; font-weight: 600; letter-spacing: .02em; text-transform: none; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control :is(select, input[type="text"], input[type="number"]) { box-sizing: border-box !important; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control input.crm-narrow { width: 96px !important; min-width: 96px !important; max-width: 96px; text-align: center; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control:has(button) select { width: 232px !important; min-width: 232px !important; max-width: 232px; }
+
+/* Menu a tendina Kith (pillola + popover) */
+select.crm-sel-native { display: none !important; }
+body .crm-selbtn { display: inline-flex !important; align-items: center; justify-content: space-between; gap: 10px; box-sizing: border-box; height: 34px; min-width: 140px; max-width: 100%; padding: 0 12px 0 16px !important;
+  border: 1.5px solid var(--text-faint) !important; border-radius: 999px !important; background: var(--background-primary) !important; color: var(--text-normal) !important; box-shadow: none !important;
+  font-family: inherit !important; font-size: 13px !important; font-weight: 500 !important; line-height: 1 !important; text-align: left; cursor: pointer; }
+body .crm-selbtn:hover { border-color: var(--text-muted) !important; background: var(--background-modifier-hover) !important; }
+body .crm-selbtn-t { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px !important; }
+body .crm-selbtn-ic { display: inline-flex; flex: none; color: var(--text-muted); width: 14px; height: 14px; }
+body .crm-selbtn-ic svg { width: 14px !important; height: 14px !important; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control .crm-selbtn { width: 220px; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control:has(button:not(.crm-selbtn)) .crm-selbtn { width: 232px; }
+body .modal.crm-modal .crm-form-item .crm-selbtn { width: 100%; }
+/* Campi di testo: stesso corpo del resto, percorsi più larghi */
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control input[type="text"], body :is(.crm-cz-body, .crm-set-card) .setting-item-control input[type="number"] { font-size: 13px !important; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control input.crm-wide { width: 340px !important; min-width: 340px !important; max-width: 340px; text-overflow: ellipsis; }
+/* Righe: spazio uguale sopra e sotto anche per la prima e l'ultima */
+body .crm-set-card .setting-item:first-child, body .modal.crm-custom .crm-set-card .setting-item:first-child { padding-top: 18px !important; }
+body .crm-set-card .setting-item:last-child, body .modal.crm-custom .crm-set-card .setting-item:last-child { padding-bottom: 18px !important; }
+body .crm-selbtn, body .crm-selbtn .crm-selbtn-t { text-align: left !important; justify-content: space-between; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control input.crm-wide { width: 300px !important; min-width: 300px !important; max-width: 300px; }
+body :is(.crm-cz-body, .crm-set-card) .setting-item-control:has(button:not(.crm-selbtn)) .crm-selbtn { width: 262px; }
+
+/* Scheda contatto: righe campo allineate (etichetta, valore, matita sulla stessa riga) */
+body .crm-rec-kv { display: flex; align-items: flex-start; gap: 12px; padding: 7px 0; }
+body .crm-rec-kv .crm-k, body .crm-rec-kv .crm-v { line-height: 24px; min-height: 24px; }
+body .crm-rec-kv .crm-k { color: var(--text-muted); flex: 0 0 38%; }
+body .crm-rec-kv .crm-rec-pen { display: inline-flex !important; align-items: center; justify-content: center; flex: none; width: 24px; height: 24px; padding: 0 !important; margin: 0 !important; border-radius: 6px; color: var(--text-muted); opacity: .45; }
+body .crm-rec-kv .crm-rec-pen svg { width: 15px !important; height: 15px !important; }
+body .crm-rec-kv:hover .crm-rec-pen { opacity: 1; }
+body .crm-rec-kv .crm-rec-pen:hover { background: var(--background-modifier-hover); color: var(--text-normal); }
+body .crm-rec-kv .crm-v .crm-cal-btn { vertical-align: middle; margin-left: 8px; }

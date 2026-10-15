@@ -3,7 +3,7 @@
 > *Kith: the people you know and care about.* A modern personal CRM built **on top of your own notes**. One note per person, plain Markdown + frontmatter, no database, no cloud, no account.
 > UI in **English and Italian** (follows Obsidian's language).
 
-Table, cards, kanban and relationship-graph views · full-page contact records and **company pages** · customizable columns · multi-tag relationships linked to companies · bulk importer (LinkedIn, phone, Facebook, CSV) · follow-up reminders · birthdays → Google Calendar / `.ics` · "Today" widget for your daily note · fully customizable fields, colors and fonts. It follows your theme (designed with the *Minimal* theme in mind) and takes its visual cues from tools like Attio and the new HubSpot: flat, dense, quiet.
+Table, cards, kanban and relationship-graph views · full-page contact records and **company pages** · customizable columns · multi-tag relationships linked to companies · bulk importer (LinkedIn, phone, Facebook, CSV) · follow-up reminders · birthdays → Google Calendar / `.ics` · "Today" widget for your daily note · fully customizable fields, colors and fonts. It follows your theme (designed with the *Minimal* theme in mind) and takes its visual cues from modern CRM tools: flat, dense, quiet.
 
 ![Kith table view with 55 contacts, KPI strip, relationship badges and the bulk action bar](docs/screenshot-table.png)
 
@@ -39,13 +39,13 @@ Table, cards, kanban and relationship-graph views · full-page contact records a
 
 | Area | What you get |
 |---|---|
-| **Views** | Table (HubSpot-style, fully configurable columns), cards, kanban (group by relationship / closeness / status / priority, drag & drop), relationship **graph** |
+| **Views** | Table (fully configurable columns), cards, kanban (group by relationship / closeness / status / priority, drag & drop), relationship **graph** |
 | **Contact record** | Full-page record (click a name): inline editing, custom photo, connected people, companies (current and past), recent interactions, clickable email / phone / WhatsApp / LinkedIn / Instagram |
 | **Company pages** | One page per company collecting its people, info, notes and timeline; auto-filled from the web, per-company sections and fields, manual logo |
 | **Relationships** | Several tags per person, each optionally tied to a company (`former colleague @ Google`), with colors |
 | **Bulk actions** | Select rows → action bar above the table: contacted today, edit, add relationship, archive, delete, calendar |
 | **Filters & KPIs** | Search, filter by relationship / closeness / priority / status, clickable KPI strip (active contacts, overdue follow-ups, upcoming birthdays, high priority) |
-| **Importer** | LinkedIn `Connections.csv`, phone `.vcf` / Google Contacts CSV, Facebook friends (`.json` / `.html`), generic CSV. **You pick who gets imported**; duplicates are detected (email, phone, LinkedIn, name) and nothing is written before you confirm |
+| **Importer** | One importer with automatic detection: LinkedIn `Connections.csv`, phone `.vcf` / Google Contacts CSV, Facebook friends (`.json` / `.html`), generic CSV. Load LinkedIn and your address book together to **cross-check** them (email, profile, name). **You pick who gets imported**; duplicates are detected and nothing is written before you confirm |
 | **Follow-ups** | "Next follow-up" date or "contact frequency" → automatic due dates, overdue / due-soon badges, "Contacted today" in one click |
 | **Interactions** | Log calls, meetings, messages as notes linked to the person; the last-contact date updates automatically |
 | **Birthdays** | Upcoming-birthday agenda, one-click **Add to Google Calendar** (pre-filled yearly all-day event), `.ics` export |
@@ -153,13 +153,15 @@ Interaction notes (created by *+ Interaction*) live in the interactions folder a
 
 ## Views
 
-- **Table**: HubSpot-style. Use the **⋮** menu in each column header to sort, filter, pin, move or remove it, and **+** at the end to add any field (custom ones included). Company, email and city cells are clickable (a city lists everyone who lives there), and a small company icon sits next to the company name. The header can be collapsed (default).
+- **Table**: use the **⋮** menu in each column header to sort, filter, pin, move or remove it, and **+** at the end to add any field (custom ones included). Company, email and city cells are clickable (a city lists everyone who lives there), and a small company icon sits next to the company name. The header can be collapsed (default).
 - **Bulk action bar**: tick one or more rows and an action bar appears above the table: *Contacted today*, *Interaction*, *Edit* (or add a relationship / closeness / priority / status to many at once), *Calendar*, *Delete* (with confirmation), *Open record*, *Archive*.
 - **Cards**: compact cards with tags, next birthday and due state.
 - **Kanban**: group by relationship, closeness, status or priority; **drag a card to another column** to change that value.
 - **Graph**: contacts as nodes. Connections come from the same company (2+ people), *Met through* naming another contact, *Partner*, or `[[links]]` between notes. Shows the 700 most connected contacts; toggle companies and isolated contacts. The detail panel on the right is only shown in this view.
 - **Saved views**: save the current filters, quick filter, search, sort, mode and column filters as a tab next to the built-in ones; update, rename or delete from the tab's menu. The `+` turns highlighted when the current state differs from every saved view.
-- **Side panel**: a compact HubSpot-style list of contacts in the left sidebar (search, filters, quick access). It opens with Kith and closes when you leave it; it stays collapsed until you open it.
+- **Side panel**: a compact list of contacts in the left sidebar (search, filters, quick access). It opens with Kith and closes when you leave it; it stays collapsed until you open it.
+- **Home**: a **New contact ▾** pill (new contact, import), pill search and filters, a footer with the contact count and **Export CSV** (only the selected contacts; *Select all* in the table header selects the current filter).
+- **Resizable dialogs**: drag the corner handle of Customize or Import; double-click it to reset.
 - **Menus**: every Kith menu (context menus, column headers, bulk actions, the *Other* button) uses the same popover: icons, sections, search when long, drill-in submenus, keyboard navigation.
 - **Contact record** (click a name): full page with resizable columns, inline editing, a custom photo (upload, paste from the clipboard, paste a link, or try to fetch it from the contact's Instagram handle), connected people with the reason (partner, "introduced you to X" / "introduced by X"), and a **Companies** card listing current, past and relationship companies; each company links to everyone connected with it, past ones are collapsed by default.
 - **Company page**: click any company (same header as the contact page, with an *Actions* menu and *Edit*). It lists its people and shows info, notes and a timeline. Kith can fill the empty fields (website, industry, contacts, logo) from Wikidata and the official website; you can also upload a logo, paste a link or fetch it from the company's Instagram. Hide or show sections and fields **per company**, with an optional "use for all", and drag the column dividers to resize.
@@ -168,7 +170,9 @@ Interaction notes (created by *+ Interaction*) live in the interactions folder a
 
 ## Importing contacts
 
-Open **Customize → Import** (or run the command *Import contacts*; on an empty CRM there is also an Import button). Drop one or more files, check the preview, choose who to import, and confirm. Nothing is created before that.
+Open **New contact ▾ → Import contacts** (or **Customize → Import**, or run the command *Import contacts*). Drop one or more files: Kith detects the source of each one. Check the preview, choose who to import, and confirm. Nothing is created before that.
+
+**LinkedIn + address book:** drop both files together and Kith cross-checks them by email, LinkedIn profile and name. You see each LinkedIn contact next to its address-book match, with homonyms and already-present contacts flagged, and choose whether to add, complete or skip. LinkedIn provides role, company and profile; the address book provides phone and personal data. Address-book contacts with no LinkedIn match can be imported by loading the address book on its own.
 
 | Source | How to export |
 |---|---|
@@ -254,6 +258,7 @@ Options: `giorni` (look-ahead window in days, default 7), `max` (rows per sectio
 | Birthday window (days) | 30 | For the KPI and the agenda |
 | Default view | Table | Table / Cards / Kanban / Network |
 | Calendar .ics: include follow-ups | on | Birthdays are always included |
+| Download .ics for all contacts | - | Button: one file with every birthday (and follow-ups, if enabled) |
 | Confirm before deleting | on | Off = straight to trash |
 | "Today" widget in new daily notes | off | Experimental |
 | Language | Automatic | Restart the plugin after changing |
@@ -293,7 +298,7 @@ Issues and pull requests are welcome.
 **Kith** è un CRM personale moderno costruito **sopra le tue note**: una nota per persona, Markdown + frontmatter, nessun database, nessun cloud, nessun account.
 
 ### Cosa fa
-- **Viste**: tabella stile HubSpot (colonne personalizzabili, azioni multiple sopra la tabella), schede, kanban con drag & drop, **grafo** delle relazioni.
+- **Viste**: tabella (colonne personalizzabili, azioni multiple sopra la tabella), schede, kanban con drag & drop, **grafo** delle relazioni.
 - **Scheda contatto** a pagina intera (foto personalizzata, persone collegate, aziende attuali e passate) e **pagina azienda** che raccoglie persone, info e note, con compilazione automatica dei dati.
 - **Relazioni multiple** con azienda collegata (`ex collega @ Google`) e colori.
 - **Importer massivo** da LinkedIn, rubrica del telefono (`.vcf` / Google CSV), Facebook e CSV generico, **scegliendo chi importare**; riconosce i doppioni e non scrive nulla prima della tua conferma.
