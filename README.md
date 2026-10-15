@@ -5,7 +5,7 @@
 
 Table, cards, kanban and relationship-graph views · full-page contact records and **company pages** · customizable columns · multi-tag relationships linked to companies · bulk importer (LinkedIn, phone, Facebook, CSV) · follow-up reminders · birthdays → Google Calendar / `.ics` · "Today" widget for your daily note · fully customizable fields, colors and fonts. It follows your theme (designed with the *Minimal* theme in mind) and takes its visual cues from modern CRM tools: flat, dense, quiet.
 
-![Kith table view with 55 contacts, KPI strip, relationship badges and the bulk action bar](docs/gallery-home.png)
+<p align="center"><img src="docs/gallery-home.png" width="760" alt="Kith table view with 55 contacts, KPI strip, relationship badges and the bulk action bar"></p>
 
 *Table view with a demo set of 55 fictional contacts: KPI strip, filters, relationship badges linked to companies, follow-up states, company icons, and the bulk action bar above the table.*
 
@@ -38,27 +38,14 @@ Table, cards, kanban and relationship-graph views · full-page contact records a
 
 ## Gallery
 
-Everything below is a demo set: people, companies, addresses and numbers are **fictional**, and photos and logos are generated illustrations (no real brands).
+Demo set: people, companies, addresses and numbers are **fictional**; photos and logos are generated illustrations (no real brands). Click an image to see it full size.
 
-**Table view**: KPI strip, filters, relationship badges, follow-up states, bulk actions.
-
-![Table view](docs/gallery-home.png)
-
-**Kanban view**: contacts grouped by priority, drag cards between columns.
-
-![Kanban view](docs/gallery-kanban.png)
-
-**Contact record**: photo, quick actions, timeline of interactions, notes, work history, relationships, linked companies and connected people.
-
-![Contact record](docs/gallery-contact.png)
-
-**Company page**: logo, details, people working there (current and past), company timeline and note.
-
-![Company page](docs/gallery-company.png)
-
-**Importer**: LinkedIn export cross-checked with your address book, with match confidence and conflicts to review before anything is written.
-
-![Importer review](docs/gallery-import.png)
+<table>
+<tr><th width="33%">Table</th><th width="33%">Kanban</th><th width="33%">Contact record</th></tr>
+<tr><td align="center" width="33%"><a href="docs/gallery-home.png"><img src="docs/gallery-home.png" alt="Table view"></a></td><td align="center" width="33%"><a href="docs/gallery-kanban.png"><img src="docs/gallery-kanban.png" alt="Kanban view"></a></td><td align="center" width="33%"><a href="docs/gallery-contact.png"><img src="docs/gallery-contact.png" alt="Contact record"></a></td></tr>
+<tr><th width="33%">Company page</th><th width="33%">Importer</th><th width="33%"></th></tr>
+<tr><td align="center" width="33%"><a href="docs/gallery-company.png"><img src="docs/gallery-company.png" alt="Company page"></a></td><td align="center" width="33%"><a href="docs/gallery-import.png"><img src="docs/gallery-import.png" alt="Importer review"></a></td><td></td></tr>
+</table>
 
 ---
 
