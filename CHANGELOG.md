@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.0
+## 0.7.5
 
 ### Navigation
 - **Side panel** in the left sidebar, HubSpot-style: search, filters and quick access. It opens with Kith, stays collapsed until you open it, and closes when you leave Kith
