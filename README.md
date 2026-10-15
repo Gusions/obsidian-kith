@@ -2,12 +2,14 @@
 
 > *Kith: the people you know and care about.* A modern personal CRM built **on top of your own notes**. One note per person, plain Markdown + frontmatter, no database, no cloud, no account.
 > UI in **English and Italian** (follows Obsidian's language).
+>
+> Built on the [**file over app**](https://stephango.com/file-over-app) philosophy (Steph Ango, [@kepano](https://x.com/kepano)): your contacts are plain files you own and can read in any editor, today and in thirty years. Kith is just a lens on them; if you remove the plugin, nothing is lost.
 
 Table, cards, kanban and relationship-graph views · full-page contact records and **company pages** · customizable columns · multi-tag relationships linked to companies · bulk importer (LinkedIn, phone, Facebook, CSV) · follow-up reminders · birthdays → Google Calendar / `.ics` · "Today" widget for your daily note · fully customizable fields, colors and fonts. It follows your theme (designed with the *Minimal* theme in mind) and takes its visual cues from modern CRM tools: flat, dense, quiet.
 
 <p align="center"><img src="docs/gallery-home.png" width="760" alt="Kith table view with 55 contacts, KPI strip, relationship badges and the bulk action bar"></p>
 
-*Table view with a demo set of 55 fictional contacts: KPI strip, filters, relationship badges linked to companies, follow-up states, company icons, and the bulk action bar above the table.*
+*Demo set of 55 fictional contacts. More screenshots in the [Gallery](#gallery).*
 
 🇮🇹 [Vai alla sezione in italiano](#-italiano)
 
@@ -84,12 +86,12 @@ Requires Obsidian **1.5.0+**. Developed and tested on desktop; mobile is not fla
 
 1. Open **Settings → Kith** and set the three folders (by default `Contacts/People`, `Contacts/Interactions`, `Contacts/Companies` in English; `Persone/Persone`, `Persone/Interazioni`, `Persone/Aziende` in Italian). If you already have contact notes, point *Contacts folder* to them.
 2. Click the **users** icon in the left ribbon (or run *Open Kith*).
-3. Either **+ New contact**, or import your LinkedIn / phone / Facebook export from **Customize → Import** (or the *Import contacts* command).
+3. Either **+ New contact**, or import your LinkedIn / phone / Facebook export from **New contact ▾ → Import contacts** (or the *Import contacts* command).
 4. Tick a row to get the action bar (**Contacted today**, **Interaction**, **Edit**, **Calendar**, **Delete**…), or click a name to open the full record.
 
 ## How contacts are stored
 
-Each contact is a normal note in the contacts folder. Properties live in the frontmatter, so you can also edit them in Obsidian's Properties panel, query them with Bases / Dataview, or sync them however you already sync your vault.
+Following *file over app*, each contact is a normal note in the contacts folder: no database, no proprietary format, nothing to export or migrate. Kith only reads and edits these files, so they stay yours and keep working with or without the plugin. Properties live in the frontmatter, so you can also edit them in Obsidian's Properties panel, query them with Bases / Dataview, or sync them however you already sync your vault.
 
 ```yaml
 ---
@@ -147,7 +149,7 @@ interests: [running, wine]
 | | Favors received / given | `favors_received` / `favors_given` | `favori_ricevuti` / `favori_dati` |
 | Notes | Notes | `notes` | `note` |
 
-List fields (interests, skills, languages, children, past companies) accept YAML lists or `a | b | c`.
+List fields (interests, skills, languages, children, past companies) accept YAML lists or a comma-separated line (`a, b, c`; the older `a | b | c` is still understood). Kith shows and edits them comma-separated.
 </details>
 
 ### Values the plugin understands
@@ -298,6 +300,7 @@ The plugin is a single dependency-free JavaScript file (`main.js`, CommonJS, no 
 ## Limitations and roadmap
 
 - Right-click menus, bulk actions and the `Delete` key are implemented but are not covered by automated tests.
+- The LinkedIn + address-book cross-check has been developed and tested on synthetic data; real-world exports may reveal edge cases. Always review the preview before confirming (nothing is written until you do).
 - Company enrichment and the Instagram photo depend on third-party services and may find nothing; the manual logo and photo options always work.
 - Languages other than English and Italian fall back to English.
 - No automatic Google Calendar insertion (would require OAuth); the pre-filled event is deliberate.
@@ -311,16 +314,19 @@ Issues and pull requests are welcome.
 
 **Kith** è un CRM personale moderno costruito **sopra le tue note**: una nota per persona, Markdown + frontmatter, nessun database, nessun cloud, nessun account.
 
+Segue la filosofia [**file over app**](https://stephango.com/file-over-app) di Steph Ango ([@kepano](https://x.com/kepano)): i tuoi contatti sono file semplici, tuoi, leggibili con qualsiasi editor oggi e fra trent'anni. Kith è solo un modo di guardarli: se togli il plugin non perdi nulla.
+
 ### Cosa fa
 - **Viste**: tabella (colonne personalizzabili, azioni multiple sopra la tabella), schede, kanban con drag & drop, **grafo** delle relazioni.
 - **Scheda contatto** a pagina intera (foto personalizzata, persone collegate, aziende attuali e passate) e **pagina azienda** che raccoglie persone, info e note, con compilazione automatica dei dati.
 - **Relazioni multiple** con azienda collegata (`ex collega @ Google`) e colori.
-- **Importer massivo** da LinkedIn, rubrica del telefono (`.vcf` / Google CSV), Facebook e CSV generico, **scegliendo chi importare**; riconosce i doppioni e non scrive nulla prima della tua conferma.
+- **Importer unico** con riconoscimento automatico della fonte: LinkedIn, rubrica del telefono (`.vcf` / Google CSV), Facebook e CSV generico, **scegliendo chi importare**. Carica insieme LinkedIn e rubrica per **incrociarli** (email, profilo, nome) e vedere ogni contatto accanto al suo match. Riconosce i doppioni e non scrive nulla prima della tua conferma.
 - **Follow-up** automatici (data esplicita oppure ultimo contatto + frequenza), interazioni registrate come note collegate.
 - **Compleanni**: agenda, pulsante "Google Calendar" con evento annuale già compilato (basta premere *Salva*), export `.ics`.
 - **Widget "Oggi"** per la daily note (blocco `crm-oggi`).
 - **Personalizzazione** totale: colori, font, densità, campi nascosti / rinominati / personalizzati, colonne.
 - **Eliminazione sicura** con conferma (cestino) oppure archiviazione.
+- **Finestre ridimensionabili** (Personalizza, Importa) ed **Export CSV** dei soli contatti selezionati dalla Home.
 - Segue il **tema** di Obsidian (pensato per Minimal).
 
 ### Installazione
@@ -329,11 +335,11 @@ Copia `main.js`, `manifest.json`, `styles.css` in `<vault>/.obsidian/plugins/kit
 ### Avvio rapido
 1. *Impostazioni → Kith*: imposta le cartelle (di default `Persone/Persone`, `Persone/Interazioni`, `Persone/Aziende`). Se hai già delle note contatto, punta la cartella contatti a quelle.
 2. Clicca l'icona **utenti** nella barra laterale sinistra.
-3. **+ Nuovo contatto** oppure **Importa**.
+3. **Nuovo contatto ▾** → *Nuovo contatto* oppure *Importa contatti*.
 4. Spunta una riga per la barra azioni (**Contattato oggi**, **Interazione**, **Modifica**, **Calendario**, **Elimina**) oppure clicca un nome per aprire la scheda.
 
 ### Come sono salvati i contatti
-Ogni contatto è una nota normale con proprietà nel frontmatter (`nome`, `cognome`, `compleanno`, `relazione`, `priorita`, `frequenza_contatto`, `ultimo_contatto`, `prossimo_follow_up`…). Il riconoscimento dei nomi è tollerante (maiuscole, accenti, `_`, `-` ignorati) e **accetta sia chiavi italiane sia inglesi**: le tue note non vengono mai riscritte. Le date si scrivono sempre in **formato ISO** (`2026-03-14`; compleanno senza anno: `--03-14`). La tabella completa dei campi è nella sezione inglese ([Field reference](#how-contacts-are-stored)).
+Ogni contatto è una nota normale (*file over app*: nessun database, nessun formato proprietario) con proprietà nel frontmatter (`nome`, `cognome`, `compleanno`, `relazione`, `priorita`, `frequenza_contatto`, `ultimo_contatto`, `prossimo_follow_up`…). Il riconoscimento dei nomi è tollerante (maiuscole, accenti, `_`, `-` ignorati) e **accetta sia chiavi italiane sia inglesi**: le tue note non vengono mai riscritte. Le date si scrivono sempre in **formato ISO** (`2026-03-14`; compleanno senza anno: `--03-14`). La tabella completa dei campi è nella sezione inglese ([Field reference](#how-contacts-are-stored)).
 
 Valori riconosciuti: priorità `alta/media/bassa`, vicinanza `stretta/media/lontana`, frequenza `settimanale/mensile/trimestrale/semestrale/annuale`, stato `attivo/dormiente/archiviato` (e gli equivalenti inglesi).
 
