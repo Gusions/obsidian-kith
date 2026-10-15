@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.8.0
+
+### Navigation
+- **Side panel** in the left sidebar, HubSpot-style: search, filters and quick access. It opens with Kith, stays collapsed until you open it, and closes when you leave Kith
+- **Saved views**: save filters, quick filter, search, sort, mode and column filters as tabs; update, rename, delete
+- Startup alert for overdue follow-ups and upcoming birthdays
+
+### Contact page
+- Redesigned header (HubSpot-style): large photo, name, role, round action buttons (contacted today, interaction, email, call, edit, other) and an *Actions* menu
+- *Other* popover with grouped actions and search: communicate, log a call / meeting / message / email, calendar, photo, copy
+- Photo: upload, paste from the clipboard, paste a link, or fetch from Instagram (several fallback sources); the camera badge only shows on hover when a photo exists
+- Adding a partner asks whether to add that person to your contacts
+- Fixed the *connected people* label (introduced by / introduced you to) when viewing the other side of a link
+
+### Company page
+- Same header as the contact page: back button, *Actions* menu, round action buttons and *Edit* for all company fields
+- People list integrated in the page (no inner scrolling, aligned columns, email and phone shortcuts)
+- Fetch the company logo from Instagram
+- Hidden sections and fields can be restored from *Actions → Customize page* or the *Hidden items* shortcut; section and field controls are always visible
+
+### Interface
+- Every menu uses the same HubSpot-style popover (context menus, column headers, bulk edit with drill-in submenus, calendar menu)
+- Consistent buttons across all views; icons no longer depend on the theme's sizing
+
 ## 0.7.0
 
 ### Table & views
@@ -13,7 +37,7 @@
 ### Contact page
 - Full-page record (click a name): inline editing, add-field menu, resizable columns, larger photo (96 px)
 - Custom photo, or fetch it from the contact's Instagram handle, paste from clipboard, or paste an image link
-- Connected people with the reason (partner, introduced you / introduced by you); partner and "met through" suggest existing contacts, save as links and are clickable
+- Connected people with the reason (partner, "introduced you to X" / "introduced by X"); partner and "met through" suggest existing contacts, save as links and are clickable
 - Multi-select relationship with linked company (`Former colleague @ Google`), with default colors per relationship and a working color picker; bold, tinted badges with spacing
 - Companies card: current, past and relationship companies, each linked to everyone in that company. Past companies are shown collapsed by default
 - Back button / swipe back through record, company and table

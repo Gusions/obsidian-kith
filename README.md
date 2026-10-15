@@ -158,8 +158,11 @@ Interaction notes (created by *+ Interaction*) live in the interactions folder a
 - **Cards**: compact cards with tags, next birthday and due state.
 - **Kanban**: group by relationship, closeness, status or priority; **drag a card to another column** to change that value.
 - **Graph**: contacts as nodes. Connections come from the same company (2+ people), *Met through* naming another contact, *Partner*, or `[[links]]` between notes. Shows the 700 most connected contacts; toggle companies and isolated contacts. The detail panel on the right is only shown in this view.
-- **Contact record** (click a name): full page with resizable columns, inline editing, a custom photo (upload, paste from the clipboard, paste a link, or try to fetch it from the contact's Instagram handle), connected people with the reason (partner, introduced you / by you), and a **Companies** card listing current, past and relationship companies; each company links to everyone connected with it, past ones are collapsed by default.
-- **Company page**: click any company. It lists its people and shows info, notes and a timeline. Kith can fill the empty fields (website, industry, contacts, logo) from Wikidata and the official website; you can also upload a logo or paste a link. Hide or show sections and fields **per company**, with an optional "use for all", and drag the column dividers to resize.
+- **Saved views**: save the current filters, quick filter, search, sort, mode and column filters as a tab next to the built-in ones; update, rename or delete from the tab's menu. The `+` turns highlighted when the current state differs from every saved view.
+- **Side panel**: a compact HubSpot-style list of contacts in the left sidebar (search, filters, quick access). It opens with Kith and closes when you leave it; it stays collapsed until you open it.
+- **Menus**: every Kith menu (context menus, column headers, bulk actions, the *Other* button) uses the same popover: icons, sections, search when long, drill-in submenus, keyboard navigation.
+- **Contact record** (click a name): full page with resizable columns, inline editing, a custom photo (upload, paste from the clipboard, paste a link, or try to fetch it from the contact's Instagram handle), connected people with the reason (partner, "introduced you to X" / "introduced by X"), and a **Companies** card listing current, past and relationship companies; each company links to everyone connected with it, past ones are collapsed by default.
+- **Company page**: click any company (same header as the contact page, with an *Actions* menu and *Edit*). It lists its people and shows info, notes and a timeline. Kith can fill the empty fields (website, industry, contacts, logo) from Wikidata and the official website; you can also upload a logo, paste a link or fetch it from the company's Instagram. Hide or show sections and fields **per company**, with an optional "use for all", and drag the column dividers to resize.
 - **Navigation**: the back button (or a swipe back) walks back through record, company and table.
 - **Right-click menus**: *Copy name / email / phone / full record*, *Archive*, *Delete…*. Keyboard: `Delete` / `⌘⌫` on a selected contact starts the delete flow (with confirmation).
 
@@ -279,7 +282,7 @@ The plugin is a single dependency-free JavaScript file (`main.js`, CommonJS, no 
 - Company enrichment and the Instagram photo depend on third-party services and may find nothing; the manual logo and photo options always work.
 - Languages other than English and Italian fall back to English.
 - No automatic Google Calendar insertion (would require OAuth); the pre-filled event is deliberate.
-- Ideas: saved views, merge duplicates, more import sources, additional languages.
+- Ideas: merge duplicates, more import sources, additional languages.
 
 Issues and pull requests are welcome.
 

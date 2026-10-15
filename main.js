@@ -3,13 +3,13 @@
 const obsidian = require('obsidian');
 const {
   Plugin, ItemView, Modal, Notice, PluginSettingTab, Setting, TFile,
-  FuzzySuggestModal, setIcon, normalizePath, stringifyYaml, MarkdownRenderChild, Menu, requestUrl,
+  FuzzySuggestModal, setIcon, normalizePath, stringifyYaml, MarkdownRenderChild, requestUrl,
 } = obsidian;
 
 /* ───────────────────────── i18n (IT / EN) ───────────────────────── */
 /* Le stringhe nel codice sono in italiano e fanno da chiave; EN contiene le traduzioni inglesi.
    La lingua segue Obsidian (localStorage "language"), con override opzionale "crm-contatti-lang". */
-const EN = {"✓ In calendario": "✓ In calendar", "Calendario": "Calendar", "Calendario: compleanni e follow-up": "Calendar: birthdays and follow-ups", "✓ Compleanno in Google Calendar (riapri)": "✓ Birthday in Google Calendar (reopen)", "Aggiungi compleanno a Google Calendar": "Add birthday to Google Calendar", "Scarica .ics di questo contatto": "Download .ics for this contact", "Scarica .ics della selezione": "Download .ics for the selection", "Scarica .ics di compleanni e follow-up": "Download .ics of birthdays and follow-ups", "Impostazioni calendario…": "Calendar settings…", "Nessuna immagine negli appunti": "No image in the clipboard", "Incolla immagine dagli appunti": "Paste image from clipboard", "Immagine non scaricabile da questo link": "Couldn't download an image from this link", "Recupera da Instagram": "Fetch from Instagram", "Nessun profilo Instagram nella scheda": "No Instagram profile on this contact", "Foto recuperata da Instagram": "Photo fetched from Instagram", "Impossibile recuperare la foto da Instagram (profilo privato o accesso bloccato). Carica la foto a mano.": "Couldn't fetch the photo from Instagram (private profile or access blocked). Upload it manually.", "Salva": "Save", "Link o percorso dell’immagine": "Image link or path", "Rimuovi logo": "Remove logo", "Incolla link immagine…": "Paste image link…", "Carica immagine…": "Upload image…", "Cambia logo": "Change logo", "Nascondi campo in questa pagina": "Hide field on this page", "Rimuovi sezione da questa pagina": "Remove section from this page", "Ripristina predefinito di tutte le aziende": "Reset default for all companies", "Ripristina questa pagina": "Reset this page", "Disposizione salvata come predefinita": "Layout saved as default", "Usa questa disposizione per tutte le aziende": "Use this layout for all companies", "Personalizza questa pagina": "Customize this page", "Personalizza pagina": "Customize page", "Aprendo la pagina di un’azienda, Kith cerca sito, settore, contatti e logo su Wikidata e sul sito ufficiale. Invia in rete solo il nome dell’azienda. Spegni per usare solo i dati inseriti a mano.": "When you open a company page, Kith looks up website, industry, contacts and logo on Wikidata and the official site. Only the company name is sent. Turn off to use manual data only.", "Arricchisci le aziende in automatico": "Enrich companies automatically", "Fonte: ${}": "Source: ${}", "Recupero non riuscito": "Fetch failed", "Nessuna nuova informazione trovata": "No new information found", "Aggiunti ${} campi (${})": "Added ${} fields (${})", "Recupero informazioni…": "Fetching information…", "Recupero…": "Fetching…", "Aggiorna info": "Refresh info", "Descrizione": "Description", "Collegate via relazione": "Linked via relationship", "Apri ${}": "Open ${}", "Aggiungi relazione": "Add relationship", "Mostra tutte le persone a ${}": "Show everyone in ${}", "Kith: indietro": "Kith: go back", "Scegli un’azienda…": "Choose a company…", "Apri pagina azienda…": "Open company page…", "Nessuna nota. Creala dal pulsante a sinistra.": "No note yet. Create it with the button on the left.", "Nota azienda": "Company note", "Cronologia azienda": "Company timeline", "Ex colleghi": "Former colleagues", "Persone": "People", "dai contatti": "from contacts", "Indirizzo": "Address", "Sito web": "Website", "Riepilogo": "Summary", "Informazioni": "Information", "Crea nota azienda": "Create company note", "Mostra in Kith": "Show in Kith", "+ Persona": "+ Person", "persone": "people", "persona": "person", "Email copiate": "Emails copied", "Copia ${} email": "Copy ${} emails", "Interazione": "Interaction", "${} contatti selezionati": "${} contacts selected", "1 contatto selezionato: ${}": "1 contact selected: ${}", "Ordine crescente": "Ascending", "Ordine decrescente": "Descending", "Filtra per questa colonna": "Filter by this column", "Rimuovi filtro colonna": "Remove column filter", "Blocca colonna": "Pin column", "Sblocca colonna": "Unpin column", "contiene…": "contains…", "Filtra: ${}": "Filter: ${}", "Opzioni colonna": "Column options", "Cerca un campo…": "Search a field…", "Nessun campo": "No fields", "Altri contatti in questa azienda": "Other contacts at this company", "Passata": "Past", "ex": "former", "Aziende": "Companies", "Mostra tutte le persone in Kith": "Show everyone in Kith", "Apri nota azienda": "Open company note", "Nessun altro contatto": "No other contacts", "Salva colore": "Save color", "Comprimi intestazione": "Collapse header", "Espandi intestazione": "Expand header", "Eliminare ${} contatti?": "Delete ${} contacts?", "Le note verranno spostate nel cestino secondo le impostazioni di Obsidian. Le interazioni collegate restano nel vault.": "Notes will be moved to the trash according to Obsidian settings. Linked interactions stay in the vault.", "${} contatti eliminati": "${} contacts deleted", "Cambia foto": "Change photo", "Carica foto…": "Upload photo…", "Rimuovi foto": "Remove photo", "Te l’ha presentato/a": "Introduced you", "Presentato/a da te": "Introduced by you", "tra ${} gg": "in ${} d", "${} giorni fa": "${} days ago", "oggi": "today", "ieri": "yesterday", "domani": "tomorrow", "mese": "month", "mesi": "months", "anno": "year", "anni": "years", "${} ${} fa": "${} ${} ago", "Anagrafica": "Personal", "Contatti": "Contact", "Lavoro": "Work", "Relazione": "Relationship", "Rete": "Network", "Note": "Notes", "Nome": "First name", "Cognome": "Last name", "Soprannome": "Nickname", "Compleanno": "Birthday", "Città": "City", "Paese": "Country", "Partner": "Partner", "Figli": "Children", "Lingue": "Languages", "Email": "Email", "Email lavoro": "Work email", "Telefono": "Phone", "Ruolo attuale": "Current role", "Azienda attuale": "Current company", "Aziende passate": "Past companies", "Settore": "Industry", "Competenze": "Skills", "Vicinanza": "Closeness", "Stato": "Status", "Priorità": "Priority", "Frequenza contatto": "Contact frequency", "Canale preferito": "Preferred channel", "Ultimo contatto": "Last contact", "Prossimo follow-up": "Next follow-up", "Quando contattare": "When to reach out", "Conosciuti dove": "Met where", "Conosciuti quando": "Met when", "Conosciuti tramite": "Met through", "Interessi": "Interests", "Può aiutarmi con": "Can help me with", "Posso aiutarlo con": "I can help with", "Favori ricevuti": "Favors received", "Favori dati": "Favors given", "Nome A→Z": "Name A→Z", "Contatto più vecchio": "Oldest contact", "Follow-up più urgente": "Most urgent follow-up", "Prossimo compleanno": "Next birthday", "Apri Kith": "Open Kith", "Nuovo contatto": "New contact", "Registra interazione": "Log interaction", "Segna contatto come contattato oggi": "Mark contact as contacted today", "${}: ultimo contatto = oggi": "${}: last contact = today", "Elimina contatto…": "Delete contact…", "Personalizza CRM (colori, font, campi, Google Calendar)": "Customize CRM (colors, fonts, fields, Google Calendar)", "Aggiungi il compleanno del contatto a Google Calendar": "Add the contact's birthday to Google Calendar", "Importa contatti (LinkedIn, telefono, Facebook, CSV)": "Import contacts (LinkedIn, phone, Facebook, CSV)", "Esporta compleanni e follow-up per il calendario (.ics)": "Export birthdays and follow-ups for your calendar (.ics)", "Inserisci widget CRM “Oggi” nella nota": "Insert CRM “Today” widget in note", "Copiato": "Copied", "Copia non riuscita": "Copy failed", "“${}” eliminato": "“${}” deleted", "“${}” archiviato": "“${}” archived", "“${}” ripristinato": "“${}” restored", "Questo contatto non ha un compleanno valido (serve almeno giorno e mese)": "This contact has no valid birthday (day and month are required)", "Senza nome": "Unnamed", "---\n${}---\n\n## Note\n\n## Interazioni\n": "---\n${}---\n\n## Notes\n\n## Interactions\n", "\n## Note\n\n## Interazioni\n": "\n## Notes\n\n## Interactions\n", "Nessun compleanno o follow-up da esportare": "No birthdays or follow-ups to export", "${}/Compleanni e follow-up.ics": "${}/Birthdays and follow-ups.ics", "Creato “${}”: ${} compleanni, ${} follow-up. Aprilo per importarlo nel calendario.": "Created “${}”: ${} birthdays, ${} follow-ups. Open it to import into your calendar.", "Kith": "Kith", "Cerca per nome, azienda, città, interessi…": "Search by name, company, city, interests…", "Importa": "Import", "Personalizza": "Customize", "Calendario .ics": "Calendar .ics", "+ Nuovo contatto": "+ New contact", "Contatti attivi": "Active contacts", "Follow-up scaduti": "Overdue follow-ups", "Compleanni (${} gg)": "Birthdays (${} d)", "Priorità alta": "High priority", "Tutte le relazioni": "All relationships", "Ogni vicinanza": "Any closeness", "Ogni priorità": "Any priority", "Solo attivi": "Active only", "Tutti (incl. archiviati)": "All (incl. archived)", "Filtro rapido: ${} ✕": "Quick filter: ${} ✕", "Ordina": "Sort", "Raggruppa": "Group by", "Colonne: relazione": "Columns: relationship", "Colonne: vicinanza": "Columns: closeness", "Colonne: stato": "Columns: status", "Colonne: priorità": "Columns: priority", "Tabella": "Table", "Schede": "Cards", "Kanban": "Kanban", "Nessun contatto trovato": "No contacts found", "Cerco note con frontmatter in “${}”. Se il tuo vault usa un'altra cartella, cambiala nelle impostazioni del plugin, oppure crea il primo contatto.": "Looking for notes with frontmatter in “${}”. If your vault uses a different folder, change it in the plugin settings, or create your first contact.", "contatto": "contact", "contatti": "contacts", "Nessun risultato con questi filtri.": "No results with these filters.", "Aziende": "Companies", "Isolati (${})": "Isolated (${})", "Adatta": "Fit", "Nessuna connessione da mostrare. Le relazioni nascono da: stessa azienda (almeno 2 persone), “Conosciuti tramite” con il nome di un altro contatto, “Partner”, oppure [[link]] tra schede.": "No connections to show. Relationships come from: the same company (at least 2 people), “Met through” naming another contact, “Partner”, or [[links]] between notes.", "Mostrati i 700 contatti più connessi": "Showing the 700 most connected contacts", "Oggi": "Today", "Contatto": "Contact", "Chiama": "Call", "Scaduto da ${} gg": "Overdue by ${} d", "Tra ${} gg": "In ${} d", "Ultimo contatto: ": "Last contact: ", "Follow-up: ": "Follow-up: ", "Follow-up": "Follow-up", "oggi!": "today!", "Non assegnato": "Unassigned", "Spostato in “${}”": "Moved to “${}”", "← Elenco": "← List", "✓ Contattato oggi": "✓ Contacted today", "+ Interazione": "+ Interaction", "Modifica": "Edit", "Apri nota": "Open note", "Elimina": "Delete", "Ripristina": "Restore", "Archivia": "Archive", "Prossimo contatto": "Next contact", "Frequenza": "Frequency", "Personale": "Personal", "Ruolo": "Role", "Azienda": "Company", "✓ In Google Calendar": "✓ In Google Calendar", "+ Google Calendar": "+ Google Calendar", " · ${} anni": " · ${} years old", "tra ": "in ", " gg": " d", "Altri campi": "Other fields", "Interazioni recenti": "Recent interactions", "Nessuna interazione registrata.": "No interactions logged.", "Apri scheda": "Open record", "Contattato oggi": "Contacted today", "Copia scheda completa": "Copy full record", "Scheda copiata": "Record copied", "Copia nome": "Copy name", "Nome copiato": "Name copied", "email lavoro": "work email", "Copia ${}": "Copy ${}", "${} copiata": "${} copied", "Copia selezione": "Copy selection", "${} copiato": "${} copied", "Copia “${}: …”": "Copy “${}: …”", "Seleziona un contatto per vedere la scheda completa.": "Select a contact to see the full record.", "Tutto in ordine ✨": "All clear ✨", "Prossimi 7 giorni": "Next 7 days", "Compleanni in arrivo": "Upcoming birthdays", "Agenda": "Agenda", "🎂 oggi": "🎂 today", "Modifica ${}": "Edit ${}", "valori separati da |": "values separated by |", "Annulla": "Cancel", "Salva modifiche": "Save changes", "Crea contatto": "Create contact", "Inserisci almeno nome o cognome": "Enter at least a first or last name", "Contatto aggiornato": "Contact updated", "Contatto creato": "Contact created", "Errore nel salvataggio: ": "Error while saving: ", "Nuova interazione con ${}": "New interaction with ${}", "Tipo": "Type", "Data": "Date", "Messaggio": "Message", "Chiamata": "Call", "Incontro": "Meeting", "Evento": "Event", "Altro": "Other", "Prossimo follow-up (opzionale)": "Next follow-up (optional)", "Cosa vi siete detti": "What you talked about", "Registra": "Log", "Interazione registrata": "Interaction logged", "Errore: ": "Error: ", "Scegli un contatto…": "Choose a contact…", "stessa email": "same email", "stesso telefono": "same phone", "stesso LinkedIn": "same LinkedIn", "stesso nome": "same name", "lettura non riuscita": "could not be read", "Nato/a il ${}": "Born on ${}", "🎂 Compleanno di ${}": "🎂 ${}’s birthday", "Relazione: ${}": "Relationship: ${}", "Canale: ${}": "Channel: ${}", "📞 Ricontatta ${}${}": "📞 Get back in touch with ${}${}", " (scaduto)": " (overdue)", "CRM · Oggi": "CRM · Today", "Apri CRM": "Open CRM", "Nulla in programma ✨": "Nothing scheduled ✨", "… e altri ${}": "… and ${} more", "scaduto da ${} gg": "overdue by ${} d", "${}: contattato": "${}: contacted", "📞 Da ricontattare": "📞 To follow up", "🗓 Prossimi ${} giorni": "🗓 Next ${} days", "🎂 Compleanni": "🎂 Birthdays", "Importa contatti": "Import contacts", "Carica uno o più file esportati da LinkedIn, dalla rubrica del telefono o da Facebook. Nel passo successivo scegli esattamente chi importare: niente viene creato prima della tua conferma.": "Upload one or more files exported from LinkedIn, your phone contacts or Facebook. In the next step you choose exactly who to import: nothing is created before you confirm.", "Origine: ": "Source: ", "Rileva automaticamente": "Auto-detect", "LinkedIn (Connections.csv)": "LinkedIn (Connections.csv)", "Telefono (.vcf oppure Google Contacts CSV)": "Phone (.vcf or Google Contacts CSV)", "Facebook (friends .json / .html)": "Facebook (friends .json / .html)", "CSV generico / formato del vault": "Generic CSV / vault format", "Trascina qui i file oppure": "Drop files here or", "Scegli file…": "Choose files…", "Come esportare i dati": "How to export your data", "LinkedIn: Impostazioni → Privacy dei dati → Ottieni una copia dei tuoi dati → seleziona “Collegamenti” → scarica lo zip e usa Connections.csv.": "LinkedIn: Settings → Data privacy → Get a copy of your data → select “Connections” → download the zip and use Connections.csv.", "iPhone: iCloud.com → Contatti → seleziona tutti → Esporta vCard. Android / Google: contacts.google.com → Esporta → vCard (.vcf) oppure Google CSV.": "iPhone: iCloud.com → Contacts → select all → Export vCard. Android / Google: contacts.google.com → Export → vCard (.vcf) or Google CSV.", "Facebook: Impostazioni → Le tue informazioni → Scarica le tue informazioni → Amici e follower, formato JSON → file your_friends.json. Facebook esporta solo nome e data di amicizia: niente email, telefono o compleanni.": "Facebook: Settings → Your information → Download your information → Friends and followers, JSON format → your_friends.json. Facebook only exports name and friendship date: no email, phone or birthdays.", "CSV generico: qualsiasi CSV con intestazioni tipo Nome, Cognome, Email, Telefono, Azienda… (anche il formato del tuo contatti.csv, separatore ; o ,).": "Generic CSV: any CSV with headers such as First name, Last name, Email, Phone, Company… (separator ; or ,).", "${}: nessun contatto riconosciuto (${})": "${}: no contacts recognized (${})", "Cerca nell’elenco…": "Search the list…", "Tutti gli stati": "All statuses", "Solo nuovi": "New only", "Già presenti": "Already present", "Doppi nel file": "Duplicates in file", "Tutte le fonti": "All sources", "Seleziona visibili": "Select visible", "Deseleziona visibili": "Deselect visible", "Solo i nuovi": "Only new", "＋ Aggiungi altri file": "＋ Add more files", "Relazione per i nuovi (vuoto = come da fonte)": "Relationship for new contacts (empty = as in source)", "Contatti già presenti": "Existing contacts", "Salta (non toccare)": "Skip (leave untouched)", "Completa solo i campi vuoti": "Fill empty fields only", " Crea le note azienda mancanti": " Create missing company notes", "(senza nome)": "(no name)", "Fonte": "Source", "Nuovo": "New", "Già presente · ${}": "Already present · ${}", "Doppio nel file · ${}": "Duplicate in file · ${}", "Mostra altri ${} (${} nascosti)": "Show ${} more (${} hidden)", "Nessun contatto con questi filtri.": "No contacts match these filters.", "${} selezionati su ${} · ${} visibili": "${} selected of ${} · ${} visible", "Importa ${} nuovi${}": "Import ${} new${}", " e aggiorna ${}": " and update ${}", "Importazione in corso…": "Importing…", "Interrompi": "Stop", "Importazione interrotta": "Import stopped", "Importazione completata": "Import complete", "${} contatti creati": "${} contacts created", "${} contatti esistenti completati": "${} existing contacts completed", "${} saltati": "${} skipped", "${} errori": "${} errors", "Apri il CRM": "Open the CRM", "Chiudi": "Close", "Compleanno di ${}": "${}’s birthday", "(${} anni)": "(turns ${})", " (${} anni)": " (turns ${})", "Eliminare ${}?": "Delete ${}?", "nel cestino di sistema (recuperabile)": "to the system trash (recoverable)", "nella cartella .trash del vault (recuperabile)": "to the vault’s .trash folder (recoverable)", "in modo definitivo (NON recuperabile)": "permanently (NOT recoverable)", "nel cestino": "to the trash", "La nota “${}” verrà spostata ${}. Le interazioni collegate restano nel vault.": "The note “${}” will be moved ${}. Linked interactions stay in the vault.", "Puoi cambiare questo comportamento in Impostazioni → File e collegamenti → File eliminati.": "You can change this in Settings → Files and links → Deleted files.", "Archivia invece": "Archive instead", "Aggiungi il compleanno a Google Calendar": "Add the birthday to Google Calendar", "${}: prossimo compleanno ${}.": "${}: next birthday ${}.", "Si apre Google Calendar con un evento annuale, tutto il giorno, già compilato: devi solo premere “Salva”.": "Google Calendar opens with a pre-filled yearly all-day event: you only need to press “Save”.", "Non chiedermelo più quando creo un contatto": "Don’t ask again when I create a contact", "Non ora": "Not now", "Apri Google Calendar": "Open Google Calendar", "Cartella contatti": "Contacts folder", "Percorso (dalla radice del vault) delle note persona.": "Path (from the vault root) of the person notes.", "Cartella interazioni": "Interactions folder", "Dove salvare le interazioni registrate.": "Where to save logged interactions.", "Cartella aziende": "Companies folder", "Dove creare le note azienda mancanti.": "Where to create missing company notes.", "Collega le aziende con [[link]]": "Link companies with [[links]]", "Crea nota azienda se manca": "Create company note if missing", "Finestra compleanni (giorni)": "Birthday window (days)", "Vista predefinita": "Default view", "Calendario .ics: includi i follow-up": "Calendar .ics: include follow-ups", "L’export .ics contiene sempre i compleanni (ricorrenti ogni anno); attiva per aggiungere anche le scadenze di ricontatto.": "The .ics export always includes birthdays (repeating yearly); turn on to also add follow-up due dates.", "Conferma prima di eliminare un contatto": "Confirm before deleting a contact", "Se spento, “Elimina” sposta subito la nota nel cestino senza chiedere.": "If off, “Delete” moves the note to the trash immediately without asking.", "Widget “Oggi” nelle nuove daily note (sperimentale)": "“Today” widget in new daily notes (experimental)", "Aggiunge il blocco crm-oggi alle daily note appena create. Dipende dalle impostazioni del plugin Note giornaliere.": "Adds the crm-oggi block to newly created daily notes. Depends on the Daily notes plugin settings.", "Personalizza Kith": "Customize Kith", "Google Calendar": "Google Calendar", "Ripristina predefiniti": "Reset to defaults", "“Come il tema” usa il font di Obsidian/Minimal.": "“Like the theme” uses the Obsidian/Minimal font.", "Come il tema": "Like the theme", "Sans di sistema": "System sans", "Monospazio": "Monospace", "Famiglia font": "Font family", "Nome di un font installato, es. Inter o \"SF Pro Text\".": "Name of an installed font, e.g. Inter or \"SF Pro Text\".", "Dimensione testo": "Text size", "Scala tutta l’interfaccia del CRM (100% = dimensione del tema).": "Scales the whole CRM interface (100% = theme size).", "Densità righe": "Row density", "Altezza delle righe della tabella.": "Height of table rows.", "Compatta": "Compact", "Normale": "Normal", "Comoda": "Comfortable", "Arrotondamento angoli": "Corner radius", "Bordi tra le colonne": "Column borders", "Striscia KPI in alto": "KPI strip on top", "Di base il CRM usa i colori del tema attivo (Minimal). Qui puoi sovrascriverli solo per il CRM.": "By default the CRM uses your active theme’s colors (Minimal). Here you can override them for the CRM only.", "Usa il colore del tema": "Use theme color", "Accento": "Accent", "Pulsanti principali, selezione, filtro attivo.": "Primary buttons, selection, active filter.", "Scaduto / priorità alta": "Overdue / high priority", "Follow-up scaduti e priorità alta.": "Overdue follow-ups and high priority.", "In scadenza / priorità media": "Due soon / medium priority", "Follow-up nei prossimi giorni.": "Follow-ups in the coming days.", "Ok": "OK", "Follow-up non urgenti, vicinanza stretta.": "Non-urgent follow-ups, close relationships.", "Evidenziazione dei compleanni.": "Birthday highlighting.", "Avatar": "Avatar", "Colorati": "Colored", "Neutri": "Neutral", "Colorati (tenui, in base al nome) oppure tutti neutri.": "Colored (soft, based on the name) or all neutral.", "Etichette neutre": "Neutral tags", "Spento: ogni valore (relazione, interessi…) prende un colore automatico dal tema.": "Off: each value (relationship, interests…) gets an automatic color from the theme.", "Colore per relazione": "Color per relationship", "Neutro": "Neutral", "Rinomina i campi, nascondili dal form e dalla scheda, o aggiungine di nuovi. I dati nelle note non vengono mai cancellati.": "Rename fields, hide them from the form and the record, or add new ones. Data in your notes is never deleted.", " · personalizzato": " · custom", "Chiave nella nota: ${}": "Key in the note: ${}", "Mostra nel form e nella scheda": "Show in the form and record", "Rimuovi il campo (i dati nelle note restano)": "Remove the field (data in notes stays)", "Nuovo campo personalizzato": "New custom field", "Nome del campo": "Field name", "Es. Taglia regalo": "e.g. Gift size", "Chiave nella nota": "Key in the note", "Nome della proprietà nel frontmatter. Vuoto = ricavata dal nome.": "Property name in the frontmatter. Empty = derived from the name.", "Testo": "Text", "Testo lungo": "Long text", "Lista (valori separati da |)": "List (values separated by |)", "Scelta (suggerisce i valori già usati)": "Choice (suggests values already used)", "Sezione del form": "Form section", "Aggiungi campo": "Add field", "Inserisci un nome per il campo": "Enter a name for the field", "La chiave “${}” è già usata da “${}”": "The key “${}” is already used by “${}”", "Scegli quali colonne mostrare nella tabella e in che ordine. “Contatto” è sempre la prima.": "Choose which columns to show in the table and in what order. “Contact” is always first.", "Sposta a sinistra": "Move left", "Sposta a destra": "Move right", "Rimuovi colonna": "Remove column", "Aggiungi colonna": "Add column", "Aggiungi": "Add", "Ripristina colonne predefinite": "Reset default columns", "Il plugin apre Google Calendar con un evento annuale “tutto il giorno” già compilato; tu premi “Salva”. Non serve collegare nessun account al plugin.": "The plugin opens Google Calendar with a pre-filled yearly “all-day” event; you press “Save”. No account needs to be linked to the plugin.", "Abilita “Aggiungi a Google Calendar”": "Enable “Add to Google Calendar”", "Mostra il pulsante nella scheda del contatto e il comando dedicato.": "Shows the button on the contact record and the dedicated command.", "Proponi quando creo o modifico un contatto con compleanno": "Offer when I create or edit a contact with a birthday", "Dopo il salvataggio compare una finestra con il pulsante per aprire Google Calendar.": "After saving, a window appears with a button to open Google Calendar.", "Titolo evento": "Event title", "Segnaposto: {nome} {cognome} {eta}": "Placeholders: {first} {last} {age}", "Descrizione evento": "Event description", "Dopo l’inserimento la scheda riceve la proprietà compleanno_in_calendario, così il CRM sa che l’evento esiste. Promemoria e calendario di destinazione si scelgono su Google Calendar al momento del salvataggio.": "After insertion the record gets the property birthday_in_calendar, so the CRM knows the event exists. Reminders and the target calendar are chosen in Google Calendar when you save.", "Colori, font, campi dei contatti, colonne della tabella e Google Calendar.": "Colors, fonts, contact fields, table columns and Google Calendar.", "Apri “Personalizza”": "Open “Customize”", "Aspetto": "Appearance", "Colori": "Colors", "Campi": "Fields", "Generale": "General", "Font": "Font", "oggi! 🎂": "today! 🎂", "Caricamento…": "Loading…", "Elimina…": "Delete…", "Personalizzato…": "Custom…", "Compleanni": "Birthdays", "Personalizzazione": "Customization", "🎂 Compleanno di {nome} {cognome}": "🎂 {first} {last}’s birthday", "Compleanno di {nome} {cognome} {eta}": "{first} {last}’s birthday {age}", "gg/mm/aaaa": "dd/mm/yyyy", "mm/gg/aaaa": "mm/dd/yyyy", "aaaa-mm-gg": "yyyy-mm-dd", "Data non valida": "Invalid date", "Follow-up non valido": "Invalid follow-up", "email": "email", "telefono": "phone", "archiviato": "archived", "Lingua": "Language", "Automatica": "Automatic", "Automatica = segue la lingua di Obsidian. Dopo il cambio disattiva e riattiva il plugin (Impostazioni → Plugin della community).": "Automatic = follows Obsidian’s language. After changing it, turn the plugin off and on again (Settings → Community plugins).", "Lingua salvata: riavvia il plugin per applicarla.": "Language saved: restart the plugin to apply it.", "Formato data (visualizzazione)": "Date format (display)", "Nelle note le date vengono sempre scritte in formato ISO (AAAA-MM-GG), che non è ambiguo.": "In your notes dates are always written in ISO format (YYYY-MM-DD), which is unambiguous.", "Date con la barra (es. 03/04/2025)": "Dates with slashes (e.g. 03/04/2025)", "Come interpretare le date scritte con la barra nelle note esistenti.": "How to interpret slash-formatted dates in your existing notes.", "Automatico (dalla lingua)": "Automatic (from language)", "giorno/mese/anno": "day/month/year", "mese/giorno/anno": "month/day/year", "Analizza le note": "Analyze notes", "Nessuna data con la barra trovata: sei già a posto.": "No slash-formatted dates found: you’re all set.", "Trovate ${} date con la barra: ${} sono certamente giorno/mese. Imposto “giorno/mese/anno”.": "Found ${} slash-formatted dates: ${} are definitely day/month. Setting “day/month/year”.", "Trovate ${} date con la barra: ${} sono certamente mese/giorno. Imposto “mese/giorno/anno”.": "Found ${} slash-formatted dates: ${} are definitely month/day. Setting “month/day/year”.", "Trovate ${} date con la barra, ma i segnali sono misti o assenti (${} giorno/mese, ${} mese/giorno). Scegli a mano.": "Found ${} slash-formatted dates, but the signals are mixed or missing (${} day/month, ${} month/day). Please choose manually.", "Aggiungi al calendario": "Add to calendar", "Esporta compleanni e follow-up in un file .ics da importare nel calendario": "Export birthdays and follow-ups to an .ics file you can import into your calendar", "Importa da LinkedIn, rubrica del telefono, Facebook o CSV. Scegli esattamente chi importare prima della conferma: niente viene creato prima.": "Import from LinkedIn, your phone contacts, Facebook or CSV. You choose exactly who to import before confirming: nothing is created before that.", "Apri importatore": "Open importer", "Archiviati": "Archived", "Esplora": "Browse", "Azzera filtri": "Clear filters", "Nessun valore": "No values", "Cerca contatti…": "Search contacts…", "Mostra meno": "Show less", "vicinanza ${}": "closeness ${}", "frequenza": "frequency", "follow-up": "follow-up", "Apri scheda completa": "Open full record", "← Kith": "← Kith", "Trascina per ridimensionare": "Drag to resize", "Aggiungi campo": "Add field", "Nuovo campo personalizzato": "New custom field", "← Indietro": "← Back", "Persone in ${}": "People at ${}", "Persone collegate": "Connected people", "Nessuna": "None", "Scheda": "Record", "Cronologia": "Timeline", "Tutte le interazioni": "All interactions", "Esporta CSV": "Export CSV", "${} selezionati": "${} selected", "Deseleziona": "Clear selection", "Seleziona tutti": "Select all", "contatti esportati": "contacts exported"};
+const EN = {"Aggiungere ${} ai tuoi contatti?": "Add ${} to your contacts?", "${} non è ancora nella tua lista. Se lo aggiungi, Kith crea la scheda e collega le due persone come partner.": "${} isn't in your list yet. If you add them, Kith creates the record and links the two people as partners.", "Partner di ${}": "Partner of ${}", "Aggiungi ai contatti": "Add to contacts", "${} aggiunto ai contatti": "${} added to your contacts", "Nick Instagram": "Instagram handle", "Recupera foto da Instagram": "Fetch photo from Instagram", "Incolla foto dagli appunti": "Paste photo from clipboard", "Foto": "Photo", "Cerca": "Search", "Nessun risultato": "No results", "Scrivi su WhatsApp": "Message on WhatsApp", "Invia SMS": "Send SMS", "Apri LinkedIn": "Open LinkedIn", "Apri Instagram": "Open Instagram", "Comunica": "Communicate", "Registra chiamata": "Log a call", "Registra incontro": "Log a meeting", "Registra messaggio": "Log a message", "Registra email": "Log an email", "Copia email": "Copy email", "Copia telefono": "Copy phone", "Contattato": "Contacted", "Azioni": "Actions", "Indietro": "Back", "Copia": "Copy", "Tutti i contatti": "All contacts", "Ti ha presentato ${}": "Introduced you to ${}", "Presentato/a da ${}": "Introduced by ${}", "Le mie viste": "My views", "Salva vista": "Save view", "Nome della vista": "View name", "Salva la vista attuale": "Save the current view", "Aggiorna con i filtri attuali": "Update with current filters", "Rinomina…": "Rename…", "Rinomina vista": "Rename view", "Elimina vista": "Delete view", "Apri prima la vista principale di Kith": "Open the main Kith view first", "1 follow-up scaduto": "1 overdue follow-up", "1 compleanno nei prossimi 7 giorni": "1 birthday in the next 7 days", "Clicca per aprire": "Click to open", "Avviso all’avvio": "Startup alert", "Una volta al giorno, all’apertura di Obsidian, mostra quanti follow-up sono scaduti e quanti compleanni sono vicini.": "Once a day, when Obsidian opens, shows how many follow-ups are overdue and how many birthdays are near.", "Vista “${}” salvata": "View “${}” saved", "${} follow-up scaduti": "${} overdue follow-ups", "${} compleanni nei prossimi 7 giorni": "${} birthdays in the next 7 days", "Viste": "Views", "✓ In calendario": "✓ In calendar", "Calendario": "Calendar", "Calendario: compleanni e follow-up": "Calendar: birthdays and follow-ups", "✓ Compleanno in Google Calendar (riapri)": "✓ Birthday in Google Calendar (reopen)", "Aggiungi compleanno a Google Calendar": "Add birthday to Google Calendar", "Scarica .ics di questo contatto": "Download .ics for this contact", "Scarica .ics della selezione": "Download .ics for the selection", "Scarica .ics di compleanni e follow-up": "Download .ics of birthdays and follow-ups", "Impostazioni calendario…": "Calendar settings…", "Nessuna immagine negli appunti": "No image in the clipboard", "Incolla immagine dagli appunti": "Paste image from clipboard", "Immagine non scaricabile da questo link": "Couldn't download an image from this link", "Recupera da Instagram": "Fetch from Instagram", "Nessun profilo Instagram nella scheda": "No Instagram profile on this contact", "Foto recuperata da Instagram": "Photo fetched from Instagram", "Impossibile recuperare la foto da Instagram (profilo privato o accesso bloccato). Carica la foto a mano.": "Couldn't fetch the photo from Instagram (private profile or access blocked). Upload it manually.", "Salva": "Save", "Link o percorso dell’immagine": "Image link or path", "Rimuovi logo": "Remove logo", "Incolla link immagine…": "Paste image link…", "Carica immagine…": "Upload image…", "Cambia logo": "Change logo", "Nascondi campo in questa pagina": "Hide field on this page", "Rimuovi sezione da questa pagina": "Remove section from this page", "Ripristina predefinito di tutte le aziende": "Reset default for all companies", "Ripristina questa pagina": "Reset this page", "Disposizione salvata come predefinita": "Layout saved as default", "Usa questa disposizione per tutte le aziende": "Use this layout for all companies", "Personalizza questa pagina": "Customize this page", "Personalizza pagina": "Customize page", "Aprendo la pagina di un’azienda, Kith cerca sito, settore, contatti e logo su Wikidata e sul sito ufficiale. Invia in rete solo il nome dell’azienda. Spegni per usare solo i dati inseriti a mano.": "When you open a company page, Kith looks up website, industry, contacts and logo on Wikidata and the official site. Only the company name is sent. Turn off to use manual data only.", "Arricchisci le aziende in automatico": "Enrich companies automatically", "Fonte: ${}": "Source: ${}", "Recupero non riuscito": "Fetch failed", "Nessuna nuova informazione trovata": "No new information found", "Aggiunti ${} campi (${})": "Added ${} fields (${})", "Recupero informazioni…": "Fetching information…", "Recupero…": "Fetching…", "Aggiorna info": "Refresh info", "Descrizione": "Description", "Collegate via relazione": "Linked via relationship", "Apri ${}": "Open ${}", "Aggiungi relazione": "Add relationship", "Mostra tutte le persone a ${}": "Show everyone in ${}", "Kith: indietro": "Kith: go back", "Scegli un’azienda…": "Choose a company…", "Apri pagina azienda…": "Open company page…", "Nessuna nota. Creala dal pulsante a sinistra.": "No note yet. Create it with the button on the left.", "Nota azienda": "Company note", "Cronologia azienda": "Company timeline", "Ex colleghi": "Former colleagues", "Persone": "People", "dai contatti": "from contacts", "Indirizzo": "Address", "Sito web": "Website", "Riepilogo": "Summary", "Informazioni": "Information", "Crea nota azienda": "Create company note", "Mostra in Kith": "Show in Kith", "+ Persona": "+ Person", "persone": "people", "persona": "person", "Email copiate": "Emails copied", "Copia ${} email": "Copy ${} emails", "Interazione": "Interaction", "${} contatti selezionati": "${} contacts selected", "1 contatto selezionato: ${}": "1 contact selected: ${}", "Ordine crescente": "Ascending", "Ordine decrescente": "Descending", "Filtra per questa colonna": "Filter by this column", "Rimuovi filtro colonna": "Remove column filter", "Blocca colonna": "Pin column", "Sblocca colonna": "Unpin column", "contiene…": "contains…", "Filtra: ${}": "Filter: ${}", "Opzioni colonna": "Column options", "Cerca un campo…": "Search a field…", "Nessun campo": "No fields", "Altri contatti in questa azienda": "Other contacts at this company", "Passata": "Past", "ex": "former", "Aziende": "Companies", "Mostra tutte le persone in Kith": "Show everyone in Kith", "Apri nota azienda": "Open company note", "Nessun altro contatto": "No other contacts", "Salva colore": "Save color", "Comprimi intestazione": "Collapse header", "Espandi intestazione": "Expand header", "Eliminare ${} contatti?": "Delete ${} contacts?", "Le note verranno spostate nel cestino secondo le impostazioni di Obsidian. Le interazioni collegate restano nel vault.": "Notes will be moved to the trash according to Obsidian settings. Linked interactions stay in the vault.", "${} contatti eliminati": "${} contacts deleted", "Cambia foto": "Change photo", "Carica foto…": "Upload photo…", "Rimuovi foto": "Remove photo", "Te l’ha presentato/a": "Introduced you", "Presentato/a da te": "Introduced by you", "tra ${} gg": "in ${} d", "${} giorni fa": "${} days ago", "oggi": "today", "ieri": "yesterday", "domani": "tomorrow", "mese": "month", "mesi": "months", "anno": "year", "anni": "years", "${} ${} fa": "${} ${} ago", "Anagrafica": "Personal", "Contatti": "Contact", "Lavoro": "Work", "Relazione": "Relationship", "Rete": "Network", "Note": "Notes", "Nome": "First name", "Cognome": "Last name", "Soprannome": "Nickname", "Compleanno": "Birthday", "Città": "City", "Paese": "Country", "Partner": "Partner", "Figli": "Children", "Lingue": "Languages", "Email": "Email", "Email lavoro": "Work email", "Telefono": "Phone", "Ruolo attuale": "Current role", "Azienda attuale": "Current company", "Aziende passate": "Past companies", "Settore": "Industry", "Competenze": "Skills", "Vicinanza": "Closeness", "Stato": "Status", "Priorità": "Priority", "Frequenza contatto": "Contact frequency", "Canale preferito": "Preferred channel", "Ultimo contatto": "Last contact", "Prossimo follow-up": "Next follow-up", "Quando contattare": "When to reach out", "Conosciuti dove": "Met where", "Conosciuti quando": "Met when", "Conosciuti tramite": "Met through", "Interessi": "Interests", "Può aiutarmi con": "Can help me with", "Posso aiutarlo con": "I can help with", "Favori ricevuti": "Favors received", "Favori dati": "Favors given", "Nome A→Z": "Name A→Z", "Contatto più vecchio": "Oldest contact", "Follow-up più urgente": "Most urgent follow-up", "Prossimo compleanno": "Next birthday", "Apri Kith": "Open Kith", "Nuovo contatto": "New contact", "Registra interazione": "Log interaction", "Segna contatto come contattato oggi": "Mark contact as contacted today", "${}: ultimo contatto = oggi": "${}: last contact = today", "Elimina contatto…": "Delete contact…", "Personalizza CRM (colori, font, campi, Google Calendar)": "Customize CRM (colors, fonts, fields, Google Calendar)", "Aggiungi il compleanno del contatto a Google Calendar": "Add the contact's birthday to Google Calendar", "Importa contatti (LinkedIn, telefono, Facebook, CSV)": "Import contacts (LinkedIn, phone, Facebook, CSV)", "Esporta compleanni e follow-up per il calendario (.ics)": "Export birthdays and follow-ups for your calendar (.ics)", "Inserisci widget CRM “Oggi” nella nota": "Insert CRM “Today” widget in note", "Copiato": "Copied", "Copia non riuscita": "Copy failed", "“${}” eliminato": "“${}” deleted", "“${}” archiviato": "“${}” archived", "“${}” ripristinato": "“${}” restored", "Questo contatto non ha un compleanno valido (serve almeno giorno e mese)": "This contact has no valid birthday (day and month are required)", "Senza nome": "Unnamed", "---\n${}---\n\n## Note\n\n## Interazioni\n": "---\n${}---\n\n## Notes\n\n## Interactions\n", "\n## Note\n\n## Interazioni\n": "\n## Notes\n\n## Interactions\n", "Nessun compleanno o follow-up da esportare": "No birthdays or follow-ups to export", "${}/Compleanni e follow-up.ics": "${}/Birthdays and follow-ups.ics", "Creato “${}”: ${} compleanni, ${} follow-up. Aprilo per importarlo nel calendario.": "Created “${}”: ${} birthdays, ${} follow-ups. Open it to import into your calendar.", "Kith": "Kith", "Cerca per nome, azienda, città, interessi…": "Search by name, company, city, interests…", "Importa": "Import", "Personalizza": "Customize", "Calendario .ics": "Calendar .ics", "+ Nuovo contatto": "+ New contact", "Contatti attivi": "Active contacts", "Follow-up scaduti": "Overdue follow-ups", "Compleanni (${} gg)": "Birthdays (${} d)", "Priorità alta": "High priority", "Tutte le relazioni": "All relationships", "Ogni vicinanza": "Any closeness", "Ogni priorità": "Any priority", "Solo attivi": "Active only", "Tutti (incl. archiviati)": "All (incl. archived)", "Filtro rapido: ${} ✕": "Quick filter: ${} ✕", "Ordina": "Sort", "Raggruppa": "Group by", "Colonne: relazione": "Columns: relationship", "Colonne: vicinanza": "Columns: closeness", "Colonne: stato": "Columns: status", "Colonne: priorità": "Columns: priority", "Tabella": "Table", "Schede": "Cards", "Kanban": "Kanban", "Nessun contatto trovato": "No contacts found", "Cerco note con frontmatter in “${}”. Se il tuo vault usa un'altra cartella, cambiala nelle impostazioni del plugin, oppure crea il primo contatto.": "Looking for notes with frontmatter in “${}”. If your vault uses a different folder, change it in the plugin settings, or create your first contact.", "contatto": "contact", "contatti": "contacts", "Nessun risultato con questi filtri.": "No results with these filters.", "Aziende": "Companies", "Isolati (${})": "Isolated (${})", "Adatta": "Fit", "Nessuna connessione da mostrare. Le relazioni nascono da: stessa azienda (almeno 2 persone), “Conosciuti tramite” con il nome di un altro contatto, “Partner”, oppure [[link]] tra schede.": "No connections to show. Relationships come from: the same company (at least 2 people), “Met through” naming another contact, “Partner”, or [[links]] between notes.", "Mostrati i 700 contatti più connessi": "Showing the 700 most connected contacts", "Oggi": "Today", "Contatto": "Contact", "Chiama": "Call", "Scaduto da ${} gg": "Overdue by ${} d", "Tra ${} gg": "In ${} d", "Ultimo contatto: ": "Last contact: ", "Follow-up: ": "Follow-up: ", "Follow-up": "Follow-up", "oggi!": "today!", "Non assegnato": "Unassigned", "Spostato in “${}”": "Moved to “${}”", "← Elenco": "← List", "✓ Contattato oggi": "✓ Contacted today", "+ Interazione": "+ Interaction", "Modifica": "Edit", "Apri nota": "Open note", "Elimina": "Delete", "Ripristina": "Restore", "Archivia": "Archive", "Prossimo contatto": "Next contact", "Frequenza": "Frequency", "Personale": "Personal", "Ruolo": "Role", "Azienda": "Company", "✓ In Google Calendar": "✓ In Google Calendar", "+ Google Calendar": "+ Google Calendar", " · ${} anni": " · ${} years old", "tra ": "in ", " gg": " d", "Altri campi": "Other fields", "Interazioni recenti": "Recent interactions", "Nessuna interazione registrata.": "No interactions logged.", "Apri scheda": "Open record", "Contattato oggi": "Contacted today", "Copia scheda completa": "Copy full record", "Scheda copiata": "Record copied", "Copia nome": "Copy name", "Nome copiato": "Name copied", "email lavoro": "work email", "Copia ${}": "Copy ${}", "${} copiata": "${} copied", "Copia selezione": "Copy selection", "${} copiato": "${} copied", "Copia “${}: …”": "Copy “${}: …”", "Seleziona un contatto per vedere la scheda completa.": "Select a contact to see the full record.", "Tutto in ordine ✨": "All clear ✨", "Prossimi 7 giorni": "Next 7 days", "Compleanni in arrivo": "Upcoming birthdays", "Agenda": "Agenda", "🎂 oggi": "🎂 today", "Modifica ${}": "Edit ${}", "valori separati da |": "values separated by |", "Annulla": "Cancel", "Salva modifiche": "Save changes", "Crea contatto": "Create contact", "Inserisci almeno nome o cognome": "Enter at least a first or last name", "Contatto aggiornato": "Contact updated", "Contatto creato": "Contact created", "Errore nel salvataggio: ": "Error while saving: ", "Nuova interazione con ${}": "New interaction with ${}", "Tipo": "Type", "Data": "Date", "Messaggio": "Message", "Chiamata": "Call", "Incontro": "Meeting", "Evento": "Event", "Altro": "Other", "Prossimo follow-up (opzionale)": "Next follow-up (optional)", "Cosa vi siete detti": "What you talked about", "Registra": "Log", "Interazione registrata": "Interaction logged", "Errore: ": "Error: ", "Scegli un contatto…": "Choose a contact…", "stessa email": "same email", "stesso telefono": "same phone", "stesso LinkedIn": "same LinkedIn", "stesso nome": "same name", "lettura non riuscita": "could not be read", "Nato/a il ${}": "Born on ${}", "🎂 Compleanno di ${}": "🎂 ${}’s birthday", "Relazione: ${}": "Relationship: ${}", "Canale: ${}": "Channel: ${}", "📞 Ricontatta ${}${}": "📞 Get back in touch with ${}${}", " (scaduto)": " (overdue)", "CRM · Oggi": "CRM · Today", "Apri CRM": "Open CRM", "Nulla in programma ✨": "Nothing scheduled ✨", "… e altri ${}": "… and ${} more", "scaduto da ${} gg": "overdue by ${} d", "${}: contattato": "${}: contacted", "📞 Da ricontattare": "📞 To follow up", "🗓 Prossimi ${} giorni": "🗓 Next ${} days", "🎂 Compleanni": "🎂 Birthdays", "Importa contatti": "Import contacts", "Carica uno o più file esportati da LinkedIn, dalla rubrica del telefono o da Facebook. Nel passo successivo scegli esattamente chi importare: niente viene creato prima della tua conferma.": "Upload one or more files exported from LinkedIn, your phone contacts or Facebook. In the next step you choose exactly who to import: nothing is created before you confirm.", "Origine: ": "Source: ", "Rileva automaticamente": "Auto-detect", "LinkedIn (Connections.csv)": "LinkedIn (Connections.csv)", "Telefono (.vcf oppure Google Contacts CSV)": "Phone (.vcf or Google Contacts CSV)", "Facebook (friends .json / .html)": "Facebook (friends .json / .html)", "CSV generico / formato del vault": "Generic CSV / vault format", "Trascina qui i file oppure": "Drop files here or", "Scegli file…": "Choose files…", "Come esportare i dati": "How to export your data", "LinkedIn: Impostazioni → Privacy dei dati → Ottieni una copia dei tuoi dati → seleziona “Collegamenti” → scarica lo zip e usa Connections.csv.": "LinkedIn: Settings → Data privacy → Get a copy of your data → select “Connections” → download the zip and use Connections.csv.", "iPhone: iCloud.com → Contatti → seleziona tutti → Esporta vCard. Android / Google: contacts.google.com → Esporta → vCard (.vcf) oppure Google CSV.": "iPhone: iCloud.com → Contacts → select all → Export vCard. Android / Google: contacts.google.com → Export → vCard (.vcf) or Google CSV.", "Facebook: Impostazioni → Le tue informazioni → Scarica le tue informazioni → Amici e follower, formato JSON → file your_friends.json. Facebook esporta solo nome e data di amicizia: niente email, telefono o compleanni.": "Facebook: Settings → Your information → Download your information → Friends and followers, JSON format → your_friends.json. Facebook only exports name and friendship date: no email, phone or birthdays.", "CSV generico: qualsiasi CSV con intestazioni tipo Nome, Cognome, Email, Telefono, Azienda… (anche il formato del tuo contatti.csv, separatore ; o ,).": "Generic CSV: any CSV with headers such as First name, Last name, Email, Phone, Company… (separator ; or ,).", "${}: nessun contatto riconosciuto (${})": "${}: no contacts recognized (${})", "Cerca nell’elenco…": "Search the list…", "Tutti gli stati": "All statuses", "Solo nuovi": "New only", "Già presenti": "Already present", "Doppi nel file": "Duplicates in file", "Tutte le fonti": "All sources", "Seleziona visibili": "Select visible", "Deseleziona visibili": "Deselect visible", "Solo i nuovi": "Only new", "＋ Aggiungi altri file": "＋ Add more files", "Relazione per i nuovi (vuoto = come da fonte)": "Relationship for new contacts (empty = as in source)", "Contatti già presenti": "Existing contacts", "Salta (non toccare)": "Skip (leave untouched)", "Completa solo i campi vuoti": "Fill empty fields only", " Crea le note azienda mancanti": " Create missing company notes", "(senza nome)": "(no name)", "Fonte": "Source", "Nuovo": "New", "Già presente · ${}": "Already present · ${}", "Doppio nel file · ${}": "Duplicate in file · ${}", "Mostra altri ${} (${} nascosti)": "Show ${} more (${} hidden)", "Nessun contatto con questi filtri.": "No contacts match these filters.", "${} selezionati su ${} · ${} visibili": "${} selected of ${} · ${} visible", "Importa ${} nuovi${}": "Import ${} new${}", " e aggiorna ${}": " and update ${}", "Importazione in corso…": "Importing…", "Interrompi": "Stop", "Importazione interrotta": "Import stopped", "Importazione completata": "Import complete", "${} contatti creati": "${} contacts created", "${} contatti esistenti completati": "${} existing contacts completed", "${} saltati": "${} skipped", "${} errori": "${} errors", "Apri il CRM": "Open the CRM", "Chiudi": "Close", "Compleanno di ${}": "${}’s birthday", "(${} anni)": "(turns ${})", " (${} anni)": " (turns ${})", "Eliminare ${}?": "Delete ${}?", "nel cestino di sistema (recuperabile)": "to the system trash (recoverable)", "nella cartella .trash del vault (recuperabile)": "to the vault’s .trash folder (recoverable)", "in modo definitivo (NON recuperabile)": "permanently (NOT recoverable)", "nel cestino": "to the trash", "La nota “${}” verrà spostata ${}. Le interazioni collegate restano nel vault.": "The note “${}” will be moved ${}. Linked interactions stay in the vault.", "Puoi cambiare questo comportamento in Impostazioni → File e collegamenti → File eliminati.": "You can change this in Settings → Files and links → Deleted files.", "Archivia invece": "Archive instead", "Aggiungi il compleanno a Google Calendar": "Add the birthday to Google Calendar", "${}: prossimo compleanno ${}.": "${}: next birthday ${}.", "Si apre Google Calendar con un evento annuale, tutto il giorno, già compilato: devi solo premere “Salva”.": "Google Calendar opens with a pre-filled yearly all-day event: you only need to press “Save”.", "Non chiedermelo più quando creo un contatto": "Don’t ask again when I create a contact", "Non ora": "Not now", "Apri Google Calendar": "Open Google Calendar", "Cartella contatti": "Contacts folder", "Percorso (dalla radice del vault) delle note persona.": "Path (from the vault root) of the person notes.", "Cartella interazioni": "Interactions folder", "Dove salvare le interazioni registrate.": "Where to save logged interactions.", "Cartella aziende": "Companies folder", "Dove creare le note azienda mancanti.": "Where to create missing company notes.", "Collega le aziende con [[link]]": "Link companies with [[links]]", "Crea nota azienda se manca": "Create company note if missing", "Finestra compleanni (giorni)": "Birthday window (days)", "Vista predefinita": "Default view", "Calendario .ics: includi i follow-up": "Calendar .ics: include follow-ups", "L’export .ics contiene sempre i compleanni (ricorrenti ogni anno); attiva per aggiungere anche le scadenze di ricontatto.": "The .ics export always includes birthdays (repeating yearly); turn on to also add follow-up due dates.", "Conferma prima di eliminare un contatto": "Confirm before deleting a contact", "Se spento, “Elimina” sposta subito la nota nel cestino senza chiedere.": "If off, “Delete” moves the note to the trash immediately without asking.", "Widget “Oggi” nelle nuove daily note (sperimentale)": "“Today” widget in new daily notes (experimental)", "Aggiunge il blocco crm-oggi alle daily note appena create. Dipende dalle impostazioni del plugin Note giornaliere.": "Adds the crm-oggi block to newly created daily notes. Depends on the Daily notes plugin settings.", "Personalizza Kith": "Customize Kith", "Google Calendar": "Google Calendar", "Ripristina predefiniti": "Reset to defaults", "“Come il tema” usa il font di Obsidian/Minimal.": "“Like the theme” uses the Obsidian/Minimal font.", "Come il tema": "Like the theme", "Sans di sistema": "System sans", "Monospazio": "Monospace", "Famiglia font": "Font family", "Nome di un font installato, es. Inter o \"SF Pro Text\".": "Name of an installed font, e.g. Inter or \"SF Pro Text\".", "Dimensione testo": "Text size", "Scala tutta l’interfaccia del CRM (100% = dimensione del tema).": "Scales the whole CRM interface (100% = theme size).", "Densità righe": "Row density", "Altezza delle righe della tabella.": "Height of table rows.", "Compatta": "Compact", "Normale": "Normal", "Comoda": "Comfortable", "Arrotondamento angoli": "Corner radius", "Bordi tra le colonne": "Column borders", "Striscia KPI in alto": "KPI strip on top", "Di base il CRM usa i colori del tema attivo (Minimal). Qui puoi sovrascriverli solo per il CRM.": "By default the CRM uses your active theme’s colors (Minimal). Here you can override them for the CRM only.", "Usa il colore del tema": "Use theme color", "Accento": "Accent", "Pulsanti principali, selezione, filtro attivo.": "Primary buttons, selection, active filter.", "Scaduto / priorità alta": "Overdue / high priority", "Follow-up scaduti e priorità alta.": "Overdue follow-ups and high priority.", "In scadenza / priorità media": "Due soon / medium priority", "Follow-up nei prossimi giorni.": "Follow-ups in the coming days.", "Ok": "OK", "Follow-up non urgenti, vicinanza stretta.": "Non-urgent follow-ups, close relationships.", "Evidenziazione dei compleanni.": "Birthday highlighting.", "Avatar": "Avatar", "Colorati": "Colored", "Neutri": "Neutral", "Colorati (tenui, in base al nome) oppure tutti neutri.": "Colored (soft, based on the name) or all neutral.", "Etichette neutre": "Neutral tags", "Spento: ogni valore (relazione, interessi…) prende un colore automatico dal tema.": "Off: each value (relationship, interests…) gets an automatic color from the theme.", "Colore per relazione": "Color per relationship", "Neutro": "Neutral", "Rinomina i campi, nascondili dal form e dalla scheda, o aggiungine di nuovi. I dati nelle note non vengono mai cancellati.": "Rename fields, hide them from the form and the record, or add new ones. Data in your notes is never deleted.", " · personalizzato": " · custom", "Chiave nella nota: ${}": "Key in the note: ${}", "Mostra nel form e nella scheda": "Show in the form and record", "Rimuovi il campo (i dati nelle note restano)": "Remove the field (data in notes stays)", "Nuovo campo personalizzato": "New custom field", "Nome del campo": "Field name", "Es. Taglia regalo": "e.g. Gift size", "Chiave nella nota": "Key in the note", "Nome della proprietà nel frontmatter. Vuoto = ricavata dal nome.": "Property name in the frontmatter. Empty = derived from the name.", "Testo": "Text", "Testo lungo": "Long text", "Lista (valori separati da |)": "List (values separated by |)", "Scelta (suggerisce i valori già usati)": "Choice (suggests values already used)", "Sezione del form": "Form section", "Aggiungi campo": "Add field", "Inserisci un nome per il campo": "Enter a name for the field", "La chiave “${}” è già usata da “${}”": "The key “${}” is already used by “${}”", "Scegli quali colonne mostrare nella tabella e in che ordine. “Contatto” è sempre la prima.": "Choose which columns to show in the table and in what order. “Contact” is always first.", "Sposta a sinistra": "Move left", "Sposta a destra": "Move right", "Rimuovi colonna": "Remove column", "Aggiungi colonna": "Add column", "Aggiungi": "Add", "Ripristina colonne predefinite": "Reset default columns", "Il plugin apre Google Calendar con un evento annuale “tutto il giorno” già compilato; tu premi “Salva”. Non serve collegare nessun account al plugin.": "The plugin opens Google Calendar with a pre-filled yearly “all-day” event; you press “Save”. No account needs to be linked to the plugin.", "Abilita “Aggiungi a Google Calendar”": "Enable “Add to Google Calendar”", "Mostra il pulsante nella scheda del contatto e il comando dedicato.": "Shows the button on the contact record and the dedicated command.", "Proponi quando creo o modifico un contatto con compleanno": "Offer when I create or edit a contact with a birthday", "Dopo il salvataggio compare una finestra con il pulsante per aprire Google Calendar.": "After saving, a window appears with a button to open Google Calendar.", "Titolo evento": "Event title", "Segnaposto: {nome} {cognome} {eta}": "Placeholders: {first} {last} {age}", "Descrizione evento": "Event description", "Dopo l’inserimento la scheda riceve la proprietà compleanno_in_calendario, così il CRM sa che l’evento esiste. Promemoria e calendario di destinazione si scelgono su Google Calendar al momento del salvataggio.": "After insertion the record gets the property birthday_in_calendar, so the CRM knows the event exists. Reminders and the target calendar are chosen in Google Calendar when you save.", "Colori, font, campi dei contatti, colonne della tabella e Google Calendar.": "Colors, fonts, contact fields, table columns and Google Calendar.", "Apri “Personalizza”": "Open “Customize”", "Aspetto": "Appearance", "Colori": "Colors", "Campi": "Fields", "Generale": "General", "Font": "Font", "oggi! 🎂": "today! 🎂", "Caricamento…": "Loading…", "Elimina…": "Delete…", "Personalizzato…": "Custom…", "Compleanni": "Birthdays", "Personalizzazione": "Customization", "🎂 Compleanno di {nome} {cognome}": "🎂 {first} {last}’s birthday", "Compleanno di {nome} {cognome} {eta}": "{first} {last}’s birthday {age}", "gg/mm/aaaa": "dd/mm/yyyy", "mm/gg/aaaa": "mm/dd/yyyy", "aaaa-mm-gg": "yyyy-mm-dd", "Data non valida": "Invalid date", "Follow-up non valido": "Invalid follow-up", "email": "email", "telefono": "phone", "archiviato": "archived", "Lingua": "Language", "Automatica": "Automatic", "Automatica = segue la lingua di Obsidian. Dopo il cambio disattiva e riattiva il plugin (Impostazioni → Plugin della community).": "Automatic = follows Obsidian’s language. After changing it, turn the plugin off and on again (Settings → Community plugins).", "Lingua salvata: riavvia il plugin per applicarla.": "Language saved: restart the plugin to apply it.", "Formato data (visualizzazione)": "Date format (display)", "Nelle note le date vengono sempre scritte in formato ISO (AAAA-MM-GG), che non è ambiguo.": "In your notes dates are always written in ISO format (YYYY-MM-DD), which is unambiguous.", "Date con la barra (es. 03/04/2025)": "Dates with slashes (e.g. 03/04/2025)", "Come interpretare le date scritte con la barra nelle note esistenti.": "How to interpret slash-formatted dates in your existing notes.", "Automatico (dalla lingua)": "Automatic (from language)", "giorno/mese/anno": "day/month/year", "mese/giorno/anno": "month/day/year", "Analizza le note": "Analyze notes", "Nessuna data con la barra trovata: sei già a posto.": "No slash-formatted dates found: you’re all set.", "Trovate ${} date con la barra: ${} sono certamente giorno/mese. Imposto “giorno/mese/anno”.": "Found ${} slash-formatted dates: ${} are definitely day/month. Setting “day/month/year”.", "Trovate ${} date con la barra: ${} sono certamente mese/giorno. Imposto “mese/giorno/anno”.": "Found ${} slash-formatted dates: ${} are definitely month/day. Setting “month/day/year”.", "Trovate ${} date con la barra, ma i segnali sono misti o assenti (${} giorno/mese, ${} mese/giorno). Scegli a mano.": "Found ${} slash-formatted dates, but the signals are mixed or missing (${} day/month, ${} month/day). Please choose manually.", "Aggiungi al calendario": "Add to calendar", "Esporta compleanni e follow-up in un file .ics da importare nel calendario": "Export birthdays and follow-ups to an .ics file you can import into your calendar", "Importa da LinkedIn, rubrica del telefono, Facebook o CSV. Scegli esattamente chi importare prima della conferma: niente viene creato prima.": "Import from LinkedIn, your phone contacts, Facebook or CSV. You choose exactly who to import before confirming: nothing is created before that.", "Apri importatore": "Open importer", "Archiviati": "Archived", "Esplora": "Browse", "Azzera filtri": "Clear filters", "Nessun valore": "No values", "Cerca contatti…": "Search contacts…", "Mostra meno": "Show less", "vicinanza ${}": "closeness ${}", "frequenza": "frequency", "follow-up": "follow-up", "Apri scheda completa": "Open full record", "← Kith": "← Kith", "Trascina per ridimensionare": "Drag to resize", "Aggiungi campo": "Add field", "Nuovo campo personalizzato": "New custom field", "← Indietro": "← Back", "Persone in ${}": "People at ${}", "Persone collegate": "Connected people", "Nessuna": "None", "Scheda": "Record", "Cronologia": "Timeline", "Tutte le interazioni": "All interactions", "Esporta CSV": "Export CSV", "${} selezionati": "${} selected", "Deseleziona": "Clear selection", "Seleziona tutti": "Select all", "contatti esportati": "contacts exported", "Persona": "Person", "In Kith": "In Kith", "Aggiorna": "Refresh", "Aggiungi persona": "Add person", "Logo": "Logo", "Sezioni": "Sections", "Campi informazioni": "Info fields", "ultimo contatto": "last contact", "Modifica informazioni": "Edit information", "Elementi nascosti (${}) · gestisci": "Hidden items (${}) · manage", "Mostra o nascondi sezioni e campi": "Show or hide sections and fields", "Recupera logo da Instagram": "Fetch logo from Instagram"};
 function detectLang() {
   let l = '';
   try { l = localStorage.getItem('crm-contatti-lang') || ''; } catch (e) { l = ''; }
@@ -50,6 +50,9 @@ const DEFAULT_SETTINGS = {
   createAziende: true,
   autoEnrichCompanies: true,
   coEnrich: {},
+  savedViews: [],
+  startupAlert: true,
+  lastAlert: '',
   coLayout: {},
   birthdayWindow: 30,
   defaultMode: 'tabella',
@@ -386,7 +389,7 @@ class CRMPlugin extends Plugin {
     this.registerView(COMPANY_TYPE, (leaf) => new CRMCompanyView(leaf, this));
     this.addCommand({ id: 'kith-indietro', name: T('Kith: indietro'), checkCallback: (chk) => { const v = this.app.workspace.getActiveViewOfType(ItemView); const ok = !!v && typeof v.goBack === 'function'; if (ok && !chk) v.goBack(); return ok; } });
     this.addCommand({ id: 'apri-azienda', name: T('Apri pagina azienda…'), callback: () => new CompanyPicker(this.app, allCompanyNames(this), (n) => this.openCompany(n)).open() });
-    this.app.workspace.onLayoutReady(() => { this.syncSidebar(); });
+    this.app.workspace.onLayoutReady(() => { this.syncSidebar(); setTimeout(() => { try { this.startupAlert(); } catch (e) { console.error('Kith alert', e); } }, 4000); });
     this.registerEvent(this.app.workspace.on('active-leaf-change', () => this.syncSidebar()));
     this.addRibbonIcon('users', T('Apri Kith'), () => this.activateView());
 
@@ -559,10 +562,21 @@ class CRMPlugin extends Plugin {
     this._syncing = true;
     try {
       const ws = this.app.workspace;
+      const isKith = (t) => t === VIEW_TYPE || t === RECORD_TYPE || t === COMPANY_TYPE;
+      const rl = ws.getMostRecentLeaf ? ws.getMostRecentLeaf(ws.rootSplit) : null;
+      const rv = rl && rl.view;
       const act = ws.getActiveViewOfType(ItemView);
-      const onKith = !!act && (act.getViewType() === VIEW_TYPE || act.getViewType() === SIDE_TYPE || act.getViewType() === RECORD_TYPE || act.getViewType() === COMPANY_TYPE);
-      if (onKith) await this.ensureSidebar(!ws.leftSplit.collapsed);
-      else if (ws.getLeavesOfType(SIDE_TYPE).length) this.closeSidebar();
+      const onKith = !!(rv && rv.getViewType && isKith(rv.getViewType())) || !!(act && isKith(act.getViewType()));
+      if (onKith && !this._wasKith) {
+        /* entering Kith: the panel is prepared but the left sidebar stays hidden */
+        await this.ensureSidebar(false);
+        try { ws.leftSplit.collapse(); } catch (e) { /* ignora */ }
+      } else if (!onKith && (this._wasKith || ws.getLeavesOfType(SIDE_TYPE).length)) {
+        this.closeSidebar();
+      } else if (onKith) {
+        await this.ensureSidebar(!ws.leftSplit.collapsed);
+      }
+      this._wasKith = onKith;
     } finally { this._syncing = false; }
   }
   async ensureSidebar(reveal = true) {
@@ -578,8 +592,8 @@ class CRMPlugin extends Plugin {
   closeSidebar() {
     const ws = this.app.workspace;
     ws.detachLeavesOfType(SIDE_TYPE);
-    const prev = this._prevLeft; this._prevLeft = null;
-    if (prev && ws.getLeavesOfType('file-explorer').includes(prev) && !ws.leftSplit.collapsed) ws.revealLeaf(prev);
+    this._prevLeft = null;
+    try { ws.leftSplit.collapse(); } catch (e) { /* ignora */ }
   }
   onMainClosed() { setTimeout(() => this.syncSidebar(), 80); }
   refreshSidebar() {
@@ -587,6 +601,54 @@ class CRMPlugin extends Plugin {
     this._st = setTimeout(() => {
       for (const leaf of this.app.workspace.getLeavesOfType(SIDE_TYPE)) { const v = leaf.view; if (v && v.update) v.update(); }
     }, 120);
+  }
+  /* ── viste salvate ── */
+  viewKey(st) { return JSON.stringify([st.filters, st.quick || '', st.q || '', st.sort || '', st.mode || '', st.groupBy || '', st.colSort || null, st.colFilters || {}]); }
+  normState(st) {
+    const f = Object.assign({ relazione: '', vicinanza: '', priorita: '', azienda: '', citta: '', stato: 'attivi' }, st.filters || {});
+    const cf = {}; for (const [k, v] of Object.entries(st.colFilters || {})) if (v) cf[k] = v;
+    return { filters: f, quick: st.quick || '', q: st.q || '', sort: st.sort || 'nome', mode: st.mode || this.settings.defaultMode, groupBy: st.groupBy || this.settings.groupBy, colSort: st.colSort ? { key: st.colSort.key, dir: st.colSort.dir } : null, colFilters: cf };
+  }
+  savedViews() { return this.settings.savedViews || (this.settings.savedViews = []); }
+  matchSavedView(st) { const k = this.viewKey(this.normState(st)); return this.savedViews().find((v) => this.viewKey(this.normState(v.state)) === k) || null; }
+  countView(sv) {
+    const v = Object.create(CRMView.prototype);
+    Object.assign(v, this.normState(sv.state), { plugin: this, app: this.app, all: this.getContacts() });
+    try { return v.applyFilters().length; } catch (e) { return 0; }
+  }
+  async saveView(name, state) {
+    name = String(name || '').trim(); if (!name) return null;
+    const list = this.savedViews();
+    const ex = list.find((v) => nv(v.name) === nv(name));
+    const st = this.normState(state);
+    if (ex) ex.state = st; else list.push({ id: 'v' + Date.now().toString(36), name, state: st });
+    await this.saveSettings(); this.refreshViews();
+    return ex || list[list.length - 1];
+  }
+  async deleteView(id) { this.settings.savedViews = this.savedViews().filter((v) => v.id !== id); await this.saveSettings(); this.refreshViews(); }
+  async renameView(id, name) { const v = this.savedViews().find((x) => x.id === id); name = String(name || '').trim(); if (v && name) { v.name = name; await this.saveSettings(); this.refreshViews(); } }
+  async updateView(id, state) { const v = this.savedViews().find((x) => x.id === id); if (v) { v.state = this.normState(state); await this.saveSettings(); this.refreshViews(); } }
+  viewMenu(sv, e, getState) {
+    const m = new Menu();
+    m.addItem((i) => i.setTitle(T('Aggiorna con i filtri attuali')).setIcon('refresh-cw').onClick(() => { const st = getState && getState(); if (st) this.updateView(sv.id, st); else new Notice(T('Apri prima la vista principale di Kith')); }));
+    m.addItem((i) => i.setTitle(T('Rinomina…')).setIcon('pencil').onClick(() => new TextPromptModal(this.app, T('Rinomina vista'), '', sv.name, (v) => this.renameView(sv.id, v)).open()));
+    m.addItem((i) => i.setTitle(T('Elimina vista')).setIcon('trash').onClick(() => this.deleteView(sv.id)));
+    m.showAtMouseEvent(e);
+  }
+  startupAlert() {
+    if (this.settings.startupAlert === false) return;
+    const d = isoDate(new Date());
+    if (this.settings.lastAlert === d) return;
+    const act = this.getContacts().filter((c) => !c.archived);
+    const od = act.filter((c) => c.due.state === 'scaduto').length;
+    const bd = act.filter((c) => c.bday && c.bday.days <= 7).length;
+    if (!od && !bd) return;
+    this.settings.lastAlert = d; this.saveSettings();
+    const parts = [];
+    if (od) parts.push(od === 1 ? T('1 follow-up scaduto') : T`${od} follow-up scaduti`);
+    if (bd) parts.push(bd === 1 ? T('1 compleanno nei prossimi 7 giorni') : T`${bd} compleanni nei prossimi 7 giorni`);
+    const n = new Notice('Kith · ' + parts.join(' · ') + '\n' + T('Clicca per aprire'), 12000);
+    try { if (n.noticeEl) n.noticeEl.addEventListener('click', () => this.navigate(od ? { reset: true, quick: 'scaduti' } : { reset: true, quick: 'compleanni' })); } catch (e) { /* ignora */ }
   }
   async navigate(patch) {
     const leaf = await this.activateView();
@@ -761,7 +823,9 @@ class CRMPlugin extends Plugin {
     return f instanceof TFile ? this.app.vault.getResourcePath(f) : null;
   }
   igHandle(c) {
-    const v = (c.s('instagram') || '').trim(); if (!v) return '';
+    let v = (c.s('instagram') || '').trim();
+    if (!v) { const n = (c.s('soprannome') || '').trim().replace(/^@/, ''); if (n && !/\s/.test(n)) v = n; }
+    if (!v) return '';
     const m = v.match(/instagram\.com\/([^/?#]+)/i);
     return (m ? m[1] : v).replace(/^@/, '').replace(/\/$/, '');
   }
@@ -776,8 +840,19 @@ class CRMPlugin extends Plugin {
     return false;
   }
   async fetchInstagramPhoto(c) {
-    const h = this.igHandle(c);
-    if (!h) { new Notice(T('Nessun profilo Instagram nella scheda')); return false; }
+    const h0 = this.igHandle(c);
+    if (!h0) {
+      new TextPromptModal(this.app, T('Nick Instagram'), '@nome', '', async (v) => {
+        v = String(v || '').trim().replace(/^@/, '').replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/[/?#].*$/, '');
+        if (!v) return;
+        await this.saveContact(c.file, { instagram: v });
+        await this.fetchInstagramPhotoFor(c, v);
+      }).open();
+      return false;
+    }
+    return this.fetchInstagramPhotoFor(c, h0);
+  }
+  async fetchInstagramPhotoFor(c, h, apply) {
     const e = encodeURIComponent(h);
     const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Safari/605.1.15';
     const og = (host, ua) => async () => {
@@ -806,7 +881,7 @@ class CRMPlugin extends Plugin {
       try {
         const u = await get();
         if (!u) { log.push(name + ':–'); continue; }
-        if (await this.photoFromUrl(c, u)) { new Notice(T('Foto recuperata da Instagram')); return true; }
+        if (await (apply ? apply(u) : this.photoFromUrl(c, u))) { new Notice(T('Foto recuperata da Instagram')); return true; }
         log.push(name + ':no');
       } catch (err) { log.push(name + ':err'); }
     }
@@ -836,7 +911,7 @@ class CRMPlugin extends Plugin {
   }
 
   /* values: { chiaveLogica: stringa | array }. Passare '' o [] per cancellare il campo. */
-  async saveContact(file, values) {
+  async saveContact(file, values, opts = {}) {
     if (!file) {
       const name = [values.nome, values.cognome].filter(Boolean).join(' ').trim();
       await this.ensureFolder(this.settings.personeFolder);
@@ -874,6 +949,11 @@ class CRMPlugin extends Plugin {
         fm[key] = v;
       }
     });
+    if (values.partner && !opts.noOffer) {
+      const names = String(Array.isArray(values.partner) ? values.partner.join(' | ') : values.partner).split(/\s*[|,;]\s*/).map((x) => x.replace(/^\[\[|\]\]$/g, '').split('|').pop().trim()).filter(Boolean);
+      const missing = names.find((n) => !this.findPerson(n, file));
+      if (missing) setTimeout(() => new AddPersonModal(this.app, this, missing, file).open(), 350);
+    }
     return file;
   }
 
@@ -926,7 +1006,18 @@ class CRMView extends ItemView {
   }
   async onClose() { if (this.graph) { this.graph.destroy(); this.graph = null; } this.plugin.onMainClosed(this); }
 
+  curState() { return this.plugin.normState({ filters: this.filters, quick: this.quick, q: this.q, sort: this.sort, mode: this.mode, groupBy: this.groupBy, colSort: this.colSort, colFilters: this.colFilters }); }
+  loadState(st) {
+    const n = this.plugin.normState(st);
+    this.filters = n.filters; this.quick = n.quick; this.q = n.q; this.sort = n.sort; this.mode = n.mode; this.groupBy = n.groupBy; this.colSort = n.colSort; this.colFilters = n.colFilters;
+    if (this.searchEl) this.searchEl.value = this.q;
+  }
+  askSaveView() {
+    const st = this.curState();
+    new TextPromptModal(this.app, T('Salva vista'), T('Nome della vista'), '', async (name) => { if (name) { await this.plugin.saveView(name, st); new Notice(T`Vista “${name}” salvata`); } }).open();
+  }
   applyNav(p) {
+    if (p.view) { this.loadState(p.view.state); this.renderKpi(); this.renderToolbar(); this.renderList(); return; }
     if (p.reset) { this.filters = { relazione: '', vicinanza: '', priorita: '', azienda: '', citta: '', stato: 'attivi' }; this.quick = ''; this.q = ''; if (this.searchEl) this.searchEl.value = ''; }
     if (p.quick !== undefined) this.quick = (p.quick && this.quick === p.quick) ? '' : p.quick;
     if (p.toggle) { const { key, v } = p.toggle; const same = nv(this.filters[key] || '') === nv(v); this.filters[key] = same ? (key === 'stato' ? 'attivi' : '') : v; }
@@ -1093,11 +1184,25 @@ class CRMView extends ItemView {
       { id: 'alta', label: T('Priorità alta'), n: active.filter((c) => cv(c.s('priorita')) === 'alta').length },
       { id: 'archiviati', label: T('Archiviati'), n: this.all.length - active.length },
     ];
+    const curSaved = this.plugin.matchSavedView(this.curState());
     for (const it of items) {
-      const t = el.createDiv({ cls: 'crm-tab' + (this.quick === it.id ? ' is-active' : '') });
+      const t = el.createDiv({ cls: 'crm-tab' + (this.quick === it.id && !curSaved ? ' is-active' : '') });
       t.createSpan({ text: it.label }); t.createSpan({ cls: 'crm-tab-n', text: String(it.n) });
       t.addEventListener('click', () => { this.quick = it.id; this.renderKpi(); this.renderToolbar(); this.renderList(); });
     }
+    const saved = this.plugin.savedViews();
+    if (saved.length) el.createSpan({ cls: 'crm-tab-sep' });
+    for (const sv of saved) {
+      const t = el.createDiv({ cls: 'crm-tab is-saved' + (curSaved && curSaved.id === sv.id ? ' is-active' : '') });
+      setIcon(t.createSpan('crm-tab-ico'), 'bookmark');
+      t.createSpan({ text: sv.name }); t.createSpan({ cls: 'crm-tab-n', text: String(this.plugin.countView(sv)) });
+      t.addEventListener('click', () => this.applyNav({ view: sv }));
+      t.addEventListener('contextmenu', (e) => { e.preventDefault(); this.plugin.viewMenu(sv, e, () => this.curState()); });
+    }
+    const dirty = !curSaved && this.plugin.viewKey(this.curState()) !== this.plugin.viewKey(this.plugin.normState({ quick: this.quick, mode: this.mode }));
+    const add = el.createEl('button', { cls: 'crm-tab-add clickable-icon' + (dirty ? ' is-hot' : ''), attr: { 'aria-label': T('Salva la vista attuale'), title: T('Salva la vista attuale') } });
+    setIcon(add, 'bookmark-plus'); if (dirty) add.createSpan({ text: T('Salva vista') });
+    add.addEventListener('click', () => this.askSaveView());
   }
 
   /* ── toolbar ── */
@@ -1160,6 +1265,7 @@ class CRMView extends ItemView {
   /* ── elenco ── */
   renderList() {
     this.plugin.refreshSidebar();
+    if (this.tabsEl) this.renderTabs();
     const el = this.mainEl;
     if (this.graph) { this.graph.destroy(); this.graph = null; }
     el.empty();
@@ -1908,9 +2014,7 @@ class CRMRecordView extends ItemView {
     const c = this.contact();
     if (!c) { root.createDiv({ cls: 'crm-muted crm-rec-empty', text: T('Caricamento…') }); return; }
     const all = this.plugin.getContacts();
-    const bar = root.createDiv('crm-rec-bar');
     const goBack = () => this.goBack();
-    bar.createEl('button', { cls: 'crm-btn', text: (this.stack.length || this.co) ? T('← Indietro') : T('← Kith') }).addEventListener('click', goBack);
     const wrap = root.createDiv('crm-rec');
     const rc = Object.assign({ l: 22, r: 22 }, this.plugin.settings.recordCols || {});
     wrap.style.setProperty('--lf', rc.l); wrap.style.setProperty('--rf', rc.r);
@@ -1937,34 +2041,103 @@ class CRMRecordView extends ItemView {
 
     /* sinistra: identità e dati chiave */
     const left = wrap.createDiv('crm-rec-col crm-rec-left');
-    const card = left.createDiv('crm-rec-card crm-d-head');
-    const av = this.avatar(card, c, 'xl');
+    const card = left.createDiv('crm-rec-card crm-hs-card');
+    const top = card.createDiv('crm-hs-top');
+    const back = top.createEl('button', { cls: 'crm-hs-back' });
+    setIcon(back.createSpan('crm-hs-backico'), 'chevron-left'); back.createSpan({ cls: 'crm-hs-btxt', text: (this.stack.length || this.co) ? T('Indietro') : T('Tutti i contatti') }); back.setAttr('aria-label', (this.stack.length || this.co) ? T('Indietro') : T('Tutti i contatti'));
+    back.addEventListener('click', goBack);
+    const acm = top.createEl('button', { cls: 'crm-hs-menu' });
+    acm.createSpan({ cls: 'crm-hs-btxt', text: T('Azioni') }); acm.setAttr('aria-label', T('Azioni')); setIcon(acm.createSpan('crm-hs-caret'), 'chevron-down');
+    acm.addEventListener('click', (e) => {
+      const m = new Menu();
+      m.addItem((i) => i.setTitle(T('Modifica')).setIcon('pencil').onClick(() => new ContactModal(this.app, this.plugin, c, () => {}).open()));
+      m.addItem((i) => i.setTitle(T('Calendario')).setIcon('calendar-plus').onClick(() => this.plugin.calendarMenu([c], e)));
+      m.addSeparator();
+      m.addItem((i) => i.setTitle(c.archived ? T('Ripristina') : T('Archivia')).setIcon('archive').onClick(() => this.plugin.setArchived(c, !c.archived)));
+      m.addItem((i) => i.setTitle(T('Elimina')).setIcon('trash').onClick(() => this.plugin.removeContact(c)));
+      m.showAtMouseEvent(e);
+    });
+    const body = card.createDiv('crm-hs-body');
+    const idr = body.createDiv('crm-hs-id');
+    const av = this.avatar(idr, c, 'xl');
     av.addClass('crm-av-edit'); av.setAttr('aria-label', T('Cambia foto'));
+    const camb = av.createSpan('crm-av-cam'); setIcon(camb, 'camera');
     const pick = card.createEl('input', { type: 'file', attr: { accept: 'image/*', style: 'display:none' } });
     pick.addEventListener('change', async () => { const f = pick.files && pick.files[0]; if (f) { await this.plugin.setPhoto(c, f); } });
     av.addEventListener('click', (e) => {
       const m = new Menu();
       m.addItem((it) => it.setTitle(T('Carica foto…')).setIcon('image-plus').onClick(() => pick.click()));
-      if (this.plugin.igHandle(c)) m.addItem((it) => it.setTitle(T('Recupera da Instagram')).setIcon('at-sign').onClick(() => this.plugin.fetchInstagramPhoto(c)));
+      m.addItem((it) => it.setTitle(T('Recupera da Instagram')).setIcon('at-sign').onClick(() => this.plugin.fetchInstagramPhoto(c)));
       m.addItem((it) => it.setTitle(T('Incolla immagine dagli appunti')).setIcon('clipboard-paste').onClick(() => this.plugin.photoFromClipboard(c)));
       m.addItem((it) => it.setTitle(T('Incolla link immagine…')).setIcon('link').onClick(() => new TextPromptModal(this.app, T('Link o percorso dell’immagine'), 'https://…', '', async (v) => { if (v && /^https?:/.test(v)) { const ok = await this.plugin.photoFromUrl(c, v).catch(() => false); if (!ok) new Notice(T('Immagine non scaricabile da questo link')); } }).open()));
       if (c.s('foto')) m.addItem((it) => it.setTitle(T('Rimuovi foto')).setIcon('trash').onClick(async () => { await this.plugin.saveContact(c.file, { foto: '' }); }));
       m.showAtMouseEvent(e);
     });
-    card.createDiv({ cls: 'crm-d-name', text: c.name });
-    if (c.s('soprannome')) card.createDiv({ cls: 'crm-sub', text: `“${c.s('soprannome')}”` });
-    card.createDiv({ cls: 'crm-sub', text: this.subline(c) });
-    const tags = card.createDiv('crm-card-tags');
+    const idt = idr.createDiv('crm-hs-idtext');
+    idt.createDiv({ cls: 'crm-hs-name', text: c.name });
+    if (c.s('soprannome')) idt.createDiv({ cls: 'crm-sub', text: `“${c.s('soprannome')}”` });
+    idt.createDiv({ cls: 'crm-sub', text: this.subline(c) });
+    const prim = c.s('email') || c.s('emaillavoro') || c.s('telefono');
+    if (prim) {
+      const pl = body.createDiv('crm-hs-link');
+      const kind = (c.s('email') || c.s('emaillavoro')) ? 'email' : 'tel';
+      const ph = linkFor(kind, prim) || '#';
+      pl.createEl('a', { cls: 'crm-hs-linktext', text: prim, href: ph, attr: { target: '_blank', rel: 'noopener' } });
+      const ex = pl.createEl('a', { cls: 'clickable-icon crm-hs-ico', href: ph, attr: { 'aria-label': kind === 'email' ? T('Email') : T('Chiama'), target: '_blank', rel: 'noopener' } }); setIcon(ex, 'external-link');
+      const cp = pl.createEl('button', { cls: 'clickable-icon crm-hs-ico', attr: { 'aria-label': T('Copia') } }); setIcon(cp, 'copy');
+      cp.addEventListener('click', () => this.plugin.copyText(prim));
+    }
+    const tags = body.createDiv('crm-card-tags');
     this.relBadges(tags, c);
     this.badge(tags, c.s('vicinanza') && T`vicinanza ${dv(c.s('vicinanza'))}`);
     this.priChip(tags, c);
     if (c.archived) this.badge(tags, T('archiviato'), 'crm-pri crm-pri-bassa');
-    this.quickActions(card, c);
-    const acts = card.createDiv('crm-d-actions');
-    const act = (text, cls, fn) => acts.createEl('button', { cls: 'crm-btn ' + cls, text }).addEventListener('click', fn);
-    act(T('✓ Contattato oggi'), 'crm-btn-primary', async () => { await this.plugin.markContacted(c); new Notice(T`${c.name}: ultimo contatto = oggi`); });
-    act(T('Modifica'), '', () => new ContactModal(this.app, this.plugin, c, () => {}).open());
-    act(T('Apri nota'), '', () => this.app.workspace.getLeaf('tab').openFile(c.file));
+    const acts = body.createDiv('crm-hs-actions');
+    const act = (icon, label, fn, href) => {
+      const w = acts.createDiv('crm-hs-act');
+      const b = w.createEl(href ? 'a' : 'button', { cls: 'crm-hs-circle', attr: Object.assign({ 'aria-label': label, title: label }, href ? { href, target: '_blank', rel: 'noopener' } : {}) });
+      setIcon(b, icon);
+      if (fn) b.addEventListener('click', fn);
+      w.createSpan({ cls: 'crm-hs-lab', text: label });
+      return b;
+    };
+    act('check', T('Contattato'), async () => { await this.plugin.markContacted(c); new Notice(T`${c.name}: ultimo contatto = oggi`); });
+    act('message-square-plus', T('Interazione'), () => new InteractionModal(this.app, this.plugin, c).open());
+    const em = linkFor('email', c.s('email') || c.s('emaillavoro')); if (em) act('mail', T('Email'), null, em);
+    const tel = linkFor('tel', c.s('telefono')); if (tel) act('phone', T('Chiama'), null, tel);
+    act('pencil', T('Modifica'), () => new ContactModal(this.app, this.plugin, c, () => {}).open());
+    act('ellipsis', T('Altro'), (e) => {
+      const anchor = e.currentTarget || e.target;
+      const open = (h) => window.open(h, '_blank');
+      const tel = linkFor('tel', c.s('telefono') || c.s('whatsapp'));
+      const comm = [];
+      const wa = linkFor('whatsapp', c.s('whatsapp') || c.s('telefono')); if (wa) comm.push({ icon: 'message-circle', label: T('Scrivi su WhatsApp'), kw: 'whatsapp', onClick: () => open(wa) });
+      if (tel) comm.push({ icon: 'message-square', label: T('Invia SMS'), kw: 'sms', onClick: () => open(tel.replace(/^tel:/, 'sms:')) });
+      const li = linkFor('linkedin', c.s('linkedin')); if (li) comm.push({ icon: 'link', label: T('Apri LinkedIn'), kw: 'linkedin', onClick: () => open(li) });
+      const ig = linkFor('instagram', c.s('instagram')); if (ig) comm.push({ icon: 'at-sign', label: T('Apri Instagram'), kw: 'instagram', onClick: () => open(ig) });
+      const log = (t) => () => new InteractionModal(this.app, this.plugin, c, t).open();
+      const groups = [];
+      if (comm.length) groups.push({ title: T('Comunica'), items: comm });
+      groups.push({ title: T('Registra'), items: [
+        { icon: 'phone-call', label: T('Registra chiamata'), kw: 'interazione', onClick: log(T('Chiamata')) },
+        { icon: 'users', label: T('Registra incontro'), kw: 'interazione', onClick: log(T('Incontro')) },
+        { icon: 'message-square-plus', label: T('Registra messaggio'), kw: 'interazione', onClick: log(T('Messaggio')) },
+        { icon: 'mail-plus', label: T('Registra email'), kw: 'interazione', onClick: log(T('Email')) },
+      ] });
+      const cal = [];
+      if (c.bday) cal.push({ icon: 'calendar-plus', label: T('Aggiungi compleanno a Google Calendar'), kw: 'calendario', onClick: () => this.plugin.openBirthday(this.plugin.birthdayInfo(c)) });
+      cal.push({ icon: 'download', label: T('Scarica .ics di questo contatto'), kw: 'calendario', onClick: () => this.plugin.exportICS([c]) });
+      groups.push({ title: T('Calendario'), items: cal });
+      const oth = [];
+      const mail = c.s('email') || c.s('emaillavoro'); if (mail) oth.push({ icon: 'copy', label: T('Copia email'), onClick: () => this.plugin.copyText(mail) });
+      const ph = c.s('telefono') || c.s('whatsapp'); if (ph) oth.push({ icon: 'copy', label: T('Copia telefono'), onClick: () => this.plugin.copyText(ph) });
+      const ph2 = [];
+      ph2.push({ icon: 'at-sign', label: T('Recupera foto da Instagram'), kw: 'foto instagram immagine', onClick: () => this.plugin.fetchInstagramPhoto(c) });
+      ph2.push({ icon: 'clipboard-paste', label: T('Incolla foto dagli appunti'), kw: 'foto immagine', onClick: () => this.plugin.photoFromClipboard(c) });
+      groups.push({ title: T('Foto'), items: ph2 });
+      if (oth.length) groups.push({ title: T('Altro'), items: oth });
+      openActionPopover(anchor, groups);
+    });
 
     const mid = wrap.createDiv('crm-rec-col crm-rec-mid');
     const shown = FIELDS.filter((f) => !f.internal && (!isHidden(f.k) || f.k === 'nome' || f.k === 'cognome'));
@@ -2158,14 +2331,15 @@ class CRMRecordView extends ItemView {
     const toks = (v) => String(v || '').split(/\s*[|,;]\s*/).map((t) => norm(t.replace(/^\[\[|\]\]$/g, ''))).filter(Boolean);
     const mine = toks(c.s('partner')), via = toks(c.s('conosciutitramite'));
     const isMe = (v) => toks(v).some((t) => t === norm(c.name) || t === norm(c.file.basename));
+    const first = c.s('nome') || String(c.name).split(' ')[0];
     const seen = new Map();
     const add = (x, why) => { if (x === c) return; if (!seen.has(x)) seen.set(x, []); if (!seen.get(x).includes(why)) seen.get(x).push(why); };
     for (const x of all) {
       if (x === c) continue;
       const nk = norm(x.name), bk = norm(x.file.basename);
       if (mine.some((t) => t === nk || t === bk)) add(x, T('Partner'));
-      if (via.some((t) => t === nk || t === bk)) add(x, T('Te l’ha presentato/a'));
-      if (isMe(x.s('conosciutitramite'))) add(x, T('Presentato/a da te'));
+      if (via.some((t) => t === nk || t === bk)) add(x, T`Ti ha presentato ${first}`);
+      if (isMe(x.s('conosciutitramite'))) add(x, T`Presentato/a da ${first}`);
       if (isMe(x.s('partner'))) add(x, T('Partner'));
     }
     const lc = right.createDiv('crm-rec-card');
@@ -2461,6 +2635,32 @@ class CRMCompanyView extends ItemView {
     if (!file) return;
     await this.app.fileManager.processFrontMatter(file, (fm) => { if (val) fm.logo = val; else delete fm.logo; });
   }
+  async fetchInstagramLogo() {
+    const clean = (v) => String(v || '').trim().replace(/^@/, '').replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/[/?#].*$/, '');
+    const igf = CO_FIELDS.find((x) => x.k === 'instagram');
+    const run = async (h) => {
+      const apply = async (url) => {
+        const r = await requestUrl({ url, throw: false, headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Safari/605.1.15' } });
+        const ct = String((r.headers && (r.headers['content-type'] || r.headers['Content-Type'])) || '');
+        if (r.status === 200 && r.arrayBuffer && r.arrayBuffer.byteLength > 500 && (/^image\//i.test(ct) || !ct)) {
+          const ext = /png/i.test(ct) ? 'png' : /webp/i.test(ct) ? 'webp' : /gif/i.test(ct) ? 'gif' : 'jpg';
+          await this.setLogoFile({ name: `logo.${ext}`, arrayBuffer: async () => r.arrayBuffer });
+          return true;
+        }
+        return false;
+      };
+      const ok = await this.plugin.fetchInstagramPhotoFor({}, h, apply);
+      this.render();
+      return ok;
+    };
+    const h0 = clean(this.fmValue(igf));
+    if (h0) return run(h0);
+    new TextPromptModal(this.app, T('Nick Instagram'), '@nome', '', async (v) => {
+      const h = clean(v); if (!h) return;
+      await this.setFm(igf, h);
+      await run(h);
+    }).open();
+  }
   async setLogoFile(f) {
     let file = this.note();
     if (!file) { await this.plugin.ensureCompany(this.name, null, true); file = this.note(); }
@@ -2482,15 +2682,18 @@ class CRMCompanyView extends ItemView {
     s.coLayout[norm(this.name)] = { hidden: [...lay.hidden], hiddenFields: [...lay.hiddenFields] };
     await this.plugin.saveData(s); this.render();
   }
-  layoutMenu(e) {
+  layoutMenu(e) { const m = new Menu(); this.fillLayoutMenu(m); m.showAtMouseEvent(e); }
+  fillLayoutMenu(m) {
     const lay = this.layout(), s = this.plugin.settings;
-    const m = new Menu();
+    m.addItem((it) => it.setTitle(T('Sezioni')).setIsLabel(true));
     for (const [id, label] of CO_SECTIONS) m.addItem((it) => it.setTitle(label).setChecked(!lay.hidden.has(id)).onClick(() => { if (lay.hidden.has(id)) lay.hidden.delete(id); else lay.hidden.add(id); this.setLayout(lay); }));
+    m.addSeparator();
+    m.addItem((it) => it.setTitle(T('Campi informazioni')).setIsLabel(true));
+    for (const f of CO_FIELDS) m.addItem((it) => it.setTitle(f.label()).setChecked(!lay.hiddenFields.has(f.k)).onClick(() => { if (lay.hiddenFields.has(f.k)) lay.hiddenFields.delete(f.k); else lay.hiddenFields.add(f.k); this.setLayout(lay); }));
     m.addSeparator();
     m.addItem((it) => it.setTitle(T('Usa questa disposizione per tutte le aziende')).setIcon('copy').onClick(async () => { s.coLayout = s.coLayout || {}; s.coLayout['*'] = { hidden: [...lay.hidden], hiddenFields: [...lay.hiddenFields] }; await this.plugin.saveData(s); new Notice(T('Disposizione salvata come predefinita')); }));
     if (lay.own) m.addItem((it) => it.setTitle(T('Ripristina questa pagina')).setIcon('rotate-ccw').onClick(async () => { delete s.coLayout[norm(this.name)]; await this.plugin.saveData(s); this.render(); }));
     if ((s.coLayout || {})['*']) m.addItem((it) => it.setTitle(T('Ripristina predefinito di tutte le aziende')).setIcon('eraser').onClick(async () => { delete s.coLayout['*']; await this.plugin.saveData(s); this.render(); }));
-    m.showAtMouseEvent(e);
   }
   async goBack() {
     if (this.from) await this.leaf.setViewState({ type: RECORD_TYPE, active: true, state: { path: this.from, stack: [] } });
@@ -2503,19 +2706,32 @@ class CRMCompanyView extends ItemView {
     const p = this.plugin, name = this.name;
     const { cur, past, linked } = companyPeople(p, name);
     const live = cur.filter((c) => !c.archived), archivedCur = cur.filter((c) => c.archived);
-    const bar = root.createDiv('crm-rec-bar');
-    bar.createEl('button', { cls: 'crm-btn', text: this.from ? T('← Indietro') : T('← Kith') }).addEventListener('click', () => this.goBack());
     const lay = this.layout();
-    const cust = bar.createEl('button', { cls: 'crm-btn crm-co-cust', attr: { title: T('Personalizza questa pagina') } });
-    setIcon(cust.createSpan('crm-bulk-ico'), 'sliders-horizontal'); cust.createSpan({ text: T('Personalizza pagina') });
-    cust.addEventListener('click', (e) => this.layoutMenu(e));
     const wrap = root.createDiv('crm-co-page');
     const rc = Object.assign({ l: 22, r: 22 }, this.plugin.settings.coCols || {});
     wrap.style.setProperty('--lf', rc.l); wrap.style.setProperty('--rf', rc.r);
     const left = wrap.createDiv('crm-co-col co-left'), mid = wrap.createDiv('crm-co-col crm-co-mid co-mid'), right = wrap.createDiv('crm-co-col co-right');
 
     /* identità */
-    const id = left.createDiv('crm-rec-card crm-d-head');
+    const id = left.createDiv('crm-rec-card crm-d-head crm-hs-card crm-co-hs');
+    const topb = id.createDiv('crm-hs-top');
+    const backb = topb.createEl('button', { cls: 'crm-hs-back' });
+    setIcon(backb.createSpan('crm-hs-backico'), 'chevron-left');
+    const backLab = this.from ? T('Indietro') : T('Tutti i contatti');
+    backb.createSpan({ cls: 'crm-hs-btxt', text: backLab }); backb.setAttr('aria-label', backLab);
+    backb.addEventListener('click', () => this.goBack());
+    const pageb = topb.createEl('button', { cls: 'crm-hs-menu' });
+    pageb.createSpan({ cls: 'crm-hs-btxt', text: T('Azioni') }); pageb.setAttr('aria-label', T('Azioni')); setIcon(pageb.createSpan('crm-hs-caret'), 'chevron-down');
+    pageb.addEventListener('click', (e) => {
+      const m = new Menu(); const nf0 = this.note();
+      m.addItem((i) => i.setTitle(T('Modifica')).setIcon('pencil').onClick(() => new CompanyEditModal(this.app, this).open()));
+      m.addItem((i) => i.setTitle(T('Aggiungi persona')).setIcon('user-plus').onClick(() => new ContactModal(this.app, p, null, async (f) => { await p.saveContact(f, { azienda: name }); this.render(); }).open()));
+      m.addItem((i) => i.setTitle(T('Aggiorna info')).setIcon('refresh-cw').onClick(() => this.enrich(this.fmValue(CO_FIELDS[0]) || '', true)));
+      m.addItem((i) => i.setTitle(nf0 ? T('Apri nota') : T('Crea nota azienda')).setIcon('file-text').onClick(async () => { if (nf0) this.app.workspace.getLeaf('tab').openFile(nf0); else { await p.ensureCompany(name, null, true); this.render(); } }));
+      m.addSeparator();
+      m.addItem((i) => { i.setTitle(T('Personalizza pagina')).setIcon('sliders-horizontal'); this.fillLayoutMenu(i.setSubmenu()); });
+      m.showAtMouseEvent(e);
+    });
     const logo = id.createDiv('crm-co-logo');
     const logoRaw = this.fmGet(['logo']);
     const logoUrl = this.plugin.resolveImg(logoRaw, (this.note() || {}).path);
@@ -2527,6 +2743,7 @@ class CRMCompanyView extends ItemView {
     logo.addEventListener('click', (e) => {
       const m = new Menu();
       m.addItem((it) => it.setTitle(T('Carica immagine…')).setIcon('image-plus').onClick(() => pickLogo.click()));
+      m.addItem((it) => it.setTitle(T('Recupera da Instagram')).setIcon('at-sign').onClick(() => this.fetchInstagramLogo()));
       m.addItem((it) => it.setTitle(T('Incolla link immagine…')).setIcon('link').onClick(() => new TextPromptModal(this.app, T('Link o percorso dell’immagine'), 'https://…', /^https?:/.test(logoRaw) ? logoRaw : '', async (v) => { await this.setLogo(v); this.render(); }).open()));
       if (logoRaw) m.addItem((it) => it.setTitle(T('Rimuovi logo')).setIcon('trash').onClick(async () => { await this.setLogo(''); this.render(); }));
       m.showAtMouseEvent(e);
@@ -2535,14 +2752,46 @@ class CRMCompanyView extends ItemView {
     const descr = this.fmGet(['descrizione', 'description', 'about']);
     if (descr) id.createDiv({ cls: 'crm-sub crm-co-descr', text: descr });
     id.createDiv({ cls: 'crm-sub', text: `${live.length} ${T(live.length === 1 ? 'persona' : 'persone')}${past.length ? ` · ${past.length} ${T('ex')}` : ''}` });
-    const acts = id.createDiv('crm-d-actions');
-    const act = (text, cls, fn) => acts.createEl('button', { cls: 'crm-btn ' + cls, text }).addEventListener('click', fn);
-    act(T('+ Persona'), 'crm-btn-primary', () => new ContactModal(this.app, p, null, async (f) => { await p.saveContact(f, { azienda: name }); this.render(); }).open());
-    act(T('Mostra in Kith'), '', () => p.navigate({ reset: true, toggle: { key: 'azienda', v: name } }));
     const nf = this.note();
-    act(this.enriching ? T('Recupero…') : T('Aggiorna info'), '', () => this.enrich(this.fmValue(CO_FIELDS[0]) || '', true));
-    if (nf) act(T('Apri nota'), '', () => this.app.workspace.getLeaf('tab').openFile(nf));
-    else act(T('Crea nota azienda'), '', async () => { await p.ensureCompany(name, null, true); this.render(); });
+    const acts = id.createDiv('crm-hs-actions');
+    const act = (icon, label, fn) => {
+      const w = acts.createDiv('crm-hs-act');
+      const b2 = w.createEl('button', { cls: 'crm-hs-circle', attr: { 'aria-label': label, title: label } });
+      setIcon(b2, icon); b2.addEventListener('click', fn);
+      w.createSpan({ cls: 'crm-hs-lab', text: label });
+      return b2;
+    };
+    const addPerson = () => new ContactModal(this.app, p, null, async (f) => { await p.saveContact(f, { azienda: name }); this.render(); }).open();
+    const editCo = () => new CompanyEditModal(this.app, this).open();
+    const refresh = () => this.enrich(this.fmValue(CO_FIELDS[0]) || '', true);
+    const openNote = async () => { if (nf) this.app.workspace.getLeaf('tab').openFile(nf); else { await p.ensureCompany(name, null, true); this.render(); } };
+    act('user-plus', T('Persona'), addPerson);
+    act('filter', T('In Kith'), () => p.navigate({ reset: true, toggle: { key: 'azienda', v: name } }));
+    act('refresh-cw', T('Aggiorna'), refresh);
+    act('pencil', T('Modifica'), editCo);
+    act('ellipsis', T('Altro'), (e) => {
+      const anchor = e.currentTarget || e.target;
+      const groups = [];
+      groups.push({ title: T('Azienda'), items: [
+        { icon: 'user-plus', label: T('Aggiungi persona'), kw: 'persona contatto', onClick: addPerson },
+        { icon: 'pencil', label: T('Modifica informazioni'), kw: 'modifica campi', onClick: editCo },
+        { icon: 'refresh-cw', label: T('Aggiorna info'), kw: 'recupera enrichment', onClick: refresh },
+        { icon: 'filter', label: T('Mostra in Kith'), kw: 'filtra', onClick: () => p.navigate({ reset: true, toggle: { key: 'azienda', v: name } }) },
+        { icon: 'file-text', label: nf ? T('Apri nota') : T('Crea nota azienda'), kw: 'nota', onClick: openNote },
+      ] });
+      groups.push({ title: T('Logo'), items: [
+        { icon: 'image-plus', label: T('Cambia logo'), kw: 'immagine', onClick: () => logo.click() },
+        { icon: 'at-sign', label: T('Recupera logo da Instagram'), kw: 'immagine instagram foto', onClick: () => this.fetchInstagramLogo() },
+        ...(logoRaw ? [{ icon: 'trash', label: T('Rimuovi logo'), kw: 'immagine', onClick: async () => { await this.setLogo(''); this.render(); } }] : []),
+      ] });
+      openActionPopover(anchor, groups);
+    });
+    const nHid = lay.hidden.size + lay.hiddenFields.size;
+    if (nHid) {
+      const hb = id.createEl('button', { cls: 'crm-btn crm-co-hidden', attr: { title: T('Mostra o nascondi sezioni e campi') } });
+      setIcon(hb.createSpan('crm-bulk-ico'), 'eye'); hb.createSpan({ text: T`Elementi nascosti (${nHid}) · gestisci` });
+      hb.addEventListener('click', (e) => this.layoutMenu(e));
+    }
     if (this.status) id.createDiv({ cls: 'crm-muted crm-co-status', text: this.status });
     const srcInfo = this.fmGet(['infofonte', 'infosource']);
     if (srcInfo && !this.status) id.createDiv({ cls: 'crm-muted crm-co-status', text: T`Fonte: ${srcInfo}` });
@@ -2572,7 +2821,7 @@ class CRMCompanyView extends ItemView {
         const a = host.createEl('a', { cls: 'crm-int-title', text: cityName });
         a.addEventListener('click', (e) => { e.preventDefault(); this.plugin.navigate({ reset: true, toggle: { key: 'citta', v: cityName } }); });
         if (!val) host.createSpan({ cls: 'crm-muted crm-co-derived', text: ` (${T('dai contatti')})` });
-        const pen2 = r.createSpan({ cls: 'crm-rec-pen clickable-icon', attr: { 'aria-label': T('Modifica') } }); setIcon(pen2, 'pencil');
+        const pen2 = r.createSpan({ cls: 'crm-rec-pen clickable-icon', attr: { 'aria-label': T('Modifica') } }); kIcon(pen2, 'pencil');
         pen2.addEventListener('click', () => { this.editing = f.k; this.render(); });
         continue;
       }
@@ -2581,7 +2830,7 @@ class CRMCompanyView extends ItemView {
       else if (val) host.setText(val);
       else if (hint) { host.createSpan({ cls: 'crm-muted', text: hint }); host.createSpan({ cls: 'crm-muted crm-co-derived', text: ` (${T('dai contatti')})` }); }
       else host.createSpan({ cls: 'crm-muted', text: '—' });
-      const pen = r.createSpan({ cls: 'crm-rec-pen clickable-icon', attr: { 'aria-label': T('Modifica') } }); setIcon(pen, 'pencil');
+      const pen = r.createSpan({ cls: 'crm-rec-pen clickable-icon', attr: { 'aria-label': T('Modifica') } }); kIcon(pen, 'pencil');
       pen.addEventListener('click', () => { this.editing = f.k; this.render(); });
     }
 
@@ -2604,23 +2853,24 @@ class CRMCompanyView extends ItemView {
       const card = parent.createDiv('crm-rec-card'); card.dataset.section = secId;
       const h = card.createDiv('crm-rec-head'); h.createSpan({ cls: 'crm-rec-h', text: `${title} (${list.length})` });
       if (!list.length) { card.createDiv({ cls: 'crm-muted', text: T('Nessuna') }); return; }
-      const wrapT = card.createDiv('crm-table-wrap'); const t = wrapT.createEl('table', { cls: 'crm-table crm-co-table' });
-      const hr = t.createEl('thead').createEl('tr');
-      for (const lab of [T('Contatto'), T('Ruolo'), T('Relazione'), T('Email'), T('Telefono'), T('Ultimo contatto'), T('Follow-up')]) hr.createEl('th', { text: lab });
-      const tb = t.createEl('tbody');
+      const listEl = card.createDiv('crm-co-plist');
       const view = miniView(p);
       for (const c of list) {
-        const tr = tb.createEl('tr', { cls: 'crm-row' });
-        const n = tr.createEl('td').createDiv('crm-namecell');
-        view.avatar(n, c); n.createDiv('crm-nametext').createDiv({ cls: 'crm-name', text: c.name });
+        const r = listEl.createDiv('crm-co-prow');
+        const n = r.createDiv('crm-co-pmain');
+        view.avatar(n, c);
+        const tx = n.createDiv('crm-co-ptext');
+        tx.createDiv({ cls: 'crm-name', text: c.name });
+        const sub = [c.s('ruolo'), c.due.last ? `${T('ultimo contatto')} ${relTime(c.due.last)}` : ''].filter(Boolean).join(' · ');
+        if (sub) tx.createDiv({ cls: 'crm-sub', text: sub });
         n.addEventListener('click', () => p.openRecord(c.file, { company: name }));
-        tr.createEl('td', { text: c.s('ruolo') || '—' });
-        view.relBadges(tr.createEl('td'), c);
-        const lk = (td, kind, val) => { const href = val && linkFor(kind, val); if (href) td.createEl('a', { cls: 'crm-cell-link', text: val, href, attr: { target: '_blank', rel: 'noopener' } }); else td.setText('—'); };
-        lk(tr.createEl('td'), 'email', c.s('email') || c.s('emaillavoro'));
-        lk(tr.createEl('td'), 'tel', c.s('telefono'));
-        tr.createEl('td', { text: c.due.last ? relTime(c.due.last) : '—' });
-        if (isPast) tr.createEl('td', { text: '—' }); else view.dueChip(tr.createEl('td'), c);
+        const mid2 = r.createDiv('crm-co-pbadges'); view.relBadges(mid2, c);
+        const end = r.createDiv('crm-co-pend');
+        const dueSlot = end.createDiv('crm-co-pdue'); if (!isPast) view.dueChip(dueSlot, c);
+        for (const [icon, kind, val] of [['mail', 'email', c.s('email') || c.s('emaillavoro')], ['phone', 'tel', c.s('telefono')]]) {
+          const href = val && linkFor(kind, val); if (!href) { end.createSpan('crm-co-pico crm-co-pico-empty'); continue; }
+          const a2 = end.createEl('a', { cls: 'clickable-icon crm-co-pico', href, attr: { target: '_blank', rel: 'noopener', 'aria-label': val, title: val } }); setIcon(a2, icon);
+        }
       }
     };
     peopleCard(mid, T('Persone'), [...live, ...archivedCur], false, 'people');
@@ -2666,15 +2916,15 @@ class CRMCompanyView extends ItemView {
       const head = card.querySelector('.crm-rec-head'); if (!head) continue;
       const tools = head.createSpan('crm-sec-tools');
       if (id === 'info' && lay.hiddenFields.size) {
-        const plus = tools.createSpan({ cls: 'clickable-icon crm-sec-btn', attr: { 'aria-label': T('Aggiungi campo'), title: T('Aggiungi campo') } }); setIcon(plus, 'plus');
+        const plus = tools.createSpan({ cls: 'clickable-icon crm-sec-btn', attr: { 'aria-label': T('Aggiungi campo'), title: T('Aggiungi campo') } }); kIcon(plus, 'plus');
         plus.addEventListener('click', (e) => { const m = new Menu(); for (const f of CO_FIELDS.filter((x) => lay.hiddenFields.has(x.k))) m.addItem((it) => it.setTitle(f.label()).onClick(() => { lay.hiddenFields.delete(f.k); this.setLayout(lay); })); m.showAtMouseEvent(e); });
       }
-      const x = tools.createSpan({ cls: 'clickable-icon crm-sec-btn', attr: { 'aria-label': T('Rimuovi sezione da questa pagina'), title: T('Rimuovi sezione da questa pagina') } }); setIcon(x, 'x');
+      const x = tools.createSpan({ cls: 'clickable-icon crm-sec-btn', attr: { 'aria-label': T('Rimuovi sezione da questa pagina'), title: T('Rimuovi sezione da questa pagina') } }); kIcon(x, 'x');
       x.addEventListener('click', () => { lay.hidden.add(id); this.setLayout(lay); });
     }
     for (const r of [...root.querySelectorAll('[data-field]')]) {
       const fk = r.dataset.field;
-      const hx = r.createSpan({ cls: 'crm-rec-pen clickable-icon', attr: { 'aria-label': T('Nascondi campo in questa pagina'), title: T('Nascondi campo in questa pagina') } }); setIcon(hx, 'eye-off');
+      const hx = r.createSpan({ cls: 'crm-rec-pen clickable-icon', attr: { 'aria-label': T('Nascondi campo in questa pagina'), title: T('Nascondi campo in questa pagina') } }); kIcon(hx, 'eye-off');
       hx.addEventListener('click', () => { lay.hiddenFields.add(fk); this.setLayout(lay); });
     }
     const hasL = left.children.length > 0, hasR = right.children.length > 0;
@@ -2687,6 +2937,30 @@ class CRMCompanyView extends ItemView {
   }
 }
 
+class CompanyEditModal extends Modal {
+  constructor(app, view) { super(app); this.view = view; }
+  onOpen() {
+    const { contentEl } = this; contentEl.empty(); this.titleEl.setText(`${T('Modifica')} · ${this.view.name}`);
+    const grid = contentEl.createDiv('crm-form-grid');
+    this.inputs = [];
+    for (const f of CO_FIELDS) {
+      const row = grid.createDiv('crm-form-item' + (f.k === 'descrizione' ? ' wide' : '')); row.createEl('label', { text: f.label() });
+      const inp = row.createEl('input', { type: 'text', attr: { style: 'width:100%' } }); inp.value = this.view.fmValue(f);
+      this.inputs.push([f, inp, inp.value]);
+    }
+    const foot = contentEl.createDiv('crm-form-foot');
+    foot.createEl('button', { cls: 'crm-btn', text: T('Annulla') }).addEventListener('click', () => this.close());
+    const ok = foot.createEl('button', { cls: 'crm-btn crm-btn-primary', text: T('Salva') });
+    ok.addEventListener('click', async () => {
+      this.close();
+      for (const [f, inp, old] of this.inputs) { const v = inp.value.trim(); if (v !== old.trim()) await this.view.setFm(f, v); }
+      this.view.render();
+    });
+    setTimeout(() => this.inputs[0] && this.inputs[0][1].focus(), 0);
+  }
+  onClose() { this.contentEl.empty(); }
+}
+
 class CompanyPicker extends FuzzySuggestModal {
   constructor(app, names, onChoose) { super(app); this.names = names; this.onChoose = onChoose; this.setPlaceholder(T('Scegli un’azienda…')); }
   getItems() { return this.names; }
@@ -2695,15 +2969,22 @@ class CompanyPicker extends FuzzySuggestModal {
 }
 
 class KithSidebar extends ItemView {
-  constructor(leaf, plugin) { super(leaf); this.plugin = plugin; this.closedGroups = new Set(); this.expand = new Set(); }
+  constructor(leaf, plugin) { super(leaf); this.plugin = plugin; this.openGroups = new Set(); this.expand = new Set(); }
   getViewType() { return SIDE_TYPE; }
   getDisplayText() { return T('Kith'); }
   getIcon() { return 'users'; }
   async onOpen() {
     const root = this.contentEl;
     root.empty(); root.addClass('crm-side');
-    root.createEl('h2', { cls: 'crm-side-title', text: T('Kith') });
-    this.searchEl = root.createEl('input', { type: 'search', cls: 'crm-side-search', placeholder: T('Cerca contatti…') });
+    const hd = root.createDiv('crm-side-head');
+    setIcon(hd.createSpan('crm-side-logo'), 'users');
+    hd.createEl('h2', { cls: 'crm-side-title', text: T('Kith') });
+    const nb = hd.createEl('button', { cls: 'crm-side-new', attr: { 'aria-label': T('Nuovo contatto'), title: T('Nuovo contatto') } });
+    setIcon(nb, 'plus');
+    nb.addEventListener('click', () => new ContactModal(this.plugin.app, this.plugin, null, (f) => this.plugin.focusContact(f)).open());
+    const sw = root.createDiv('crm-side-searchwrap');
+    setIcon(sw.createSpan('crm-side-searchico'), 'search');
+    this.searchEl = sw.createEl('input', { type: 'search', cls: 'crm-side-search', placeholder: T('Cerca contatti…') });
     this.searchEl.addEventListener('input', () => { const mv = this.mainView(); if (mv) mv.applyNav({ q: this.searchEl.value }); });
     this.searchEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !this.mainView()) this.plugin.navigate({ q: this.searchEl.value }); });
     this.bodyEl = root.createDiv('crm-side-body');
@@ -2738,12 +3019,14 @@ class KithSidebar extends ItemView {
     const overdue = active.filter((c) => c.due.state === 'scaduto').sort(SORTS.followup);
     const bdays = active.filter((c) => c.bday && c.bday.days <= win).sort(SORTS.compleanno);
     const nav = root.createDiv('crm-side-section');
+    nav.createDiv({ cls: 'crm-side-h', text: T('Viste') });
     const people = (list, key, metaFn, tone) => {
       if (!list.length) return;
       const sub = nav.createDiv('crm-side-sub');
       const open = this.expand.has(key), shown = open ? list : list.slice(0, 5);
       for (const c of shown) {
         const r = row(sub, { cls: 'is-person', label: c.name, meta: metaFn(c), tone, active: mv && mv.selected === c.file.path, onClick: () => p.focusContact(c.file) });
+        const av = miniView(p).avatar(createDiv(), c, 'xs'); r.insertBefore(av, r.firstChild);
         const q = r.createSpan('crm-side-quick');
         const mk = (icon, tip, fn) => { const b = q.createEl('button', { cls: 'clickable-icon', attr: { 'aria-label': tip } }); setIcon(b, icon); b.addEventListener('click', (e) => { e.stopPropagation(); fn(); }); b.addEventListener('keydown', (e) => e.stopPropagation()); };
         mk('check', T('Contattato oggi'), () => p.markContacted(c));
@@ -2760,6 +3043,16 @@ class KithSidebar extends ItemView {
     item('star', T('Priorità alta'), active.filter((c) => cv(c.s('priorita')) === 'alta').length, quick === 'alta', () => p.navigate({ quick: 'alta' }));
     item('archive', T('Archiviati'), all.length - active.length, quick === 'archiviati', () => p.navigate({ quick: 'archiviati' }));
 
+    const svs = p.savedViews();
+    if (svs.length) {
+      const sec = root.createDiv('crm-side-section');
+      sec.createDiv({ cls: 'crm-side-h', text: T('Le mie viste') });
+      const curSv = mv ? p.matchSavedView(mv.curState()) : null;
+      for (const sv of svs) {
+        const rw = row(sec, { icon: 'bookmark', label: sv.name, count: p.countView(sv), active: !!curSv && curSv.id === sv.id, onClick: () => p.navigate({ view: sv }) });
+        rw.addEventListener('contextmenu', (e) => { e.preventDefault(); p.viewMenu(sv, e, () => { const m2 = this.mainView(); return m2 ? m2.curState() : null; }); });
+      }
+    }
     const browse = root.createDiv('crm-side-section');
     const bh = browse.createDiv({ cls: 'crm-side-h crm-side-h-row' });
     bh.createSpan({ text: T('Esplora') });
@@ -2776,9 +3069,9 @@ class KithSidebar extends ItemView {
       if (!counts.size) continue;
       const g = browse.createEl('details', { cls: 'crm-side-group' });
       const sel = key === 'stato' ? (filters.stato !== 'attivi' && filters.stato !== 'tutti' ? filters.stato : '') : filters[key];
-      g.open = !this.closedGroups.has(key) || !!sel;
-      g.addEventListener('toggle', () => { if (g.open) this.closedGroups.delete(key); else this.closedGroups.add(key); });
-      const sm = g.createEl('summary'); sm.createSpan({ text: label + (sel ? ': ' + cap(dv(sel)) : '') }); sm.createSpan({ cls: 'crm-side-count', text: String(counts.size) });
+      g.open = this.openGroups.has(key) || !!sel;
+      g.addEventListener('toggle', () => { if (g.open) this.openGroups.add(key); else this.openGroups.delete(key); });
+      const sm = g.createEl('summary'); setIcon(sm.createSpan('crm-side-chev'), 'chevron-right'); sm.createSpan({ cls: 'crm-side-label', text: label + (sel ? ': ' + cap(dv(sel)) : '') }); sm.createSpan({ cls: 'crm-side-count', text: String(counts.size) });
       if (sel) sm.addClass('has-filter');
       const vals = [...counts.values()].sort((a, b) => b.n - a.n || a.v.localeCompare(b.v));
       const fk = 'f-' + key, more = this.expand.has(fk), cut = !more && vals.length > 8 && !sel ? 8 : vals.length;
@@ -2786,8 +3079,9 @@ class KithSidebar extends ItemView {
       if (vals.length > 8 && !sel) row(g, { cls: 'is-more', label: more ? T('Mostra meno') : T`… e altri ${vals.length - 8}`, onClick: () => { if (more) this.expand.delete(fk); else this.expand.add(fk); this.update(); } });
     }
     const foot = root.createDiv('crm-side-actions');
-    foot.createEl('button', { cls: 'mod-cta', text: T('Nuovo contatto') }).addEventListener('click', () => new ContactModal(p.app, p, null, (f) => p.focusContact(f)).open());
-    foot.createEl('button', { text: T('Personalizza') }).addEventListener('click', () => new CustomizeModal(p.app, p).open());
+    foot.createEl('button', { cls: 'mod-cta', text: T('+ Nuovo contatto') }).addEventListener('click', () => new ContactModal(p.app, p, null, (f) => p.focusContact(f)).open());
+    const cb = foot.createEl('button', { cls: 'crm-side-cust', attr: { 'aria-label': T('Personalizza'), title: T('Personalizza') } }); setIcon(cb, 'settings');
+    cb.addEventListener('click', () => new CustomizeModal(p.app, p).open());
     this.contentEl.scrollTop = top;
   }
 }
@@ -2973,7 +3267,7 @@ class ContactModal extends Modal {
 }
 
 class InteractionModal extends Modal {
-  constructor(app, plugin, contact) { super(app); this.plugin = plugin; this.contact = contact; }
+  constructor(app, plugin, contact, preType) { super(app); this.plugin = plugin; this.contact = contact; this.preType = preType || ''; }
   onOpen() {
     const { contentEl } = this;
     contentEl.empty();
@@ -2984,6 +3278,7 @@ class InteractionModal extends Modal {
 
     this.tipo = item(T('Tipo')).createEl('select', { cls: 'dropdown' });
     for (const t of [T('Messaggio'), T('Chiamata'), T('Incontro'), T('Email'), T('Evento'), T('Altro')]) this.tipo.createEl('option', { value: t, text: t });
+    if (this.preType) this.tipo.value = this.preType;
     this.data = item(T('Data')).createEl('input', { type: 'text' });
     this.data.value = fmtDate(new Date());
     this.fu = item(T('Prossimo follow-up (opzionale)')).createEl('input', { type: 'text', placeholder: datePh() });
@@ -4267,6 +4562,179 @@ class BulkDeleteModal extends Modal {
   onClose() { this.contentEl.empty(); }
 }
 
+/* Chiede se aggiungere ai contatti la persona indicata come partner (e non ancora presente) */
+class AddPersonModal extends Modal {
+  constructor(app, plugin, name, fromFile) { super(app); this.plugin = plugin; this.name = name; this.fromFile = fromFile; }
+  onOpen() {
+    const { contentEl } = this; contentEl.empty();
+    this.modalEl.addClass('crm-modal', 'crm-addp');
+    this.titleEl.setText(T`Aggiungere ${this.name} ai tuoi contatti?`);
+    const from = this.plugin.getContacts().find((c) => c.file.path === this.fromFile.path);
+    contentEl.createEl('p', { cls: 'crm-muted', text: T`${this.name} non è ancora nella tua lista. Se lo aggiungi, Kith crea la scheda e collega le due persone come partner.` });
+    const card = contentEl.createDiv('crm-addp-card');
+    const ini = this.name.split(/\s+/).map((x) => x[0]).slice(0, 2).join('').toUpperCase();
+    card.createDiv({ cls: 'crm-avatar lg t' + (hue(this.name) % 8), text: ini });
+    const tx = card.createDiv('crm-addp-text');
+    tx.createDiv({ cls: 'crm-addp-name', text: this.name });
+    tx.createDiv({ cls: 'crm-sub', text: from ? T`Partner di ${from.name}` : T('Partner') });
+    const foot = contentEl.createDiv('crm-form-foot');
+    foot.createEl('button', { cls: 'crm-btn', text: T('Non ora') }).addEventListener('click', () => this.close());
+    const ok = foot.createEl('button', { cls: 'crm-btn crm-btn-primary', text: T('Aggiungi ai contatti') });
+    ok.addEventListener('click', async () => {
+      ok.disabled = true;
+      try {
+        const parts = this.name.trim().split(/\s+/);
+        const nome = parts.shift(), cognome = parts.join(' ');
+        const back = `[[${this.fromFile.basename}]]`;
+        const nf = await this.plugin.saveContact(null, { nome, cognome, partner: back }, { noOffer: true });
+        await this.plugin.saveContact(this.fromFile, { partner: nf.basename }, { noOffer: true });
+        new Notice(T`${this.name} aggiunto ai contatti`);
+        this.close();
+        this.plugin.refreshViews();
+      } catch (e) { console.error(e); new Notice(T('Errore nel salvataggio: ') + e.message); ok.disabled = false; }
+    });
+  }
+  onClose() { this.contentEl.empty(); }
+}
+
+/* ───────── Menu Kith: popover stile HubSpot (sostituisce il Menu nativo di Obsidian) ───────── */
+function openKithPop(target, entries, opts = {}) {
+  document.querySelectorAll('.crm-pop').forEach((n) => n.remove());
+  const pop = document.body.createDiv('crm-pop');
+  const stack = [{ title: '', entries }];
+  const countItems = (es) => es.filter((x) => x.type === 'item').length;
+  const wantSearch = opts.search != null ? opts.search : countItems(entries) >= 8;
+  pop.toggleClass('has-search', wantSearch);
+  let sw = null, inp = null;
+  if (wantSearch) {
+    sw = pop.createDiv('crm-pop-search');
+    inp = sw.createEl('input', { type: 'text', placeholder: T('Cerca'), attr: { 'aria-label': T('Cerca') } });
+    setIcon(sw.createSpan('crm-pop-searchico'), 'search');
+  }
+  const list = pop.createDiv('crm-pop-list');
+  let rows = [], idx = -1;
+  const close = () => { document.removeEventListener('mousedown', outside, true); document.removeEventListener('keydown', onKey, true); pop.remove(); };
+  const outside = (e) => { if (!pop.contains(e.target) && !(target && target.contains && target.contains(e.target))) close(); };
+  const mark = () => rows.forEach((r, i) => r.el.toggleClass('is-sel', i === idx));
+  const choose = (en) => {
+    if (en.disabled) return;
+    if (en.sub) { stack.push({ title: en.label, entries: en.sub }); if (inp) inp.value = ''; render(); return; }
+    close(); if (en.onClick) en.onClick(opts.evt);
+  };
+  const render = () => {
+    list.empty(); rows = []; idx = -1;
+    const lvl = stack[stack.length - 1];
+    if (stack.length > 1) {
+      const back = list.createDiv({ cls: 'crm-pop-item crm-pop-back' });
+      setIcon(back.createSpan('crm-pop-ico'), 'chevron-left');
+      back.createSpan({ cls: 'crm-pop-label', text: lvl.title });
+      back.addEventListener('click', () => { stack.pop(); if (inp) inp.value = ''; render(); });
+    }
+    const q = inp ? norm(inp.value) : '';
+    let lastSep = true, any = false;
+    for (const en of lvl.entries) {
+      if (en.type === 'h') { if (!q) list.createDiv({ cls: 'crm-pop-h', text: en.title }); continue; }
+      if (en.type === 'sep') { if (!lastSep && !q) { list.createDiv('crm-pop-sep'); lastSep = true; } continue; }
+      if (q && !norm(en.label + ' ' + (en.kw || '')).includes(q)) continue;
+      const el = list.createDiv({ cls: 'crm-pop-item' + (en.disabled ? ' is-disabled' : '') + (en.danger ? ' is-danger' : '') });
+      const ic = el.createSpan('crm-pop-ico'); if (en.icon) setIcon(ic, en.icon);
+      el.createSpan({ cls: 'crm-pop-label', text: en.label });
+      if (en.checked) setIcon(el.createSpan('crm-pop-check'), 'check');
+      if (en.sub) setIcon(el.createSpan('crm-pop-chev'), 'chevron-right');
+      el.addEventListener('click', () => choose(en));
+      el.addEventListener('mousemove', () => { idx = rows.findIndex((r) => r.el === el); mark(); });
+      rows.push({ el, en }); lastSep = false; any = true;
+    }
+    if (!any) list.createDiv({ cls: 'crm-pop-empty', text: T('Nessun risultato') });
+    place();
+  };
+  const onKey = (e) => {
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); if (stack.length > 1) { stack.pop(); render(); } else close(); return; }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (!rows.length) return; idx = (idx + (e.key === 'ArrowDown' ? 1 : -1) + rows.length) % rows.length; mark(); rows[idx].el.scrollIntoView({ block: 'nearest' }); }
+    else if (e.key === 'ArrowRight' && idx >= 0 && rows[idx].en.sub) { e.preventDefault(); choose(rows[idx].en); }
+    else if (e.key === 'ArrowLeft' && stack.length > 1) { e.preventDefault(); stack.pop(); render(); }
+    else if (e.key === 'Enter' && idx >= 0) { e.preventDefault(); choose(rows[idx].en); }
+  };
+  const W = wantSearch ? 320 : 280;
+  pop.style.width = W + 'px';
+  const place = () => {
+    const vw = window.innerWidth, vh = window.innerHeight;
+    pop.style.top = pop.style.bottom = pop.style.left = '';
+    let left, top, bottom, avail;
+    if (target && target.getBoundingClientRect) {
+      const r = target.getBoundingClientRect();
+      left = Math.max(8, Math.min(r.left + r.width / 2 - W / 2, vw - W - 8));
+      const below = vh - r.bottom - 12, above = r.top - 12;
+      if (below < 280 && above > below) { bottom = vh - r.top + 8; avail = above; } else { top = r.bottom + 8; avail = below; }
+    } else {
+      const p = target || { x: 0, y: 0 };
+      left = Math.max(8, Math.min(p.x, vw - W - 8));
+      const below = vh - p.y - 12, above = p.y - 12;
+      if (below < 280 && above > below) { bottom = vh - p.y + 4; avail = above; } else { top = p.y + 4; avail = below; }
+    }
+    pop.style.left = left + 'px';
+    if (top != null) pop.style.top = top + 'px'; else pop.style.bottom = bottom + 'px';
+    pop.style.maxHeight = Math.max(160, Math.min(460, avail)) + 'px';
+  };
+  if (inp) inp.addEventListener('input', render);
+  render();
+  setTimeout(() => { document.addEventListener('mousedown', outside, true); document.addEventListener('keydown', onKey, true); if (inp) inp.focus(); }, 0);
+  return pop;
+}
+/* Popover a gruppi con titolo (usato da «Altro») */
+function openActionPopover(anchor, groups) {
+  const entries = [];
+  for (const g of groups) { if (g.title) entries.push({ type: 'h', title: g.title }); for (const it of g.items) entries.push({ type: 'item', icon: it.icon, label: it.label, kw: it.kw, onClick: it.onClick }); }
+  return openKithPop(anchor, entries, { search: true });
+}
+/* Compatibile con l'API di Menu di Obsidian, ma con lo stesso aspetto dei popover Kith */
+class KithMenuItem {
+  constructor() { this.title = ''; this.icon = ''; this.cb = null; this.chk = false; this.dis = false; this.warn = false; this.sub = null; }
+  setTitle(t) { this.title = String(t); return this; }
+  setIcon(i) { this.icon = i || ''; return this; }
+  onClick(f) { this.cb = f; return this; }
+  setChecked(v) { this.chk = !!v; return this; }
+  setDisabled(v) { this.dis = !!v; return this; }
+  setWarning(v) { this.warn = !!v; return this; }
+  setSection() { return this; }
+  setIsLabel() { return this; }
+  setSubmenu() { this.sub = new Menu(); return this.sub; }
+}
+class Menu {
+  constructor() { this.list = []; }
+  addItem(cb) { const it = new KithMenuItem(); cb(it); this.list.push({ type: 'item', it }); return this; }
+  addSeparator() { this.list.push({ type: 'sep' }); return this; }
+  entries() {
+    return this.list.map((x) => (x.type === 'sep' ? { type: 'sep' } : { type: 'item', label: x.it.title, icon: x.it.icon, onClick: x.it.cb, checked: x.it.chk, disabled: x.it.dis, danger: x.it.warn || (x.it.icon === 'trash'), sub: x.it.sub ? x.it.sub.entries() : null }));
+  }
+  showAtMouseEvent(e) {
+    const ctx = e && e.type === 'contextmenu';
+    let el = e && (e.currentTarget || e.target);
+    if (ctx || !el || !el.getBoundingClientRect) el = null;
+    const target = el || { x: (e && e.clientX) || 0, y: (e && e.clientY) || 0 };
+    openKithPop(target, this.entries(), { evt: e });
+    return this;
+  }
+  showAtPosition(p) { openKithPop({ x: p.x, y: p.y }, this.entries()); return this; }
+  hide() { document.querySelectorAll('.crm-pop').forEach((n) => n.remove()); }
+}
+
+/* Inline icons that do not depend on the theme's icon styling (always drawn at a fixed size) */
+const K_ICONS = {
+  x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+  plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+  'eye-off': '<path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/>',
+  pencil: '<path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/>',
+};
+function kIcon(el, name, size = 16) {
+  el.empty();
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(NS, 'svg');
+  for (const [k, v] of Object.entries({ viewBox: '0 0 24 24', width: size, height: size, fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' })) svg.setAttribute(k, v);
+  svg.style.cssText = `width:${size}px;height:${size}px;display:block;flex:none;stroke:currentColor;fill:none;`;
+  svg.innerHTML = K_ICONS[name] || '';
+  el.appendChild(svg);
+}
 class TextPromptModal extends Modal {
   constructor(app, title, placeholder, initial, onSubmit) { super(app); this.t = title; this.ph = placeholder; this.init = initial || ''; this.onSubmit = onSubmit; }
   onOpen() {
@@ -4390,6 +4858,8 @@ function renderGeneral(el, plugin) {
     .addToggle((t) => t.setValue(s.createAziende).onChange(async (v) => { s.createAziende = v; await save(); }));
   new Setting(el).setName(T('Arricchisci le aziende in automatico')).setDesc(T('Aprendo la pagina di un’azienda, Kith cerca sito, settore, contatti e logo su Wikidata e sul sito ufficiale. Invia in rete solo il nome dell’azienda. Spegni per usare solo i dati inseriti a mano.'))
     .addToggle((t) => t.setValue(s.autoEnrichCompanies !== false).onChange(async (v) => { s.autoEnrichCompanies = v; await save(); }));
+  new Setting(el).setName(T('Avviso all’avvio')).setDesc(T('Una volta al giorno, all’apertura di Obsidian, mostra quanti follow-up sono scaduti e quanti compleanni sono vicini.'))
+    .addToggle((t) => t.setValue(s.startupAlert !== false).onChange(async (v) => { s.startupAlert = v; await save(); }));
   new Setting(el).setName(T('Finestra compleanni (giorni)'))
     .addText((t) => t.setValue(String(s.birthdayWindow)).onChange(async (v) => { s.birthdayWindow = Math.max(1, parseInt(v, 10) || 30); await save(); }));
   new Setting(el).setName(T('Vista predefinita'))
