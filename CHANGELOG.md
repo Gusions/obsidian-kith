@@ -14,7 +14,7 @@
 - Full-page record (click a name): inline editing, add-field menu, resizable columns, larger photo (96 px)
 - Custom photo, or fetch it from the contact's Instagram handle, paste from clipboard, or paste an image link
 - Connected people with the reason (partner, introduced you / introduced by you); partner and "met through" suggest existing contacts, save as links and are clickable
-- Multi-select relationship with linked company (`Former colleague @ Lexroom`), with default colors per relationship and a working color picker; bold, tinted badges with spacing
+- Multi-select relationship with linked company (`Former colleague @ Google`), with default colors per relationship and a working color picker; bold, tinted badges with spacing
 - Companies card: current, past and relationship companies, each linked to everyone in that company. Past companies are shown collapsed by default
 - Back button / swipe back through record, company and table
 

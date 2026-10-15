@@ -42,7 +42,7 @@ Table, cards, kanban and relationship-graph views · full-page contact records a
 | **Views** | Table (HubSpot-style, fully configurable columns), cards, kanban (group by relationship / closeness / status / priority, drag & drop), relationship **graph** |
 | **Contact record** | Full-page record (click a name): inline editing, custom photo, connected people, companies (current and past), recent interactions, clickable email / phone / WhatsApp / LinkedIn / Instagram |
 | **Company pages** | One page per company collecting its people, info, notes and timeline; auto-filled from the web, per-company sections and fields, manual logo |
-| **Relationships** | Several tags per person, each optionally tied to a company (`former colleague @ Lexroom`), with colors |
+| **Relationships** | Several tags per person, each optionally tied to a company (`former colleague @ Google`), with colors |
 | **Bulk actions** | Select rows → action bar above the table: contacted today, edit, add relationship, archive, delete, calendar |
 | **Filters & KPIs** | Search, filter by relationship / closeness / priority / status, clickable KPI strip (active contacts, overdue follow-ups, upcoming birthdays, high priority) |
 | **Importer** | LinkedIn `Connections.csv`, phone `.vcf` / Google Contacts CSV, Facebook friends (`.json` / `.html`), generic CSV. **You pick who gets imported**; duplicates are detected (email, phone, LinkedIn, name) and nothing is written before you confirm |
@@ -292,7 +292,7 @@ Issues and pull requests are welcome.
 ### Cosa fa
 - **Viste**: tabella stile HubSpot (colonne personalizzabili, azioni multiple sopra la tabella), schede, kanban con drag & drop, **grafo** delle relazioni.
 - **Scheda contatto** a pagina intera (foto personalizzata, persone collegate, aziende attuali e passate) e **pagina azienda** che raccoglie persone, info e note, con compilazione automatica dei dati.
-- **Relazioni multiple** con azienda collegata (`ex collega @ Lexroom`) e colori.
+- **Relazioni multiple** con azienda collegata (`ex collega @ Google`) e colori.
 - **Importer massivo** da LinkedIn, rubrica del telefono (`.vcf` / Google CSV), Facebook e CSV generico, **scegliendo chi importare**; riconosce i doppioni e non scrive nulla prima della tua conferma.
 - **Follow-up** automatici (data esplicita oppure ultimo contatto + frequenza), interazioni registrate come note collegate.
 - **Compleanni**: agenda, pulsante "Google Calendar" con evento annuale già compilato (basta premere *Salva*), export `.ics`.
