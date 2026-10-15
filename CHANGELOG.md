@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.7.0
+
+### Table & views
+- HubSpot-style table: tabs with counts, pill filters, row checkboxes, CSV export
+- Customizable columns with a header menu: sort, filter, pin, move, add and remove fields; table scrolls horizontally instead of clipping
+- Bulk action bar above the table (contacted today, interaction, edit, delete, archive, calendar); delete with confirmation
+- Detail side pane removed from Table / Cards / Kanban (kept in Network); icon-only view switcher; collapsible header (collapsed by default)
+- Clickable company, email and city cells (a city shows everyone living there); mini company icon next to the company name
+- Calendar button in the toolbar and next to the birthday date (table and contact page): Google Calendar event or `.ics` export for one contact, a selection, or everyone
+
+### Contact page
+- Full-page record (click a name): inline editing, add-field menu, resizable columns, larger photo (96 px)
+- Custom photo, or fetch it from the contact's Instagram handle, paste from clipboard, or paste an image link
+- Connected people with the reason (partner, introduced you / introduced by you); partner and "met through" suggest existing contacts, save as links and are clickable
+- Multi-select relationship with linked company (`Former colleague @ Lexroom`), with default colors per relationship and a working color picker; bold, tinted badges with spacing
+- Companies card: current, past and relationship companies, each linked to everyone in that company. Past companies are shown collapsed by default
+- Back button / swipe back through record, company and table
+
+### Company page
+- Dedicated page per company: people, info, notes, timeline
+- Automatic enrichment from the name or website (Wikidata + website data); only fills empty fields
+- Per-company show/hide of sections and fields, with an optional "use for all"
+- Resizable columns; empty side columns collapse and the table expands
+- Manual logo: upload an image or paste a link when automatic fetching finds nothing
+
+### Forms & language
+- New/Edit contact form: collapsible sections with filled-field counters; Obsidian-styled suggestion menu
+- Preset values (relationship, closeness, priority, status…) follow the UI language
+
 ## 0.6.0
 - **Sidebar panel** (desktop): opening Kith adds a Kith tab to the left sidebar, next to Files/Search/Bookmarks. Quick views (active, overdue follow-ups, birthdays, high priority, archived) and filters by relationship, closeness, priority and status, with counts. Closes together with the Kith tab
 - New quick view: Archived
@@ -9,18 +38,6 @@
 - Company and City facets; hover quick actions (Contacted today, Log interaction); empty rows hidden
 - New/Edit contact form: collapsible sections with filled-field counters; Obsidian-styled suggestion menu replaces the native datalist
 - Preset values (relationship, closeness, priority, status…) and a few leftover strings now follow the UI language
-- Table scrolls horizontally instead of clipping columns
-- HubSpot-style table: tabs with counts, pill filters, row checkboxes, footer with bulk Archive / Delete / Clear selection, CSV export
-- Full-page contact record (click a name): inline editing, add-field menu, resizable columns, back button, connected people with reason (partner, introduced you / introduced by you)
-- Custom contact photo instead of initials (click the avatar in the record)
-- "Partner" and "Met through" suggest existing contacts, save as links and are clickable
-- Detail side pane removed from Table / Cards / Kanban (kept in Network); icon-only view switcher
-- Collapsible header (collapsed by default); bulk action bar above the table; working color pickers for relationship labels with default colors and bold tinted badges
-- Customizable table columns with HubSpot-style header menu (sort, filter, pin, move, add, remove); clickable company, email and city cells; mini company icon
-- Multi-select relationship with linked company (`label @ Company`)
-- Companies card on the person page (including past companies)
-- Full company page: people, info, notes, per-company hidden sections/fields, resizable columns, automatic enrichment (Wikidata + website), manual logo (upload or link)
-- Back navigation and swipe gesture between record, company and table
 
 ## 0.5.1
 - Header: **New contact** is now the first button; "Calendar .ics" renamed **Add to calendar**

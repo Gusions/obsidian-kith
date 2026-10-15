@@ -517,3 +517,8 @@ a.crm-co-name:hover { color: var(--interactive-accent); text-decoration: underli
 
 /* bold relationship labels */
 .crm-badge.has-tone, .crm-badge.has-tone .crm-rel-co { font-weight: 600; }
+
+/* calendar shortcut next to birthday date */
+.crm-cal-btn { margin-left: 10px; display: inline-flex; align-items: center; gap: 5px; vertical-align: middle; }
+.crm-cell-cal { display: inline-flex; vertical-align: middle; margin-left: 8px; opacity: .6; }
+.crm-cell-cal:hover { opacity: 1; }

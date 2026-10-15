@@ -1,7 +1,7 @@
 {
   "id": "kith",
   "name": "Kith",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "minAppVersion": "1.5.0",
   "description": "A personal CRM for the people in your vault: table, cards, kanban and graph views, bulk import (LinkedIn, phone, Facebook, CSV), follow-up reminders, birthdays to Google Calendar, a Today widget. English and Italian.",
   "author": "@gusions",
