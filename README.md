@@ -3,11 +3,11 @@
 > *Kith: the people you know and care about.* A modern personal CRM built **on top of your own notes**. One note per person, plain Markdown + frontmatter, no database, no cloud, no account.
 > UI in **English and Italian** (follows Obsidian's language).
 
-Table, cards, kanban and relationship-graph views · bulk importer (LinkedIn, phone, Facebook, CSV) · follow-up reminders · birthdays → Google Calendar · "Today" widget for your daily note · fully customizable fields, colors and fonts. It follows your theme (designed with the *Minimal* theme in mind) and takes its visual cues from tools like Attio and the new HubSpot: flat, dense, quiet.
+Table, cards, kanban and relationship-graph views · full-page contact records and **company pages** · customizable columns · multi-tag relationships linked to companies · bulk importer (LinkedIn, phone, Facebook, CSV) · follow-up reminders · birthdays → Google Calendar / `.ics` · "Today" widget for your daily note · fully customizable fields, colors and fonts. It follows your theme (designed with the *Minimal* theme in mind) and takes its visual cues from tools like Attio and the new HubSpot: flat, dense, quiet.
 
-![Kith table view with 120+ contacts, agenda panel and KPI strip](docs/screenshot-table.png)
+![Kith table view with 55 contacts, KPI strip, relationship badges and the bulk action bar](docs/screenshot-table.png)
 
-*Table view with a demo vault of 124 fictional contacts (Italian and US names): KPI strip, filters, follow-up states, and the agenda panel on the right.*
+*Table view with a demo set of 55 fictional contacts: KPI strip, filters, relationship badges linked to companies, follow-up states, company icons, and the bulk action bar above the table.*
 
 🇮🇹 [Vai alla sezione in italiano](#-italiano)
 
@@ -39,8 +39,11 @@ Table, cards, kanban and relationship-graph views · bulk importer (LinkedIn, ph
 
 | Area | What you get |
 |---|---|
-| **Views** | Table (configurable columns), cards, kanban (group by relationship / closeness / status / priority, drag & drop), relationship **graph** |
-| **Contact record** | Side panel with all info, clickable email / phone / WhatsApp / LinkedIn / Instagram, recent interactions, selectable and copyable text |
+| **Views** | Table (HubSpot-style, fully configurable columns), cards, kanban (group by relationship / closeness / status / priority, drag & drop), relationship **graph** |
+| **Contact record** | Full-page record (click a name): inline editing, custom photo, connected people, companies (current and past), recent interactions, clickable email / phone / WhatsApp / LinkedIn / Instagram |
+| **Company pages** | One page per company collecting its people, info, notes and timeline; auto-filled from the web, per-company sections and fields, manual logo |
+| **Relationships** | Several tags per person, each optionally tied to a company (`former colleague @ Lexroom`), with colors |
+| **Bulk actions** | Select rows → action bar above the table: contacted today, edit, add relationship, archive, delete, calendar |
 | **Filters & KPIs** | Search, filter by relationship / closeness / priority / status, clickable KPI strip (active contacts, overdue follow-ups, upcoming birthdays, high priority) |
 | **Importer** | LinkedIn `Connections.csv`, phone `.vcf` / Google Contacts CSV, Facebook friends (`.json` / `.html`), generic CSV. **You pick who gets imported**; duplicates are detected (email, phone, LinkedIn, name) and nothing is written before you confirm |
 | **Follow-ups** | "Next follow-up" date or "contact frequency" → automatic due dates, overdue / due-soon badges, "Contacted today" in one click |
@@ -68,7 +71,7 @@ Requires Obsidian **1.5.0+**. Developed and tested on desktop; mobile is not fla
 1. Open **Settings → Kith** and set the three folders (by default `Contacts/People`, `Contacts/Interactions`, `Contacts/Companies` in English; `Persone/Persone`, `Persone/Interazioni`, `Persone/Aziende` in Italian). If you already have contact notes, point *Contacts folder* to them.
 2. Click the **users** icon in the left ribbon (or run *Open Kith*).
 3. Either **+ New contact**, or import your LinkedIn / phone / Facebook export from **Customize → Import** (or the *Import contacts* command).
-4. Select a contact → **Contacted today**, **+ Interaction**, **Edit**.
+4. Tick a row to get the action bar (**Contacted today**, **Interaction**, **Edit**, **Calendar**, **Delete**…), or click a name to open the full record.
 
 ## How contacts are stored
 
@@ -106,6 +109,7 @@ interests: [running, wine]
 | | Nickname | `nickname` | `soprannome` |
 | | Birthday | `birthday` | `compleanno` |
 | | City / Country | `city` / `country` | `citta` / `paese` |
+| | Photo | `photo` | `foto` |
 | | Partner / Children / Languages | `partner` / `children` / `languages` | `partner` / `figli` / `lingue` |
 | Contact | Email / Work email | `email` / `work_email` | `email` / `email_lavoro` |
 | | Phone / WhatsApp | `phone` / `whatsapp` | `telefono` / `whatsapp` |
@@ -114,7 +118,7 @@ interests: [running, wine]
 | | Current company (`[[link]]`) | `current_company` | `azienda_attuale` |
 | | Past companies | `past_companies` | `aziende_passate` |
 | | Industry / Skills | `industry` / `skills` | `settore` / `competenze` |
-| Relationship | Relationship | `relationship` | `relazione` |
+| Relationship | Relationship (list; `label @ Company` links a tag to a company) | `relationship` | `relazione` |
 | | Closeness | `closeness` | `vicinanza` |
 | | Status | `status` | `stato` |
 | | Priority | `priority` | `priorita` |
@@ -149,12 +153,15 @@ Interaction notes (created by *+ Interaction*) live in the interactions folder a
 
 ## Views
 
-- **Table**: sortable, with columns you choose (Settings → *Customize* → *Table*). Quick-action icons (email, call, WhatsApp, LinkedIn, Instagram) sit next to each contact.
+- **Table**: HubSpot-style. Use the **⋮** menu in each column header to sort, filter, pin, move or remove it, and **+** at the end to add any field (custom ones included). Company, email and city cells are clickable (a city lists everyone who lives there), and a small company icon sits next to the company name. The header can be collapsed (default).
+- **Bulk action bar**: tick one or more rows and an action bar appears above the table: *Contacted today*, *Interaction*, *Edit* (or add a relationship / closeness / priority / status to many at once), *Calendar*, *Delete* (with confirmation), *Open record*, *Archive*.
 - **Cards**: compact cards with tags, next birthday and due state.
 - **Kanban**: group by relationship, closeness, status or priority; **drag a card to another column** to change that value.
-- **Graph**: contacts as nodes. Connections come from the same company (2+ people), *Met through* naming another contact, *Partner*, or `[[links]]` between notes. Shows the 700 most connected contacts; toggle companies and isolated contacts.
-- **Side panel**: the full record. Select any text to copy it; right-click for *Copy name / email / phone / selection / full record*, *Archive*, *Delete…*.
-- Keyboard: `Delete` / `⌘⌫` on a selected contact starts the delete flow (with confirmation).
+- **Graph**: contacts as nodes. Connections come from the same company (2+ people), *Met through* naming another contact, *Partner*, or `[[links]]` between notes. Shows the 700 most connected contacts; toggle companies and isolated contacts. The detail panel on the right is only shown in this view.
+- **Contact record** (click a name): full page with resizable columns, inline editing, a custom photo (upload, paste from the clipboard, paste a link, or try to fetch it from the contact's Instagram handle), connected people with the reason (partner, introduced you / by you), and a **Companies** card listing current, past and relationship companies; each company links to everyone connected with it, past ones are collapsed by default.
+- **Company page**: click any company. It lists its people and shows info, notes and a timeline. Kith can fill the empty fields (website, industry, contacts, logo) from Wikidata and the official website; you can also upload a logo or paste a link. Hide or show sections and fields **per company**, with an optional "use for all", and drag the column dividers to resize.
+- **Navigation**: the back button (or a swipe back) walks back through record, company and table.
+- **Right-click menus**: *Copy name / email / phone / full record*, *Archive*, *Delete…*. Keyboard: `Delete` / `⌘⌫` on a selected contact starts the delete flow (with confirmation).
 
 ## Importing contacts
 
@@ -181,9 +188,9 @@ The preview marks each row as **New**, **Already present** (same email / phone /
 
 No account linking, no OAuth, no API keys. For a birthday the plugin opens Google Calendar with a **pre-filled yearly all-day event**; you press *Save* (and choose reminders and the target calendar there). The contact then gets `birthday_in_calendar: <date>` so the CRM knows it's done.
 
-- Offered automatically after you save a contact with a birthday (can be turned off), via the **+ Google Calendar** button on the record, or the command *Add the contact's birthday to Google Calendar*.
+- Offered automatically after you save a contact with a birthday (can be turned off), via the **Calendar** button (table toolbar, bulk action bar, contact record, or next to the birthday date), or the command *Add the contact's birthday to Google Calendar*.
 - Title and description templates are editable (placeholders `{first} {last} {age}`; the Italian `{nome} {cognome} {eta}` also work).
-- **Add to calendar** (header button) exports all birthdays (yearly recurrence) and, optionally, follow-up due dates to a `.ics` file you can import into Apple Calendar, Outlook, Google Calendar…
+- **Add to calendar** (header button) and the **Calendar** menu export all birthdays (yearly recurrence), or just the selected contacts, and optionally follow-up due dates, to a `.ics` file you can import into Apple Calendar, Outlook, Google Calendar…
 
 ## "Today" widget
 
@@ -240,6 +247,7 @@ Options: `giorni` (look-ahead window in days, default 7), `max` (rows per sectio
 | Contacts / Interactions / Companies folder | see Quick start | Paths from the vault root |
 | Link companies with `[[links]]` | on | Company fields become links |
 | Create company note if missing | on | On import and save |
+| Enrich companies automatically | on | Opening a company page fetches missing info from Wikidata and the company website; see [Privacy](#privacy) |
 | Birthday window (days) | 30 | For the KPI and the agenda |
 | Default view | Table | Table / Cards / Kanban / Network |
 | Calendar .ics: include follow-ups | on | Birthdays are always included |
@@ -251,7 +259,11 @@ Options: `giorni` (look-ahead window in days, default 7), `max` (rows per sectio
 
 ## Privacy
 
-Everything stays in your vault. The plugin makes **no network requests**. The only thing that leaves Obsidian is when *you* click *Add to Google Calendar*: the plugin opens `calendar.google.com` in your browser with the event details in the URL. Settings are stored in `.obsidian/plugins/kith/data.json`. Imports read only the files you drop in.
+Everything stays in your vault, and nothing is sent to any server of mine. Settings are stored in `.obsidian/plugins/kith/data.json`. Imports read only the files you drop in. Network requests happen only in these cases:
+
+- **Add to Google Calendar**: when *you* click it, the plugin opens `calendar.google.com` in your browser with the event details in the URL.
+- **Company enrichment** (can be turned off in *Settings → Kith → Enrich companies automatically*): when you open a company page, Kith sends the **company name** to Wikidata and, if known, requests the company's public website to fill empty fields. No contact data is sent.
+- **Instagram photo** (only when you pick *Fetch from Instagram* on a contact): the Instagram handle is sent to `unavatar.io`, to Instagram's public endpoint, and to a couple of public profile viewers, to try to get the profile picture. It may fail, especially for private profiles.
 
 ## Development
 
@@ -263,10 +275,11 @@ The plugin is a single dependency-free JavaScript file (`main.js`, CommonJS, no 
 
 ## Limitations and roadmap
 
-- Right-click menus and copy actions, and the `Delete` key, are implemented but were not covered by automated tests.
+- Right-click menus, bulk actions and the `Delete` key are implemented but are not covered by automated tests.
+- Company enrichment and the Instagram photo depend on third-party services and may find nothing; the manual logo and photo options always work.
 - Languages other than English and Italian fall back to English.
 - No automatic Google Calendar insertion (would require OAuth); the pre-filled event is deliberate.
-- Ideas: multi-select delete, saved views, merge duplicates, more import sources, additional languages.
+- Ideas: saved views, merge duplicates, more import sources, additional languages.
 
 Issues and pull requests are welcome.
 
@@ -277,7 +290,9 @@ Issues and pull requests are welcome.
 **Kith** è un CRM personale moderno costruito **sopra le tue note**: una nota per persona, Markdown + frontmatter, nessun database, nessun cloud, nessun account.
 
 ### Cosa fa
-- **Viste**: tabella (colonne configurabili), schede, kanban con drag & drop, **grafo** delle relazioni.
+- **Viste**: tabella stile HubSpot (colonne personalizzabili, azioni multiple sopra la tabella), schede, kanban con drag & drop, **grafo** delle relazioni.
+- **Scheda contatto** a pagina intera (foto personalizzata, persone collegate, aziende attuali e passate) e **pagina azienda** che raccoglie persone, info e note, con compilazione automatica dei dati.
+- **Relazioni multiple** con azienda collegata (`ex collega @ Lexroom`) e colori.
 - **Importer massivo** da LinkedIn, rubrica del telefono (`.vcf` / Google CSV), Facebook e CSV generico, **scegliendo chi importare**; riconosce i doppioni e non scrive nulla prima della tua conferma.
 - **Follow-up** automatici (data esplicita oppure ultimo contatto + frequenza), interazioni registrate come note collegate.
 - **Compleanni**: agenda, pulsante "Google Calendar" con evento annuale già compilato (basta premere *Salva*), export `.ics`.
@@ -293,7 +308,7 @@ Copia `main.js`, `manifest.json`, `styles.css` in `<vault>/.obsidian/plugins/kit
 1. *Impostazioni → Kith*: imposta le cartelle (di default `Persone/Persone`, `Persone/Interazioni`, `Persone/Aziende`). Se hai già delle note contatto, punta la cartella contatti a quelle.
 2. Clicca l'icona **utenti** nella barra laterale sinistra.
 3. **+ Nuovo contatto** oppure **Importa**.
-4. Seleziona un contatto: **Contattato oggi**, **+ Interazione**, **Modifica**.
+4. Spunta una riga per la barra azioni (**Contattato oggi**, **Interazione**, **Modifica**, **Calendario**, **Elimina**) oppure clicca un nome per aprire la scheda.
 
 ### Come sono salvati i contatti
 Ogni contatto è una nota normale con proprietà nel frontmatter (`nome`, `cognome`, `compleanno`, `relazione`, `priorita`, `frequenza_contatto`, `ultimo_contatto`, `prossimo_follow_up`…). Il riconoscimento dei nomi è tollerante (maiuscole, accenti, `_`, `-` ignorati) e **accetta sia chiavi italiane sia inglesi**: le tue note non vengono mai riscritte. Le date si scrivono sempre in **formato ISO** (`2026-03-14`; compleanno senza anno: `--03-14`). La tabella completa dei campi è nella sezione inglese ([Field reference](#how-contacts-are-stored)).
@@ -313,7 +328,7 @@ titolo: CRM · Oggi
 ````
 
 ### Privacy
-Tutto resta nel tuo vault, nessuna richiesta di rete. Solo quando premi *Aggiungi a Google Calendar* si apre `calendar.google.com` nel browser con i dettagli dell'evento nell'URL.
+Tutto resta nel tuo vault. Le richieste di rete avvengono solo in tre casi: quando premi *Aggiungi a Google Calendar* (si apre `calendar.google.com` con i dettagli dell'evento nell'URL); quando apri la pagina di un'azienda, se l'arricchimento automatico è attivo (viene inviato solo il **nome dell'azienda** a Wikidata e viene letto il sito pubblico, disattivabile nelle impostazioni); quando scegli *Recupera da Instagram* su un contatto (il nick viene inviato a servizi pubblici per ottenere la foto profilo).
 
 ---
 
