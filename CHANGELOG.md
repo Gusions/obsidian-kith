@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.5
+
+### Contacts and companies
+- **Same city, different spelling**: Milano and Milan (and about 30 other Italian/English pairs: Roma/Rome, Torino/Turin, Firenze/Florence, Monaco di Baviera/Munich…) are now treated as one city in the **Browse** sidebar (counts are merged), the city filter, the search and the column filter. The label follows the UI language; your notes are never rewritten
+- **Text can be selected and copied** on the contact record and the company page (it was blocked by the theme); buttons, icons and resize handles behave as before
+
+### Docs
+- README: new **Gallery** (table, kanban, contact record, company page, importer), the *file over app* philosophy, comma-separated lists, updated import path and Italian section
+
 ## 0.8.0
 
 ### Home

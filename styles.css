@@ -1037,3 +1037,9 @@ body .crm-rec-kv .crm-rec-pen svg { width: 15px !important; height: 15px !import
 body .crm-rec-kv:hover .crm-rec-pen { opacity: 1; }
 body .crm-rec-kv .crm-rec-pen:hover { background: var(--background-modifier-hover); color: var(--text-normal); }
 body .crm-rec-kv .crm-v .crm-cal-btn { vertical-align: middle; margin-left: 8px; }
+
+/* Contact and company pages: text can be selected and copied */
+body .crm-rec-root, body .crm-rec-root :is(.crm-rec-card, .crm-rec-col, .crm-hs-card, .crm-rec-kv, .crm-rec-kv *, .crm-tl-row, .crm-muted, a, p, span, div):not(button):not(.crm-rec-handle):not(.crm-qa-btn) {
+  -webkit-user-select: text !important; user-select: text !important;
+}
+body .crm-rec-root :is(button, .clickable-icon, .crm-qa-btn, .crm-rec-handle, svg, summary, select, .crm-selbtn) { -webkit-user-select: none !important; user-select: none !important; }

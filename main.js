@@ -241,6 +241,23 @@ const DV = {};
 for (const k of Object.keys(PRESETS_IT)) PRESETS_IT[k].forEach((it, i) => { DV[norm(it)] = DV[norm(PRESETS_EN[k][i])] = LANG === 'it' ? it : PRESETS_EN[k][i]; });
 const dv = (s) => DV[norm(s)] || s; // preset value shown in the UI language
 const nv = (s) => norm(dv(s));
+
+// Same city, different language (Milano = Milan). Only used to compare / group; the note is never rewritten.
+const CITY_PAIRS = [['Milano', 'Milan'], ['Roma', 'Rome'], ['Torino', 'Turin'], ['Firenze', 'Florence'], ['Napoli', 'Naples'], ['Venezia', 'Venice'],
+  ['Genova', 'Genoa'], ['Padova', 'Padua'], ['Mantova', 'Mantua'], ['Siracusa', 'Syracuse'], ['Londra', 'London'], ['Parigi', 'Paris'],
+  ['Ginevra', 'Geneva'], ['Zurigo', 'Zurich'], ['Berlino', 'Berlin'], ['Lisbona', 'Lisbon'], ['Bruxelles', 'Brussels'], ['Copenaghen', 'Copenhagen'],
+  ['Mosca', 'Moscow'], ['Atene', 'Athens'], ['Varsavia', 'Warsaw'], ['Praga', 'Prague'], ['Il Cairo', 'Cairo'], ['Pechino', 'Beijing'],
+  ['Francoforte', 'Frankfurt'], ['Colonia', 'Cologne'], ['Amburgo', 'Hamburg'], ['Basilea', 'Basel'], ['Monaco di Baviera', 'Munich'],
+  ['San Pietroburgo', 'Saint Petersburg'], ['Bucarest', 'Bucharest'], ['Belgrado', 'Belgrade'], ['Cracovia', 'Krakow'], ['Vienna', 'Vienna']];
+const CITY_MAP = new Map();
+for (const [it, en] of CITY_PAIRS) { const e = { it, en, key: norm(it) }; CITY_MAP.set(norm(it), e); CITY_MAP.set(norm(en), e); }
+const cityBase = (v) => String(v == null ? '' : v).replace(/\([^)]*\)/g, '').replace(/,.*$/, '').trim();
+const cityEntry = (v) => CITY_MAP.get(norm(cityBase(v)));
+const cityKey = (v) => { const e = cityEntry(v); return e ? e.key : norm(cityBase(v)); };
+const cityLabel = (v) => { const e = cityEntry(v); return e ? (LANG === 'it' ? e.it : e.en) : v; };
+const cityAlts = (v) => { const e = cityEntry(v); return e ? e.it + ' ' + e.en : ''; };
+const facetKey = (key, v) => (key === 'citta' ? cityKey(v) : nv(v));
+const facetLabel = (key, v) => (key === 'citta' ? cityLabel(v) : dv(v));
 const relTone = (u, text) => (u.relColors && (u.relColors[cv(text)] || u.relColors[norm(text)])) || '';
 const cv = (s) => { const n = norm(s); return CANON_EN[n] || n; };
 
@@ -345,7 +362,7 @@ class Contact {
   l(k) { return toList(this.raw(FM[k])); }
   get hay() {
     if (!this._hay) {
-      this._hay = norm([this.name, this.s('soprannome'), this.s('azienda'), this.s('ruolo'), this.s('citta'),
+      this._hay = norm([this.name, this.s('soprannome'), this.s('azienda'), this.s('ruolo'), this.s('citta'), cityAlts(this.s('citta')),
         this.s('email'), this.s('telefono'), this.s('settore'), this.l('interessi').join(' '),
         this.l('competenze').join(' '), this.rels.map((r) => `${r.label} ${r.company}`).join(' '), this.s('note')].join(' '));
     }
@@ -1025,7 +1042,7 @@ class CRMView extends ItemView {
     if (p.view) { this.loadState(p.view.state); this.renderKpi(); this.renderToolbar(); this.renderList(); return; }
     if (p.reset) { this.filters = { relazione: '', vicinanza: '', priorita: '', azienda: '', citta: '', stato: 'attivi' }; this.quick = ''; this.q = ''; if (this.searchEl) this.searchEl.value = ''; }
     if (p.quick !== undefined) this.quick = (p.quick && this.quick === p.quick) ? '' : p.quick;
-    if (p.toggle) { const { key, v } = p.toggle; const same = nv(this.filters[key] || '') === nv(v); this.filters[key] = same ? (key === 'stato' ? 'attivi' : '') : v; }
+    if (p.toggle) { const { key, v } = p.toggle; const same = facetKey(key, this.filters[key] || '') === facetKey(key, v); this.filters[key] = same ? (key === 'stato' ? 'attivi' : '') : v; }
     if (p.q !== undefined) { this.q = p.q; if (this.searchEl) this.searchEl.value = p.q; if (Object.keys(p).length === 1) { this.renderList(); return; } }
     if (this.mode === 'rete') this.mode = this.plugin.settings.defaultMode === 'rete' ? 'tabella' : this.plugin.settings.defaultMode;
     this.renderKpi(); this.renderToolbar(); this.renderList();
@@ -1133,7 +1150,7 @@ class CRMView extends ItemView {
       if (f.vicinanza && nv(c.s('vicinanza')) !== nv(f.vicinanza)) return false;
       if (f.priorita && nv(c.s('priorita')) !== nv(f.priorita)) return false;
       if (f.azienda && norm(c.s('azienda')) !== norm(f.azienda)) return false;
-      if (f.citta && norm(c.s('citta')) !== norm(f.citta)) return false;
+      if (f.citta && cityKey(c.s('citta')) !== cityKey(f.citta)) return false;
       if (q && !c.hay.includes(q)) return false;
       if (this.quick === 'scaduti' && c.due.state !== 'scaduto') return false;
       if (this.quick === 'compleanni' && !(c.bday && c.bday.days <= win)) return false;
@@ -1142,7 +1159,7 @@ class CRMView extends ItemView {
     });
     const sortKey = this.quick === 'compleanni' ? 'compleanno' : this.quick === 'scaduti' ? 'followup' : this.sort;
     list = list.sort(SORTS[sortKey]);
-    for (const [k, q2] of Object.entries(this.colFilters || {})) { const nq = norm(q2); if (nq) list = list.filter((c) => norm(colText(c, k)).includes(nq)); }
+    for (const [k, q2] of Object.entries(this.colFilters || {})) { const nq = norm(q2); if (nq) list = list.filter((c) => norm(colText(c, k) + (k === 'citta' ? ' ' + cityAlts(c.s('citta')) : '')).includes(nq)); }
     if (this.colSort && colDef(this.colSort.key)) {
       const { key, dir } = this.colSort;
       list = list.sort((a, b) => { const x = colSortVal(a, key), y = colSortVal(b, key); const r = (typeof x === 'number' && typeof y === 'number') ? x - y : String(x).localeCompare(String(y), LANG); return dir === 'desc' ? -r : r; });
@@ -3075,8 +3092,8 @@ class KithSidebar extends ItemView {
       for (const c of (key === 'stato' ? all : active)) {
         for (const v of (key === 'relazione' ? c.rels.map((r) => r.label) : [c.s(key)])) {
           if (!v) continue;
-          const k = nv(v), e = counts.get(k);
-          if (e) e.n++; else counts.set(k, { v: dv(v), n: 1 });
+          const k = facetKey(key, v), e = counts.get(k);
+          if (e) e.n++; else counts.set(k, { v: facetLabel(key, v), n: 1 });
         }
       }
       if (!counts.size) continue;
@@ -3084,11 +3101,11 @@ class KithSidebar extends ItemView {
       const sel = key === 'stato' ? (filters.stato !== 'attivi' && filters.stato !== 'tutti' ? filters.stato : '') : filters[key];
       g.open = this.openGroups.has(key) || !!sel;
       g.addEventListener('toggle', () => { if (g.open) this.openGroups.add(key); else this.openGroups.delete(key); });
-      const sm = g.createEl('summary'); setIcon(sm.createSpan('crm-side-chev'), 'chevron-right'); sm.createSpan({ cls: 'crm-side-label', text: label + (sel ? ': ' + cap(dv(sel)) : '') }); sm.createSpan({ cls: 'crm-side-count', text: String(counts.size) });
+      const sm = g.createEl('summary'); setIcon(sm.createSpan('crm-side-chev'), 'chevron-right'); sm.createSpan({ cls: 'crm-side-label', text: label + (sel ? ': ' + cap(facetLabel(key, sel)) : '') }); sm.createSpan({ cls: 'crm-side-count', text: String(counts.size) });
       if (sel) sm.addClass('has-filter');
       const vals = [...counts.values()].sort((a, b) => b.n - a.n || a.v.localeCompare(b.v));
       const fk = 'f-' + key, more = this.expand.has(fk), cut = !more && vals.length > 8 && !sel ? 8 : vals.length;
-      for (const { v, n } of vals.slice(0, cut)) row(g, { label: cap(v), count: n, active: nv(sel || '') === nv(v), onClick: () => p.navigate({ toggle: { key, v } }) });
+      for (const { v, n } of vals.slice(0, cut)) row(g, { label: cap(v), count: n, active: facetKey(key, sel || '') === facetKey(key, v), onClick: () => p.navigate({ toggle: { key, v } }) });
       if (vals.length > 8 && !sel) row(g, { cls: 'is-more', label: more ? T('Mostra meno') : T`… e altri ${vals.length - 8}`, onClick: () => { if (more) this.expand.delete(fk); else this.expand.add(fk); this.update(); } });
     }
     const foot = root.createDiv('crm-side-actions');
