@@ -179,8 +179,8 @@ Interaction notes (created by *+ Interaction*) live in the interactions folder a
 - **Home**: a **New contact ▾** pill (new contact, import), pill search and filters, a footer with the contact count and **Export CSV** (only the selected contacts; *Select all* in the table header selects the current filter).
 - **Resizable dialogs**: drag the corner handle of Customize or Import; double-click it to reset.
 - **Menus**: every Kith menu (context menus, column headers, bulk actions, the *Other* button) uses the same popover: icons, sections, search when long, drill-in submenus, keyboard navigation.
-- **Contact record** (click a name): full page with resizable columns, inline editing, a custom photo (upload, paste from the clipboard, paste a link, or try to fetch it from the contact's Instagram handle), connected people with the reason (partner, "introduced you to X" / "introduced by X"), and a **Companies** card listing current, past and relationship companies; each company links to everyone connected with it, past ones are collapsed by default.
-- **Company page**: click any company (same header as the contact page, with an *Actions* menu and *Edit*). It lists its people and shows info, notes and a timeline. Kith can fill the empty fields (website, industry, contacts, logo) from Wikidata and the official website; you can also upload a logo, paste a link or fetch it from the company's Instagram. Hide or show sections and fields **per company**, with an optional "use for all", and drag the column dividers to resize.
+- **Contact record** (click a name): full page with resizable columns, inline editing, a custom photo (upload, paste from the clipboard, or paste a link), connected people with the reason (partner, "introduced you to X" / "introduced by X"), and a **Companies** card listing current, past and relationship companies; each company links to everyone connected with it, past ones are collapsed by default.
+- **Company page**: click any company (same header as the contact page, with an *Actions* menu and *Edit*). It lists its people and shows info, notes and a timeline. Kith can fill the empty fields (website, industry, contacts, logo) from Wikidata and the official website; you can also upload a logo or paste an image link. Hide or show sections and fields **per company**, with an optional "use for all", and drag the column dividers to resize.
 - **Navigation**: the back button (or a swipe back) walks back through record, company and table.
 - **Right-click menus**: *Copy name / email / phone / full record*, *Archive*, *Delete…*. Keyboard: `Delete` / `⌘⌫` on a selected contact starts the delete flow (with confirmation).
 
@@ -241,7 +241,7 @@ Options: `giorni` (look-ahead window in days, default 7), `max` (rows per sectio
 
 ## Language and date formats
 
-- **UI language** follows Obsidian (`it` → Italian, anything else → English). Override in Settings → *Language* (restart the plugin afterwards).
+- **UI language** follows Obsidian (`it` → Italian, anything else → English).
 - **Frontmatter keys**: English keys for new notes in English, Italian ones in Italian. **Both are always read.** Mixed vaults work.
 - **Date display**: ISO (`2026-03-14`, default), `14/03/2026` or `03/14/2026`.
 - **Dates with slashes in existing notes** (`03/04/2026`) are ambiguous. The plugin resolves the obvious cases (`25/04` can only be day/month), uses the order you choose, or your language by default. **Analyze notes** scans your vault, and if it finds unambiguous evidence it sets the right order for you and tells you what it found.
@@ -277,7 +277,6 @@ Options: `giorni` (look-ahead window in days, default 7), `max` (rows per sectio
 | Download .ics for all contacts | - | Button: one file with every birthday (and follow-ups, if enabled) |
 | Confirm before deleting | on | Off = straight to trash |
 | "Today" widget in new daily notes | off | Experimental |
-| Language | Automatic | Restart the plugin after changing |
 | Date format | ISO | Display only; notes always store ISO |
 | Dates with slashes | Automatic | Day/month vs month/day, with *Analyze notes* |
 
@@ -287,7 +286,7 @@ Everything stays in your vault, and nothing is sent to any server of mine. Setti
 
 - **Add to Google Calendar**: when *you* click it, the plugin opens `calendar.google.com` in your browser with the event details in the URL.
 - **Company enrichment** (can be turned off in *Settings → Kith → Enrich companies automatically*): when you open a company page, Kith sends the **company name** to Wikidata and, if known, requests the company's public website to fill empty fields. No contact data is sent.
-- **Instagram photo** (only when you pick *Fetch from Instagram* on a contact): the Instagram handle is sent to `unavatar.io`, to Instagram's public endpoint, and to a couple of public profile viewers, to try to get the profile picture. It may fail, especially for private profiles.
+- **Images by link**: if you paste an image link on a contact or company, Kith downloads that image once and saves it in your vault.
 
 ## Development
 
@@ -301,7 +300,7 @@ The plugin is a single dependency-free JavaScript file (`main.js`, CommonJS, no 
 
 - Right-click menus, bulk actions and the `Delete` key are implemented but are not covered by automated tests.
 - The LinkedIn + address-book cross-check has been developed and tested on synthetic data; real-world exports may reveal edge cases. Always review the preview before confirming (nothing is written until you do).
-- Company enrichment and the Instagram photo depend on third-party services and may find nothing; the manual logo and photo options always work.
+- Company enrichment depends on third-party services and may find nothing; the manual logo and photo options always work.
 - Languages other than English and Italian fall back to English.
 - No automatic Google Calendar insertion (would require OAuth); the pre-filled event is deliberate.
 - Ideas: merge duplicates, more import sources, additional languages.
@@ -344,7 +343,7 @@ Ogni contatto è una nota normale (*file over app*: nessun database, nessun form
 Valori riconosciuti: priorità `alta/media/bassa`, vicinanza `stretta/media/lontana`, frequenza `settimanale/mensile/trimestrale/semestrale/annuale`, stato `attivo/dormiente/archiviato` (e gli equivalenti inglesi).
 
 ### Lingua e date
-L'interfaccia segue la lingua di Obsidian (italiano → italiano, altrimenti inglese); puoi forzarla in *Impostazioni → Lingua* (poi riavvia il plugin). Formato di visualizzazione delle date: ISO (predefinito), `14/03/2026` o `03/14/2026`. Per le date con la barra già presenti nelle note (`03/04/2026`) usa **Analizza le note**: il plugin cerca nel vault le date inequivocabili e imposta da solo l'ordine giorno/mese o mese/giorno.
+L'interfaccia segue la lingua di Obsidian (italiano → italiano, altrimenti inglese). Formato di visualizzazione delle date: ISO (predefinito), `14/03/2026` o `03/14/2026`. Per le date con la barra già presenti nelle note (`03/04/2026`) usa **Analizza le note**: il plugin cerca nel vault le date inequivocabili e imposta da solo l'ordine giorno/mese o mese/giorno.
 
 ### Widget "Oggi"
 ````markdown
@@ -356,7 +355,7 @@ titolo: CRM · Oggi
 ````
 
 ### Privacy
-Tutto resta nel tuo vault. Le richieste di rete avvengono solo in tre casi: quando premi *Aggiungi a Google Calendar* (si apre `calendar.google.com` con i dettagli dell'evento nell'URL); quando apri la pagina di un'azienda, se l'arricchimento automatico è attivo (viene inviato solo il **nome dell'azienda** a Wikidata e viene letto il sito pubblico, disattivabile nelle impostazioni); quando scegli *Recupera da Instagram* su un contatto (il nick viene inviato a servizi pubblici per ottenere la foto profilo).
+Tutto resta nel tuo vault. Le richieste di rete avvengono solo in tre casi: quando premi *Aggiungi a Google Calendar* (si apre `calendar.google.com` con i dettagli dell'evento nell'URL); quando apri la pagina di un'azienda, se l'arricchimento automatico è attivo (viene inviato solo il **nome dell'azienda** a Wikidata e viene letto il sito pubblico, disattivabile nelle impostazioni); quando incolli il link di un'immagine per una foto o un logo (l'immagine viene scaricata una volta e salvata nel vault).
 
 ---
 

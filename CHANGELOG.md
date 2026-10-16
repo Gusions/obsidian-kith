@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.9.5
+
+### Community plugin release
+- Prepared for the Obsidian community plugin directory
+- **Removed** fetching profile pictures from Instagram. Photos and logos can still be uploaded, pasted from the clipboard, or loaded from an image link you provide
+- **UI language** now always follows Obsidian's language (the manual language override was removed)
+- Dialog sizes are remembered through Obsidian's own storage API instead of the browser's
+- Icons are built with the DOM instead of `innerHTML`
+
+## 0.9.0
+
+### Contacts and graph
+- Table is now a card list on phones; Settings and Customize adapt to small screens
+- Contact record: company logo in the Companies card, full-page link from the graph side panel, double-click a node in the graph to open its record
+- Graph also links people who share a past company or a relationship tag such as *former colleague @ Company*
+- **Contacted today** refreshes the views immediately; the birthday calendar button sits on its own centered row
+
 ## 0.8.5
 
 ### Contacts and companies
