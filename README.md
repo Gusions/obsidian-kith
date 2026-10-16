@@ -173,7 +173,7 @@ Interaction notes (created by *+ Interaction*) live in the interactions folder a
 - **Bulk action bar**: tick one or more rows and an action bar appears above the table: *Contacted today*, *Interaction*, *Edit* (or add a relationship / closeness / priority / status to many at once), *Calendar*, *Delete* (with confirmation), *Open record*, *Archive*.
 - **Cards**: compact cards with tags, next birthday and due state.
 - **Kanban**: group by relationship, closeness, status or priority; **drag a card to another column** to change that value.
-- **Graph**: contacts as nodes. Connections come from the same company (2+ people), *Met through* naming another contact, *Partner*, or `[[links]]` between notes. Shows the 700 most connected contacts; toggle companies and isolated contacts. The detail panel on the right is only shown in this view.
+- **Graph**: contacts as nodes. Connections come from a shared company (2+ people): current, past, or named in a relationship tag such as *former colleague @ Company*, *Met through* naming another contact, *Partner*, or `[[links]]` between notes. Shows the 700 most connected contacts; toggle companies and isolated contacts. The detail panel on the right is only shown in this view; **double-click a node** (or use *Open full record*, or click the name or photo in the panel) to open the full page.
 - **Saved views**: save the current filters, quick filter, search, sort, mode and column filters as a tab next to the built-in ones; update, rename or delete from the tab's menu. The `+` turns highlighted when the current state differs from every saved view.
 - **Side panel**: a compact list of contacts in the left sidebar (search, filters, quick access). It opens with Kith and closes when you leave it; it stays collapsed until you open it.
 - **Home**: a **New contact ▾** pill (new contact, import), pill search and filters, a footer with the contact count and **Export CSV** (only the selected contacts; *Select all* in the table header selects the current filter).
@@ -238,6 +238,7 @@ Options: `giorni` (look-ahead window in days, default 7), `max` (rows per sectio
 - **Fields**: rename any field, hide it from the form and the record, or add **custom fields** (text, long text, list, choice, in any form section). Data in your notes is never deleted when you hide or remove a field.
 - **Table**: choose and order the columns, including custom fields.
 - **Google Calendar**: enable, auto-offer, title and description templates.
+- **Modern mode** (*Settings → Kith → Customize → General → Modern mode*): an alternative look for every Kith page: minimal tabs, number cards, pill filters, a table without grid lines, a floating selection bar, softer cards on contact and company pages. Off by default; turning it off restores the classic look.
 
 ## Language and date formats
 
@@ -278,6 +279,7 @@ Options: `giorni` (look-ahead window in days, default 7), `max` (rows per sectio
 | Confirm before deleting | on | Off = straight to trash |
 | "Today" widget in new daily notes | off | Experimental |
 | Language | Automatic | Restart the plugin after changing |
+| Modern mode | off | Alternative look for all Kith pages (see [Customization](#customization)) |
 | Date format | ISO | Display only; notes always store ISO |
 | Dates with slashes | Automatic | Day/month vs month/day, with *Analyze notes* |
 

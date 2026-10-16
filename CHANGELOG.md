@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.9.5
+
+### New
+- **Modern mode** (Settings → Kith → Customize → General): an alternative look for the home, contact and company pages, kanban, cards, dialogs and menus. Off by default
+- **General** is now the first tab in Customize
+- Company page: the *Source* line no longer touches the card edge
+- Icons are built with the DOM instead of `innerHTML`; dialog sizes are remembered through Obsidian's storage API
+
+## 0.9.0
+
+### Contacts and graph
+- Table is now a card list on phones; Settings and Customize adapt to small screens
+- Contact record: company logo in the Companies card, full-page link from the graph side panel, double-click a node in the graph to open its record
+- Graph also links people who share a past company or a relationship tag such as *former colleague @ Company*
+- **Contacted today** refreshes the views immediately; the birthday calendar button sits on its own centered row
+
 ## 0.8.5
 
 ### Contacts and companies

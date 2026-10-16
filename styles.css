@@ -1043,3 +1043,267 @@ body .crm-rec-root, body .crm-rec-root :is(.crm-rec-card, .crm-rec-col, .crm-hs-
   -webkit-user-select: text !important; user-select: text !important;
 }
 body .crm-rec-root :is(button, .clickable-icon, .crm-qa-btn, .crm-rec-handle, svg, summary, select, .crm-selbtn) { -webkit-user-select: none !important; user-select: none !important; }
+
+/* ───── Phone: the table becomes a list of cards (desktop and tablet are untouched) ───── */
+body.is-phone .crm-root .crm-toolbar { padding: 6px 14px 8px; }
+body.is-phone .crm-root .crm-tb-left, body.is-phone .crm-root .crm-tb-right { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
+body.is-phone .crm-root .crm-tb-left > :is(.crm-searchwrap, .crm-search, .crm-sw) { flex: 1 1 100%; }
+body.is-phone .crm-root .crm-tb-left .crm-select, body.is-phone .crm-root .crm-tb-right .crm-select { width: auto; max-width: 100%; height: 34px; font-size: 14px; }
+
+body.is-phone .crm-root .crm-table-wrap { border: none; border-radius: 0; background: transparent; overflow: visible; padding: 0 14px 96px; }
+body.is-phone .crm-root .crm-table-wrap > .crm-table { display: block; width: 100%; min-width: 0; }
+body.is-phone .crm-root .crm-table thead { display: none; }
+body.is-phone .crm-root .crm-table tbody { display: flex; flex-direction: column; gap: 10px; }
+body.is-phone .crm-root .crm-table tr.crm-row {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 12px 14px 12px 12px;
+  border: 1px solid var(--crm-line); border-radius: var(--crm-r-lg); background: var(--background-primary); box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+body.is-phone .crm-root .crm-table tr.crm-row.is-selected { border-color: var(--interactive-accent); background: color-mix(in srgb, var(--interactive-accent) 6%, var(--background-primary)); }
+body.is-phone .crm-root .crm-table tr.crm-row > td {
+  display: block; flex: 0 0 auto; width: auto !important; min-width: 0 !important; max-width: 100% !important; height: auto !important;
+  padding: 0 !important; border: none !important; background: transparent !important; position: static !important; left: auto !important; white-space: normal; overflow: hidden; text-overflow: ellipsis;
+}
+body.is-phone .crm-root .crm-table tr.crm-row > td.is-empty, body.is-phone .crm-root .crm-table tr.crm-row > td.crm-th-add { display: none !important; }
+body.is-phone .crm-root .crm-table tr.crm-row > td.crm-chk { flex: 0 0 auto; }
+body.is-phone .crm-root .crm-table tr.crm-row > td:nth-child(2) { flex: 1 1 calc(100% - 44px); min-width: 0 !important; }
+body.is-phone .crm-root .crm-table .crm-namecell { gap: 10px; }
+body.is-phone .crm-root .crm-table .crm-name { font-size: 16px; font-weight: 600; white-space: normal; }
+/* secondary info: wrapped under the name, aligned with it */
+body.is-phone .crm-root .crm-table tr.crm-row > td:nth-child(n+3) { font-size: 13px; color: var(--text-muted); }
+body.is-phone .crm-root .crm-table tr.crm-row > td { text-align: left !important; justify-content: flex-start !important; }
+body.is-phone .crm-root .crm-table tr.crm-row > td:nth-child(3) { flex-basis: auto; }
+body.is-phone .crm-root .crm-table tr.crm-row > td a { color: inherit; text-decoration: none; }
+body.is-phone .crm-root .crm-table tr.crm-row > td a[href^="mailto"], body.is-phone .crm-root .crm-table tr.crm-row > td a[href^="tel"] { color: var(--text-accent); }
+body.is-phone .crm-root .crm-foot { padding: 4px 14px 90px; }
+
+/* Birthday calendar button: centered under the value, adapts to any column width */
+.crm-rec-calrow { display: flex; justify-content: center; margin: -2px 0 6px; }
+.crm-rec-root .crm-cal-btn { display: inline-flex !important; width: fit-content; max-width: 100%; margin: 0 auto !important; justify-content: center; }
+
+/* ───── Phone: settings and Customize adapt to the screen (desktop and tablet are untouched) ───── */
+body.is-phone .crm-set-card { padding: 2px 14px; border-radius: 12px; }
+body.is-phone :is(.crm-set-card, .crm-cz-body, .modal.crm-custom) .setting-item { flex-direction: column !important; align-items: stretch !important; gap: 8px !important; padding: 12px 0; }
+body.is-phone :is(.crm-set-card, .crm-cz-body, .modal.crm-custom) .setting-item-info { width: 100%; margin: 0; }
+body.is-phone :is(.crm-set-card, .crm-cz-body, .modal.crm-custom) .setting-item-control { width: 100%; justify-content: flex-start !important; flex-wrap: wrap; gap: 8px; }
+body.is-phone :is(.crm-set-card, .crm-cz-body, .modal.crm-custom) .setting-item-control :is(input[type="text"], select, .dropdown, .crm-selbtn, input.crm-wide) { width: 100% !important; min-width: 0 !important; max-width: 100% !important; flex: 1 1 100%; box-sizing: border-box; }
+body.is-phone :is(.crm-set-card, .crm-cz-body, .modal.crm-custom) .setting-item-control input.crm-narrow { width: 96px !important; min-width: 96px !important; flex: 0 0 auto; }
+body.is-phone :is(.crm-set-card, .crm-cz-body, .modal.crm-custom) .setting-item-control button:not(.clickable-icon) { flex: 0 1 auto; }
+/* toggles stay on the right of their label */
+body.is-phone :is(.crm-set-card, .crm-cz-body, .modal.crm-custom) .setting-item:has(> .setting-item-control > .checkbox-container:only-child) { flex-direction: row !important; align-items: center !important; }
+body.is-phone :is(.crm-set-card, .crm-cz-body, .modal.crm-custom) .setting-item:has(> .setting-item-control > .checkbox-container:only-child) .setting-item-control { width: auto; flex: none; }
+body.is-phone :is(.crm-set-card, .crm-cz-body, .modal.crm-custom) .setting-item:has(> .setting-item-control > .checkbox-container:only-child) .setting-item-info { flex: 1; width: auto; }
+
+body.is-phone .modal.crm-custom, body.is-phone .modal.crm-modal { width: 100% !important; max-width: 100% !important; padding: 18px 16px 20px !important; border-radius: 16px 16px 0 0; }
+body.is-phone .modal.crm-custom .crm-cz { flex-direction: column; min-height: 0 !important; }
+body.is-phone .modal.crm-custom .crm-cz-nav { width: auto !important; flex-direction: row !important; flex-wrap: nowrap; overflow-x: auto; margin: 0 0 12px !important; padding: 0 0 10px !important; border-right: none !important; border-bottom: 1px solid var(--background-modifier-border); gap: 4px; scrollbar-width: none; }
+body.is-phone .modal.crm-custom .crm-cz-nav::-webkit-scrollbar { display: none; }
+body.is-phone .modal.crm-custom .crm-cz-tab { width: auto !important; flex: none; white-space: nowrap; }
+body.is-phone .modal.crm-custom .crm-cz-body { max-height: calc(100vh - 230px); padding-right: 0; }
+body.is-phone .crm-resize-grip { display: none !important; }
+body.is-phone .modal.crm-modal .crm-form-grid { grid-template-columns: 1fr; }
+body.is-phone :is(.crm-set-card, .crm-cz-body, .modal.crm-custom) .setting-item-control:has(.checkbox-container) { flex-wrap: nowrap; align-items: center; }
+body.is-phone :is(.crm-set-card, .crm-cz-body, .modal.crm-custom) .setting-item-control:has(.checkbox-container) :is(input[type="text"], select, .dropdown, .crm-selbtn) { flex: 1 1 0 !important; }
+
+/* Contact record, Companies card: real logo next to the company name */
+.crm-co-head .crm-co-mini { width: 24px; height: 24px; margin-right: 0; flex: none; }
+.crm-co-head .crm-co-mini svg { width: 14px; height: 14px; }
+
+/* Detail panel (graph view): name and photo open the full record */
+.crm-d-head .crm-d-link, .crm-d-head .crm-avatar { cursor: pointer; }
+.crm-d-head .crm-d-link:hover { text-decoration: underline; }
+
+/* ───────── Modern mode (Settings → General → Modern mode) ─────────
+   Everything is scoped to body.kith-modern, so turning the setting off restores the classic look. */
+body.kith-modern {
+  --km-bg: color-mix(in srgb, var(--background-primary) 97%, var(--text-normal));
+  --km-card: var(--background-primary);
+  --km-line: color-mix(in srgb, var(--text-normal) 10%, transparent);
+  --km-line-soft: color-mix(in srgb, var(--text-normal) 6%, transparent);
+  --km-chip: color-mix(in srgb, var(--text-normal) 7%, transparent);
+  --km-hover: color-mix(in srgb, var(--interactive-accent) 6%, transparent);
+  --km-shadow: 0 1px 2px color-mix(in srgb, var(--text-normal) 6%, transparent);
+}
+body.kith-modern .crm-root:not(.crm-rec-root) { background: var(--km-bg) !important; --km-gut: 28px; padding-left: 0 !important; padding-right: 0 !important; }
+body.kith-modern .crm-root .crm-title { font-size: 26px !important; font-weight: 650 !important; letter-spacing: -0.02em; }
+body.kith-modern .crm-root .crm-circ { border: 1px solid var(--km-line) !important; background: var(--km-card) !important; box-shadow: var(--km-shadow); }
+body.kith-modern .crm-root .crm-newpill { box-shadow: 0 1px 2px color-mix(in srgb, var(--interactive-accent) 40%, transparent), 0 4px 12px -4px color-mix(in srgb, var(--interactive-accent) 55%, transparent) !important; }
+
+/* tabs: underline, no icons, counts as badges */
+body.kith-modern .crm-root .crm-tabs { border-bottom: 1px solid var(--km-line) !important; gap: 4px !important; padding: 0 calc(var(--km-gut) - 12px) !important; margin: 6px 0 18px !important; background: none !important; }
+body.kith-modern .crm-root .crm-tab { background: none !important; border: 0 !important; border-radius: 0 !important; padding: 10px 12px !important; color: var(--text-faint) !important; font-weight: 500; position: relative; box-shadow: none !important; }
+body.kith-modern .crm-root .crm-tab .crm-tab-ico { display: none !important; }
+body.kith-modern .crm-root .crm-tab.is-active { color: var(--text-normal) !important; }
+body.kith-modern .crm-root .crm-tab.is-active::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: -1px; height: 2px; border-radius: 2px; background: var(--interactive-accent); }
+body.kith-modern .crm-root .crm-tab-n { margin-left: 6px; background: var(--km-chip); color: var(--text-muted) !important; border-radius: 999px; padding: 1px 8px !important; font-size: 11.5px !important; font-weight: 600; }
+body.kith-modern .crm-root .crm-tab.is-active .crm-tab-n { background: color-mix(in srgb, var(--interactive-accent) 16%, transparent); color: var(--interactive-accent) !important; }
+
+/* KPI strip → four cards */
+body.kith-modern:not(.crm-opt-no-kpi) .crm-root .crm-kpis { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 14px !important; border: 0 !important; background: none !important; box-shadow: none !important; margin: 0 var(--km-gut) 18px !important; }
+body.kith-modern .crm-root .crm-kpi { background: var(--km-card) !important; border: 1px solid var(--km-line) !important; border-radius: 14px !important; padding: 16px 18px !important; display: flex !important; align-items: center; gap: 14px; box-shadow: var(--km-shadow); }
+body.kith-modern .crm-root .crm-kpi + .crm-kpi { border-left: 1px solid var(--km-line) !important; }
+body.kith-modern .crm-root .crm-kpi-icon { display: flex !important; width: 40px; height: 40px; flex: none; border-radius: 12px; align-items: center; justify-content: center; background: color-mix(in srgb, var(--interactive-accent) 14%, transparent); color: var(--interactive-accent); }
+body.kith-modern .crm-root .crm-kpi-icon svg { width: 20px; height: 20px; }
+body.kith-modern .crm-root .crm-kpi.tone-danger .crm-kpi-icon { background: color-mix(in srgb, var(--color-red) 14%, transparent); color: var(--color-red); }
+body.kith-modern .crm-root .crm-kpi.tone-warn .crm-kpi-icon { background: color-mix(in srgb, var(--color-orange) 15%, transparent); color: var(--color-orange); }
+body.kith-modern .crm-root .crm-kpi.tone-accent .crm-kpi-icon { background: color-mix(in srgb, var(--color-green) 15%, transparent); color: var(--color-green); }
+body.kith-modern .crm-root .crm-kpi-text { display: flex; flex-direction: column-reverse; }
+body.kith-modern .crm-root .crm-kpi-value { font-size: 28px !important; font-weight: 650 !important; line-height: 1.05; letter-spacing: -0.02em; }
+body.kith-modern .crm-root .crm-kpi.tone-danger .crm-kpi-value { color: var(--color-red) !important; }
+body.kith-modern .crm-root .crm-kpi-label { font-size: 12.5px !important; color: var(--text-faint) !important; font-weight: 500; }
+
+/* toolbar: pill selects, search, segmented control */
+body.kith-modern .crm-root .crm-select,
+body.kith-modern .crm-root .crm-sortwrap select { appearance: none !important; -webkit-appearance: none !important; height: 36px; border-radius: 999px !important; border: 1px solid var(--km-line) !important; background-color: var(--km-card) !important; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238b8b94' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>") !important; background-repeat: no-repeat !important; background-position: right 11px center !important; padding: 0 32px 0 16px !important; font-weight: 500; color: var(--text-muted) !important; box-shadow: var(--km-shadow); }
+body.kith-modern .crm-root .crm-sortwrap select { padding-left: 34px !important; }
+body.kith-modern .crm-root .crm-search { height: 36px; border-radius: 999px !important; border: 1px solid var(--km-line) !important; background: var(--km-card) !important; box-shadow: var(--km-shadow); }
+body.kith-modern .crm-root .crm-seg { background: var(--km-chip) !important; border: 0 !important; border-radius: 999px !important; padding: 3px !important; }
+body.kith-modern .crm-root .crm-seg-btn { border: 0 !important; background: none !important; border-radius: 999px !important; color: var(--text-faint); }
+body.kith-modern .crm-root .crm-seg-btn.is-active { background: var(--km-card) !important; color: var(--text-normal) !important; box-shadow: 0 1px 3px color-mix(in srgb, var(--text-normal) 20%, transparent); }
+
+/* floating selection bar (anchored to the list, not the window) */
+body.kith-modern .crm-root .crm-main { position: relative; }
+body.kith-modern .crm-root .crm-bulkbar { position: absolute !important; left: 50%; transform: translateX(-50%); bottom: 16px; z-index: 20; width: max-content !important; max-width: calc(100% - 24px); flex-wrap: wrap; justify-content: center; background: color-mix(in srgb, var(--text-normal) 92%, var(--background-primary)) !important; color: var(--background-primary) !important; border: 0 !important; border-radius: 999px !important; padding: 8px 10px 8px 20px !important; box-shadow: 0 12px 32px -6px rgba(0, 0, 0, 0.45); display: flex !important; align-items: center; gap: 6px; margin: 0 !important; }
+body.kith-modern .crm-root .crm-bulk-count { font-weight: 600; padding-right: 12px; margin-right: 4px; border-right: 1px solid color-mix(in srgb, var(--background-primary) 25%, transparent) !important; }
+body.kith-modern .crm-root .crm-bulk-btn { background: none !important; border: 0 !important; color: var(--background-primary) !important; opacity: 0.9; border-radius: 999px !important; padding: 6px 12px !important; box-shadow: none !important; }
+body.kith-modern .crm-root .crm-bulk-btn:hover { background: color-mix(in srgb, var(--background-primary) 15%, transparent) !important; opacity: 1; }
+body.kith-modern .crm-root .crm-bulk-btn.is-danger { color: color-mix(in srgb, var(--color-red) 70%, var(--background-primary)) !important; }
+body.kith-modern .crm-root .crm-bulk-x { color: var(--background-primary) !important; }
+
+/* calmer chips and links (all sizes) */
+body.kith-modern .crm-root .crm-badge.has-tone { background: var(--km-chip) !important; color: var(--text-normal) !important; border: 0 !important; font-weight: 500; }
+body.kith-modern .crm-root .crm-badge .crm-rel-co,
+body.kith-modern .crm-root .crm-badge .crm-cell-link { color: inherit !important; text-decoration: none !important; font-weight: 600; }
+body.kith-modern .crm-root .crm-badge.crm-pri { background: var(--km-chip) !important; color: var(--text-muted) !important; border: 0 !important; }
+body.kith-modern .crm-root .crm-badge.crm-pri-alta { background: color-mix(in srgb, var(--color-red) 14%, transparent) !important; color: var(--color-red) !important; }
+body.kith-modern .crm-root .crm-cell-link { color: var(--text-muted) !important; text-decoration: none !important; }
+body.kith-modern .crm-root .crm-cell-link:hover { color: var(--interactive-accent) !important; text-decoration: underline !important; }
+body.kith-modern .crm-root .crm-due { border-radius: 999px !important; font-weight: 500; font-variant-numeric: tabular-nums; }
+body.kith-modern .crm-root .crm-due:not(.due-scaduto) { background: none !important; color: var(--text-faint) !important; padding-left: 0 !important; }
+body.kith-modern .crm-root .crm-due.due-scaduto { background: color-mix(in srgb, var(--color-red) 14%, transparent) !important; color: var(--color-red) !important; }
+body.kith-modern .crm-root .crm-foot { border-top: 1px solid var(--km-line) !important; background: color-mix(in srgb, var(--km-bg) 90%, transparent) !important; backdrop-filter: blur(8px); }
+
+/* table: a card without vertical rules (desktop and tablet; the phone keeps its card list) */
+body.kith-modern:not(.is-phone) .crm-root .crm-table-wrap { background: var(--km-card); border: 1px solid var(--km-line) !important; border-radius: 14px !important; box-shadow: var(--km-shadow); overflow: auto; }
+body.kith-modern:not(.is-phone) .crm-root .crm-table { border-collapse: separate !important; border-spacing: 0 !important; border: 0 !important; }
+body.kith-modern:not(.is-phone) .crm-root .crm-table th,
+body.kith-modern:not(.is-phone) .crm-root .crm-table td { border-left: 0 !important; border-right: 0 !important; }
+body.kith-modern:not(.is-phone) .crm-root .crm-table thead th { background: var(--km-card) !important; border-bottom: 1px solid var(--km-line) !important; font-size: 11.5px !important; text-transform: uppercase; letter-spacing: 0.03em !important; color: var(--text-faint) !important; font-weight: 600 !important; padding: 12px 10px !important; white-space: nowrap; position: sticky; top: 0; z-index: 2; }
+body.kith-modern:not(.is-phone) .crm-root .crm-table td { border-top: 0 !important; border-bottom: 1px solid var(--km-line-soft) !important; padding: 9px 10px !important; color: var(--text-muted); }
+body.kith-modern:not(.is-phone) .crm-root .crm-table tr.crm-row:hover td { background: var(--km-hover) !important; }
+body.kith-modern:not(.is-phone) .crm-root .crm-table th:first-child,
+body.kith-modern:not(.is-phone) .crm-root .crm-table td:first-child { width: 44px; padding-left: 16px !important; }
+body.kith-modern:not(.is-phone) .crm-root .crm-table thead .crm-th { position: relative; }
+body.kith-modern:not(.is-phone) .crm-root .crm-table thead .crm-th .crm-th-menu { opacity: 0 !important; position: absolute !important; right: 4px !important; top: 50% !important; bottom: auto !important; transform: translateY(-50%) !important; background: var(--km-card) !important; height: auto !important; transition: opacity 0.15s; }
+body.kith-modern:not(.is-phone) .crm-root .crm-table thead .crm-th:hover .crm-th-menu { opacity: 0.75 !important; }
+body.kith-modern:not(.is-phone) .crm-root .crm-th-in { overflow: visible !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; min-width: 0; }
+body.kith-modern:not(.is-phone) .crm-root .crm-th-l { overflow: visible !important; text-overflow: clip !important; }
+body.kith-modern .crm-root .crm-name { font-weight: 600 !important; }
+
+/* modern mode on phones: two-column number cards, compact spacing, selection bar above the bottom nav */
+body.kith-modern.is-phone .crm-root:not(.crm-rec-root) { --km-gut: 14px; }
+body.kith-modern.is-phone:not(.crm-opt-no-kpi) .crm-root .crm-kpis { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+body.kith-modern.is-phone .crm-root .crm-kpi { padding: 12px 14px !important; gap: 10px; min-width: 0; }
+body.kith-modern.is-phone .crm-root .crm-kpi-icon { width: 34px; height: 34px; border-radius: 10px; }
+body.kith-modern.is-phone .crm-root .crm-kpi-icon svg { width: 17px; height: 17px; }
+body.kith-modern.is-phone .crm-root .crm-kpi-value { font-size: 22px !important; }
+body.kith-modern.is-phone .crm-root .crm-kpi-label { font-size: 11.5px !important; }
+body.kith-modern.is-phone .crm-root .crm-bulkbar { bottom: 72px; width: calc(100% - 24px) !important; border-radius: 20px !important; padding: 10px 12px !important; }
+body.kith-modern.is-phone .crm-root .crm-bulk-btn { padding: 6px 8px !important; }
+
+/* modern mode: the "collapse header" button still hides the number cards */
+body.kith-modern .crm-root.crm-collapsed .crm-kpis,
+body.kith-modern:not(.crm-opt-no-kpi) .crm-root.crm-collapsed .crm-kpis { display: none !important; }
+
+/* ───────── Modern mode: other pages (contact, company, kanban, cards, side panel, dialogs, menus) ───────── */
+body.kith-modern .crm-rec-root { background: var(--km-bg) !important; }
+body.kith-modern .crm-rec-root .crm-rec-card { background: var(--km-card) !important; border: 1px solid var(--km-line) !important; border-radius: 14px !important; box-shadow: var(--km-shadow); }
+body.kith-modern .crm-rec-root .crm-rec-h,
+body.kith-modern .crm-rec-root .crm-sec-title,
+body.kith-modern .crm-root .crm-sec-title { font-size: 11.5px !important; font-weight: 650 !important; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint) !important; }
+body.kith-modern .crm-rec-root .crm-rec-head { border-bottom: 1px solid var(--km-line-soft) !important; }
+body.kith-modern .crm-rec-root .crm-k { color: var(--text-faint) !important; font-weight: 500; }
+body.kith-modern .crm-rec-root .crm-v a,
+body.kith-modern .crm-rec-root a.crm-v { color: var(--interactive-accent) !important; text-decoration: none !important; }
+body.kith-modern .crm-rec-root .crm-v a:hover { text-decoration: underline !important; }
+body.kith-modern .crm-rec-root .crm-rec-kv { border-radius: 8px; transition: background 0.12s; }
+body.kith-modern .crm-rec-root .crm-rec-kv:hover { background: var(--km-hover); }
+body.kith-modern .crm-rec-root .crm-rec-pen { opacity: 0; transition: opacity 0.12s; }
+body.kith-modern .crm-rec-root .crm-rec-kv:hover .crm-rec-pen { opacity: 0.7; }
+body.kith-modern .crm-rec-root .crm-hs-circle { border: 0 !important; background: var(--km-chip) !important; box-shadow: none !important; transition: background 0.12s; }
+body.kith-modern .crm-rec-root .crm-hs-act:hover .crm-hs-circle { background: color-mix(in srgb, var(--interactive-accent) 16%, transparent) !important; color: var(--interactive-accent); }
+body.kith-modern .crm-rec-root .crm-hs-lab { color: var(--text-faint) !important; font-weight: 500; }
+body.kith-modern .crm-rec-root .crm-int { border-bottom: 1px solid var(--km-line-soft) !important; }
+body.kith-modern .crm-rec-root .crm-int-date { color: var(--text-faint) !important; font-variant-numeric: tabular-nums; }
+body.kith-modern .crm-rec-root .crm-note { background: var(--km-chip) !important; border: 0 !important; border-radius: 12px !important; }
+body.kith-modern .crm-rec-root .crm-co-count,
+body.kith-modern .crm-rec-root .crm-co-chip,
+body.kith-modern .crm-rec-root .crm-co-past { background: var(--km-chip) !important; border: 0 !important; color: var(--text-muted) !important; border-radius: 999px !important; }
+body.kith-modern .crm-rec-root .crm-co-prow { border-radius: 10px; }
+body.kith-modern .crm-rec-root .crm-co-prow:hover { background: var(--km-hover); }
+body.kith-modern .crm-rec-root .crm-name { font-weight: 600 !important; }
+
+/* buttons everywhere (dialogs, pages, side panel): soft pills */
+body.kith-modern .crm-btn { border-radius: 999px !important; border: 1px solid var(--km-line) !important; background: var(--km-card) !important; box-shadow: var(--km-shadow) !important; font-weight: 500; }
+body.kith-modern .crm-btn:hover { border-color: color-mix(in srgb, var(--interactive-accent) 45%, var(--km-line)) !important; }
+body.kith-modern .crm-btn.crm-btn-primary { background: var(--interactive-accent) !important; color: var(--text-on-accent) !important; border-color: transparent !important; box-shadow: 0 1px 2px color-mix(in srgb, var(--interactive-accent) 40%, transparent), 0 4px 12px -4px color-mix(in srgb, var(--interactive-accent) 55%, transparent) !important; }
+body.kith-modern .crm-btn.crm-btn-danger { background: var(--color-red) !important; color: #fff !important; border-color: transparent !important; }
+
+/* grid cards and kanban */
+body.kith-modern .crm-root .crm-card,
+body.kith-modern .crm-root .crm-kcard { background: var(--km-card) !important; border: 1px solid var(--km-line) !important; border-radius: 14px !important; box-shadow: var(--km-shadow); transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s; }
+body.kith-modern .crm-root .crm-kcard { border-radius: 12px !important; }
+body.kith-modern .crm-root .crm-card:hover,
+body.kith-modern .crm-root .crm-kcard:hover { transform: translateY(-1px); box-shadow: 0 6px 18px -8px color-mix(in srgb, var(--text-normal) 30%, transparent); border-color: color-mix(in srgb, var(--interactive-accent) 35%, var(--km-line)) !important; }
+body.kith-modern .crm-root .crm-card.is-selected,
+body.kith-modern .crm-root .crm-kcard.is-selected { border-color: var(--interactive-accent) !important; box-shadow: 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 25%, transparent); }
+body.kith-modern .crm-root .crm-col { background: var(--km-chip) !important; border-radius: 16px !important; border: 1px solid transparent; padding: 10px !important; }
+body.kith-modern .crm-root .crm-col-title { font-size: 11.5px !important; font-weight: 650 !important; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted) !important; }
+body.kith-modern .crm-root .crm-col-count { background: var(--km-card) !important; border-radius: 999px !important; padding: 1px 8px !important; font-size: 11.5px !important; color: var(--text-muted) !important; }
+body.kith-modern .crm-root .crm-agenda-row { border-radius: 10px; }
+body.kith-modern .crm-root .crm-agenda-row:hover { background: var(--km-hover); }
+
+/* side panel of the home and the sidebar */
+body.kith-modern .crm-root .crm-detail { background: var(--km-card) !important; border-left: 1px solid var(--km-line) !important; }
+body.kith-modern .crm-side .crm-side-search { border-radius: 999px !important; border: 1px solid var(--km-line) !important; }
+
+/* dialogs and menus */
+body.kith-modern .modal.crm-modal { border-radius: 20px !important; border: 1px solid var(--km-line) !important; box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.35) !important; }
+body.kith-modern .crm-modal input[type="text"],
+body.kith-modern .crm-modal input[type="search"],
+body.kith-modern .crm-modal input:not([type]),
+body.kith-modern .crm-modal textarea,
+body.kith-modern .crm-modal select { border-radius: 12px !important; border: 1px solid var(--km-line) !important; background: var(--km-card) !important; }
+body.kith-modern .crm-modal .crm-imp-table-wrap { border: 1px solid var(--km-line) !important; border-radius: 14px !important; }
+body.kith-modern .crm-pop { border-radius: 16px !important; border: 1px solid var(--km-line) !important; box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.35) !important; }
+body.kith-modern .crm-pop-item { margin: 0 6px; padding: 0 14px; border-radius: 10px; }
+body.kith-modern .crm-pop-search input { border-width: 1px !important; border-color: var(--km-line) !important; }
+
+/* company header card: the "Source: …" line had no bottom spacing and touched the card edge */
+.crm-co-hs .crm-co-status { margin: 4px 20px 20px; }
+.crm-co-hs .crm-co-hidden + .crm-co-status { margin-top: -8px; }
+body.kith-modern .crm-rec-root .crm-hs-lab { color: var(--text-muted) !important; }
+
+/* modern mode: one left/right gutter for header, tabs, cards, toolbar, list and footer, so every edge lines up */
+body.kith-modern .crm-root:not(.crm-rec-root) .crm-header { padding: 22px var(--km-gut) 6px !important; }
+body.kith-modern .crm-root:not(.crm-rec-root) .crm-toolbar { padding: 0 var(--km-gut) 12px !important; }
+body.kith-modern .crm-root:not(.crm-rec-root) .crm-main { padding-left: var(--km-gut) !important; padding-right: var(--km-gut) !important; }
+body.kith-modern .crm-root:not(.crm-rec-root) .crm-foot { margin-left: calc(var(--km-gut) * -1) !important; margin-right: calc(var(--km-gut) * -1) !important; padding-left: var(--km-gut) !important; padding-right: var(--km-gut) !important; }
+/* the "New contact" pill and round buttons keep their own colours whatever the theme does to buttons */
+body.kith-modern .crm-root .crm-newpill { background: var(--interactive-accent) !important; color: var(--text-on-accent) !important; border: 0 !important; }
+body.kith-modern .crm-root .crm-newpill:hover { background: var(--interactive-accent-hover, var(--interactive-accent)) !important; }
+body.kith-modern .crm-root .crm-circ { color: var(--text-normal) !important; }
+
+/* modern mode: minimal number cards, label on top, big number, one small monochrome icon in the corner */
+body.kith-modern .crm-root .crm-kpi { position: relative; display: flex !important; flex-direction: column; align-items: flex-start !important; justify-content: center; gap: 4px !important; padding: 14px 18px !important; min-height: 0 !important; }
+body.kith-modern .crm-root .crm-kpi .crm-kpi-icon,
+body.kith-modern .crm-root .crm-kpi.tone-danger .crm-kpi-icon,
+body.kith-modern .crm-root .crm-kpi.tone-accent .crm-kpi-icon,
+body.kith-modern .crm-root .crm-kpi.tone-warn .crm-kpi-icon { position: absolute; top: 14px; right: 16px; width: auto !important; height: auto !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; color: var(--text-faint) !important; }
+body.kith-modern .crm-root .crm-kpi.tone-danger .crm-kpi-icon { color: var(--color-red) !important; }
+body.kith-modern .crm-root .crm-kpi-icon svg { width: 16px !important; height: 16px !important; stroke-width: 1.75 !important; }
+body.kith-modern .crm-root .crm-kpi-text { flex-direction: column-reverse; gap: 2px; }
+body.kith-modern .crm-root .crm-kpi-label { font-size: 12.5px !important; font-weight: 500; color: var(--text-muted) !important; letter-spacing: 0; }
+body.kith-modern .crm-root .crm-kpi-value { font-size: 30px !important; font-weight: 600 !important; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+body.kith-modern.is-phone .crm-root .crm-kpi { padding: 10px 14px !important; }
+body.kith-modern.is-phone .crm-root .crm-kpi-value { font-size: 24px !important; }
+body.kith-modern.is-phone .crm-root .crm-kpi .crm-kpi-icon { top: 11px; right: 12px; }
