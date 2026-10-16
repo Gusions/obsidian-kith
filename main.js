@@ -754,7 +754,16 @@ class CRMPlugin extends Plugin {
   async markContacted(c) {
     const vals = { ultimocontatto: isoDate(new Date()) };
     if (c.due.source === 'followup' && c.due.days != null && c.due.days <= 0 && c.raw(FM.prossimofollowup)) vals.prossimofollowup = '';
+    // wait for Obsidian to re-index the note, then refresh every Kith view so the new date shows up at once
+    const indexed = new Promise((res) => {
+      const mc = this.app.metadataCache; let done = false;
+      const fin = () => { if (done) return; done = true; try { mc.offref(ref); } catch (e) { /* ignore */ } res(); };
+      const ref = mc.on('changed', (f) => { if (f && f.path === c.file.path) fin(); });
+      setTimeout(fin, 1200);
+    });
     await this.saveContact(c.file, vals);
+    await indexed;
+    this.refreshViews();
   }
 
   async maybeAddDailyWidget(f) {
@@ -1332,11 +1341,17 @@ class CRMView extends ItemView {
     const companies = new Map();
     const rl = this.app.metadataCache.resolvedLinks || {};
     for (const c of list) {
-      const az = c.s('azienda');
-      if (az && o.companies) {
-        const key = 'co:' + norm(az);
-        if (!companies.has(key)) companies.set(key, { id: key, label: az, members: [] });
-        companies.get(key).members.push(c);
+      if (o.companies) {
+        // current company, past companies and companies named in relationship tags (e.g. "former colleague @ Lexroom")
+        const names = [c.s('azienda'), ...c.l('aziendepassate'), ...c.rels.map((r) => r.company)].map((x) => coClean(x)).filter(Boolean);
+        const seenCo = new Set();
+        for (const az of names) {
+          const key = 'co:' + norm(az);
+          if (seenCo.has(key)) continue;
+          seenCo.add(key);
+          if (!companies.has(key)) companies.set(key, { id: key, label: az, members: [] });
+          companies.get(key).members.push(c);
+        }
       }
       for (const nm of c.l('conosciutitramite')) {
         const t = byName.get(norm(nm));
@@ -1408,6 +1423,7 @@ class CRMView extends ItemView {
       saveCam: (c) => { this.graphCam = c; },
       selected: this.selected,
       onSelect: (n) => { if (n.kind === 'person') this.select(n.id); },
+      onOpen: (n) => { if (n.kind === 'person' && n.c) this.plugin.openRecord(n.c.file); else if (n.kind === 'company') this.plugin.openCompany(n.label); },
     });
   }
 
@@ -1633,7 +1649,7 @@ class CRMView extends ItemView {
       this.avatar(n, c);
       const nt = n.createDiv('crm-nametext');
       nt.createDiv({ cls: 'crm-name', text: c.name });
-      for (const col of cols) col.cell(this, tr.createEl('td'), c);
+      for (const col of cols) { const td = tr.createEl('td'); col.cell(this, td, c); const tx = td.textContent.trim(); if (!tx || tx === '—') td.addClass('is-empty'); }
       tr.createEl('td', { cls: 'crm-th-add' });
       tr.addEventListener('click', (e) => { if (e.target.closest && (e.target.closest('.crm-nametext') || e.target.closest('.crm-avatar'))) this.plugin.openRecord(c.file); else this.select(c.file.path); });
       tr.addEventListener('dblclick', () => this.plugin.openRecord(c.file));
@@ -1776,7 +1792,9 @@ class CRMView extends ItemView {
 
     const head = d.createDiv('crm-d-head');
     this.avatar(head, c, 'xl');
-    head.createDiv({ cls: 'crm-d-name', text: c.name });
+    const dn = head.createDiv({ cls: 'crm-d-name crm-d-link', text: c.name, attr: { title: T('Apri scheda completa') } });
+    dn.addEventListener('click', () => this.plugin.openRecord(c.file));
+    head.querySelector('.crm-avatar').addEventListener('click', () => this.plugin.openRecord(c.file));
     if (c.s('soprannome')) head.createDiv({ cls: 'crm-sub', text: `“${c.s('soprannome')}”` });
     head.createDiv({ cls: 'crm-sub', text: this.subline(c) });
     const tags = head.createDiv('crm-card-tags');
@@ -1788,12 +1806,12 @@ class CRMView extends ItemView {
 
     const acts = d.createDiv('crm-d-actions');
     const act = (text, cls, fn) => { const b = acts.createEl('button', { cls: 'crm-btn ' + cls, text }); b.addEventListener('click', fn); };
-    act(T('✓ Contattato oggi'), 'crm-btn-primary', async () => {
+    act(T('Apri scheda completa'), 'crm-btn-primary', () => this.plugin.openRecord(c.file));
+    act(T('✓ Contattato oggi'), '', async () => {
       await this.plugin.markContacted(c);
       new Notice(T`${c.name}: ultimo contatto = oggi`);
     });
     act(T('+ Interazione'), '', () => new InteractionModal(this.app, this.plugin, c).open());
-    act(T('Apri scheda completa'), '', () => this.plugin.openRecord(c.file));
     act(T('Modifica'), '', () => new ContactModal(this.app, this.plugin, c, () => {}).open());
     act(T('Calendario'), '', (e) => this.plugin.calendarMenu([c], e));
     act(T('Apri nota'), '', () => this.app.workspace.getLeaf('tab').openFile(c.file));
@@ -2252,7 +2270,7 @@ class CRMRecordView extends ItemView {
         }
         else host.createSpan({ text: val });
         if (f.k === 'compleanno' && c.bday) {
-          const cb = host.createEl('button', { cls: 'crm-btn crm-mini crm-cal-btn', attr: { title: T('Calendario: compleanni e follow-up') } });
+          const cb = r.parentElement.createDiv('crm-rec-calrow').createEl('button', { cls: 'crm-btn crm-mini crm-cal-btn', attr: { title: T('Calendario: compleanni e follow-up') } });
           setIcon(cb.createSpan('crm-bulk-ico'), 'calendar-plus'); cb.createSpan({ text: hasGcalMark(c) ? T('✓ In calendario') : T('Aggiungi al calendario') });
           cb.addEventListener('click', (ev) => { ev.stopPropagation(); this.plugin.calendarMenu([c], ev); });
         }
@@ -2335,7 +2353,10 @@ class CRMRecordView extends ItemView {
         const peers = all.filter((x) => { if (x === c || x.archived) return false; const o = coOf(x); return o.cur.includes(k) || o.past.includes(k) || x.rels.some((r) => norm(r.company) === k); });
         const box = cc.createDiv('crm-co');
         const head = box.createDiv('crm-co-head'); head.tabIndex = 0;
-        setIcon(head.createSpan('crm-co-ico'), 'building-2');
+        const mini = head.createSpan('crm-co-mini crm-co-ico');
+        const logo = this.plugin.companyLogo ? this.plugin.companyLogo(co) : '';
+        const fallback = () => { mini.empty(); mini.removeClass('has-img'); setIcon(mini, 'building-2'); };
+        if (logo) { mini.addClass('has-img'); const im = mini.createEl('img', { attr: { src: logo, alt: '' } }); im.addEventListener('error', fallback); } else fallback();
         const cn = head.createEl('a', { cls: 'crm-co-name', text: co }); cn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); this.plugin.openCompany(co, c.file.path); });
         if (isPast) head.createSpan({ cls: 'crm-co-past', text: coRel.includes(co) ? (c.rels.find((r) => norm(r.company) === norm(co)) || {}).label : T('Passata') });
         head.createSpan({ cls: 'crm-co-count', text: String(peers.length), attr: { title: T('Altri contatti in questa azienda') } });
@@ -4474,6 +4495,7 @@ class RelGraph {
     cv.addEventListener('pointermove', (e) => this.onMove(e));
     cv.addEventListener('pointerup', (e) => this.onUp(e));
     cv.addEventListener('pointercancel', (e) => this.onUp(e));
+    cv.addEventListener('dblclick', (e) => { const n = this.pick(this.toWorld(e)); if (n && this.hooks.onOpen) this.hooks.onOpen(n); });
     cv.addEventListener('wheel', (e) => { e.preventDefault(); this.zoomAt(e.offsetX, e.offsetY, e.deltaY < 0 ? 1.12 : 1 / 1.12); }, { passive: false });
     this.ro = new ResizeObserver(() => this.resize());
     this.ro.observe(host);
